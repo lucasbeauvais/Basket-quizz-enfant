@@ -38,7 +38,7 @@ var MiniGame = (function(){
     function setupShot(){
       var s=spot(); ball={x:s.x,y:s.y,vx:0,vy:0,rot:0}; state='aim'; drag=null;
       touchedRim=false; scored=false; bounces=0; shotTime=0; resultTimer=0; blocked=false;
-      var m=shots[idx].defender; def=m?{mode:m,x:(shots[idx].spot==='two'?204:132)}:null; defT=Math.random()*1.7;
+      var m=shots[idx].defender; def=m?{mode:m,x:(shots[idx].spot==='two'?210:140)}:null; defT=Math.random()*1.7;
       if(def){ help.textContent=m==='jump'?'Un défenseur saute pour contrer : tire quand il retombe !':'Un défenseur lève les bras : passe par-dessus !'; help.style.opacity=1; }
     }
     setupShot();
