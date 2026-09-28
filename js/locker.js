@@ -25,6 +25,7 @@ var BACKGROUNDS=[
 function bgById(id){for(var i=0;i<BACKGROUNDS.length;i++)if(BACKGROUNDS[i].id===id)return BACKGROUNDS[i];return BACKGROUNDS[0];}
 function bgUnlocked(b){return (profile.careerPts||0)>=b.need;}
 function bgCss(b){
+  if(Assets.has('bg/'+b.id))return 'linear-gradient(rgba(8,10,30,.15),rgba(8,10,30,.15)),url("'+Assets.url('bg/'+b.id)+'") center/cover';
   if(b.img&&Assets.has(b.img))return 'linear-gradient(rgba(8,10,30,.35),rgba(8,10,30,.35)),url("'+Assets.url(b.img)+'") center/cover';
   if(b.img)return BACKGROUNDS[0].css;
   return b.css;
@@ -32,7 +33,7 @@ function bgCss(b){
 function applyBg(){
   var b=bgById(profile&&profile.bg);if(profile&&!bgUnlocked(b))b=BACKGROUNDS[0];
   document.body.style.background=bgCss(b);
-  document.body.style.backgroundSize=b.size||'';
+  document.body.style.backgroundSize=Assets.has('bg/'+b.id)?'':(b.size||'');
   document.body.style.backgroundAttachment='fixed';
 }
 /* fonds débloqués entre deux totaux de points (pour l'écran de résultat) */
@@ -42,7 +43,7 @@ function bgsUnlockedBetween(before,after){var l=[];for(var i=0;i<BACKGROUNDS.len
 function screenLocker(){hideProg();
   var p=playerById(profile.avatar),pts=profile.careerPts||0;
   var bgs='';for(var i=0;i<BACKGROUNDS.length;i++){var b=BACKGROUNDS[i],u=bgUnlocked(b),sel=(b.id===(profile.bg||'nuit'));
-    var sw='<span class="bgsw" style="background:'+bgCss(b).replace(/"/g,'&quot;')+(b.size?';background-size:'+b.size:'')+'"></span>';
+    var sw='<span class="bgsw" style="background:'+bgCss(b).replace(/"/g,'&quot;')+(b.size&&!Assets.has('bg/'+b.id)?';background-size:'+b.size:'')+'"></span>';
     bgs+=u?'<button class="bgopt'+(sel?' sel':'')+'" data-bg="'+b.id+'">'+sw+'<b>'+b.name+'</b>'+(sel?'<small>Choisi</small>':'')+'</button>'
           :'<div class="bgopt locked">'+sw+'<b>'+b.name+'</b><small class="bglock">'+lockSVG()+' '+b.need+' pts</small></div>';}
   var nextBg=null;for(var j=0;j<BACKGROUNDS.length;j++)if(!bgUnlocked(BACKGROUNDS[j])){nextBg=BACKGROUNDS[j];break;}

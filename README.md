@@ -48,7 +48,8 @@ js/sound.js             bruitages
 js/app.js               écrans et règles du jeu
 vendor/                 GSAP 3 et canvas-confetti (copiés pour marcher hors-ligne)
 assets/img/             images générées (Gemini / ChatGPT)
-prompts-images.html     les prompts pour générer les images, avec boutons « Copier »
+prompts-images.html     tous les prompts pour générer les images, avec boutons « Copier »
+prompts-images-lot2.html  le 2e lot : défenseur, fonds d'écran, badge sifflet, icône règles
 ```
 
 ## Ajouter les images

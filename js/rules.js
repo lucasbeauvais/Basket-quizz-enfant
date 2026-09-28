@@ -12,7 +12,8 @@ function rulesState(){
 }
 function rulesBadgeCount(){var r=rulesState(),n=0;for(var i=0;i<RULE_CHAPTERS.length;i++)if(r.badges[RULE_CHAPTERS[i].id])n++;return n;}
 function whistleSVG(size,on){
-  size=size||40;var c=on?'#fdb927':'#d6ccb8',s=on?'#a86a00':'#b3a78f';
+  size=size||40;
+  if(Assets.has('rules/whistle'))return '<img class="whistleimg'+(on?'':' off')+'" src="'+Assets.url('rules/whistle')+'" width="'+size+'" height="'+size+'" alt="" draggable="false">';var c=on?'#fdb927':'#d6ccb8',s=on?'#a86a00':'#b3a78f';
   return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 48 48" aria-hidden="true">'+
     '<circle cx="24" cy="24" r="23" fill="'+(on?'#1b1733':'#efe7d6')+'"/>'+
     '<path d="M10 22 h16 a9 9 0 1 1 -9 9 v-2 h-7 z" fill="'+c+'" stroke="'+s+'" stroke-width="2" stroke-linejoin="round"/>'+

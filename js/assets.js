@@ -13,7 +13,9 @@ var ASSET_LIST = [
   'categories/legendes','categories/stars','categories/france','categories/nba','categories/regles','categories/mix',
   'fx/foam-finger','fx/explosion','fx/fireball','fx/trophy','fx/ball',
   'scenes/trophy','scenes/mystery','scenes/globe','scenes/hoop','scenes/versus','scenes/chess',
-  'minigame/court'
+  'minigame/court','minigame/defender-stand','minigame/defender-jump','minigame/defender-wide',
+  'bg/nuit','bg/violet','bg/parquet','bg/street','bg/ocean','bg/feu','bg/galaxie','bg/or',
+  'rules/whistle'
 ];
 var Assets = {
   ok: {},

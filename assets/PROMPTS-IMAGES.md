@@ -131,12 +131,6 @@ Game icon: a basketball with a blue-white-red swoosh around it and a tiny Eiffel
 Game icon: a basketball hoop with backboard and net, in red, white and blue colors, with a whistle. Generic, NOT the NBA logo. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off.
 ```
 
-### `assets/img/categories/regles.png` (512 x 512)
-
-```
-Game icon: a shiny referee whistle in gold with a small striped black-and-white referee shirt pattern behind it and a basketball. No text. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off.
-```
-
 ### `assets/img/categories/mix.png` (512 x 512)
 
 ```
@@ -219,4 +213,90 @@ A chessboard on a basketball court, the chess pieces are shaped like little bask
 
 ```
 Vertical phone-screen background of a basketball arena at night: dark navy upper part with two spotlights coming from the top-left, a cheering crowd as colorful blurred dots in the middle band, and a glossy wooden court floor occupying the bottom 19% of the image (the floor edge is a horizontal line at 81% of the height). IMPORTANT: NO hoop, NO backboard, NO pole, NO ball, NO players (the game draws them itself). The right third of the image should stay calm and uncluttered. No text. Full background.
+```
+
+## 4 bis. Icône de la catégorie « Règles »
+
+### `assets/img/categories/regles.png` (512 x 512)
+
+```
+Game icon: a shiny referee whistle in gold with a small striped black-and-white referee shirt pattern behind it and a basketball. No text. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off.
+```
+
+## 8. Le défenseur du mini-jeu (3 poses, même personnage)
+
+### `assets/img/minigame/defender-stand.png` (600 x 900 (vertical))
+
+```
+an ORIGINAL cartoon basketball defender from the opposing team: athletic teenage boy, brown skin, short black hair, determined but friendly face, RED jersey with white trim and the number 0, red shorts, white sneakers. Same art style as the other characters. Full body, seen from the front with a slight 3/4 turn, feet near the bottom edge of the image. Pose: standing on the ground, both arms raised straight up above his head, hands open, ready to block a shot. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off.
+```
+
+### `assets/img/minigame/defender-jump.png` (600 x 900 (vertical))
+
+```
+SAME character as the previous image: an ORIGINAL cartoon basketball defender from the opposing team: athletic teenage boy, brown skin, short black hair, determined but friendly face, RED jersey with white trim and the number 0, red shorts, white sneakers. Same art style as the other characters. Full body, seen from the front with a slight 3/4 turn, feet near the bottom edge of the image. Pose: jumping high in the air to block a shot, knees bent, both arms stretched straight up, hands open, sneakers off the ground. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off.
+```
+
+### `assets/img/minigame/defender-wide.png` (900 x 900 (carré))
+
+```
+SAME character as the previous image: an ORIGINAL cartoon basketball defender from the opposing team: athletic teenage boy, brown skin, short black hair, determined but friendly face, RED jersey with white trim and the number 0, red shorts, white sneakers. Same art style as the other characters. Full body, seen from the front with a slight 3/4 turn, feet near the bottom edge of the image. Pose: standing in a low defensive stance, knees bent, both arms spread wide open to the sides at shoulder height, hands open. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off.
+```
+
+## 9. Les fonds d'écran à débloquer
+
+### `assets/img/bg/nuit.png` (1080 x 1920 (vertical))
+
+```
+A basketball arena at night: deep navy and purple, spotlights from the top corners, blurred crowd lights at the bottom. Vertical phone wallpaper, portrait 9:16. IMPORTANT: a white game card will cover the middle of the screen, so keep the centre calm and simple and put the interesting details near the top, bottom and side edges. Rich but slightly dark colors so white text stays readable around it. No text, no logos, no people. Full background, no transparency.
+```
+
+### `assets/img/bg/violet.png` (1080 x 1920 (vertical))
+
+```
+Luxurious purple and gold basketball theme: purple gradient with golden light rays, gold sparkles and a few golden basketballs floating near the edges. Vertical phone wallpaper, portrait 9:16. IMPORTANT: a white game card will cover the middle of the screen, so keep the centre calm and simple and put the interesting details near the top, bottom and side edges. Rich but slightly dark colors so white text stays readable around it. No text, no logos, no people. Full background, no transparency.
+```
+
+### `assets/img/bg/parquet.png` (1080 x 1920 (vertical))
+
+```
+Top-down view of a glossy wooden basketball court floor with a few painted court lines (white and orange) near the edges, warm light. Vertical phone wallpaper, portrait 9:16. IMPORTANT: a white game card will cover the middle of the screen, so keep the centre calm and simple and put the interesting details near the top, bottom and side edges. Rich but slightly dark colors so white text stays readable around it. No text, no logos, no people. Full background, no transparency.
+```
+
+### `assets/img/bg/street.png` (1080 x 1920 (vertical))
+
+```
+Outdoor street basketball playground at sunset: asphalt court with painted lines, a chain-link fence and a hoop at the top edge, city skyline silhouette, warm orange sky. No graffiti text. Vertical phone wallpaper, portrait 9:16. IMPORTANT: a white game card will cover the middle of the screen, so keep the centre calm and simple and put the interesting details near the top, bottom and side edges. Rich but slightly dark colors so white text stays readable around it. No text, no logos, no people. Full background, no transparency.
+```
+
+### `assets/img/bg/ocean.png` (1080 x 1920 (vertical))
+
+```
+Magical ocean theme: deep blue sea with light rays from the surface, bubbles, a few friendly fish and a basketball floating like a bubble near the edges. Vertical phone wallpaper, portrait 9:16. IMPORTANT: a white game card will cover the middle of the screen, so keep the centre calm and simple and put the interesting details near the top, bottom and side edges. Rich but slightly dark colors so white text stays readable around it. No text, no logos, no people. Full background, no transparency.
+```
+
+### `assets/img/bg/feu.png` (1080 x 1920 (vertical))
+
+```
+On-fire theme: dark red background with big cartoon flames rising from the bottom edge and glowing embers floating up, a flaming basketball in a top corner. Vertical phone wallpaper, portrait 9:16. IMPORTANT: a white game card will cover the middle of the screen, so keep the centre calm and simple and put the interesting details near the top, bottom and side edges. Rich but slightly dark colors so white text stays readable around it. No text, no logos, no people. Full background, no transparency.
+```
+
+### `assets/img/bg/galaxie.png` (1080 x 1920 (vertical))
+
+```
+Outer space theme: dark starry sky with a purple and blue nebula, colorful planets near the edges, one planet looks like a basketball, a small comet. Vertical phone wallpaper, portrait 9:16. IMPORTANT: a white game card will cover the middle of the screen, so keep the centre calm and simple and put the interesting details near the top, bottom and side edges. Rich but slightly dark colors so white text stays readable around it. No text, no logos, no people. Full background, no transparency.
+```
+
+### `assets/img/bg/or.png` (1080 x 1920 (vertical))
+
+```
+Legendary golden theme: shiny gold gradient with falling gold confetti, golden stars and a glowing golden trophy near the top edge. Vertical phone wallpaper, portrait 9:16. IMPORTANT: a white game card will cover the middle of the screen, so keep the centre calm and simple and put the interesting details near the top, bottom and side edges. Rich but slightly dark colors so white text stays readable around it. No text, no logos, no people. Full background, no transparency.
+```
+
+## 10. École des règles
+
+### `assets/img/rules/whistle.png` (512 x 512)
+
+```
+Game badge icon: a shiny golden referee whistle on a round dark navy medal with a thin gold ring, small sparkles. No text. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off.
 ```

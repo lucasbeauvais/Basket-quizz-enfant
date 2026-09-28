@@ -388,3 +388,5 @@ button.playercard:hover{border-color:var(--orange)}
 @media (max-width:380px){.lk-stats{grid-template-columns:repeat(2,1fr)}}
 .ballchip.def{position:relative}
 .ballchip.def::after{content:'\270B';position:absolute;top:-8px;right:-8px;font-size:15px;background:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.whistleimg{object-fit:contain;flex:0 0 auto}
+.whistleimg.off{filter:grayscale(1);opacity:.35}

@@ -55,7 +55,6 @@ GROUPS = [
   ("stars","512 x 512", "Game icon: a basketball with a bright blue and yellow lightning bolt striking through it, electric sparks. "+TRANSP),
   ("france","512 x 512", "Game icon: a basketball with a blue-white-red swoosh around it and a tiny Eiffel Tower silhouette next to it. "+TRANSP),
   ("nba","512 x 512", "Game icon: a basketball hoop with backboard and net, in red, white and blue colors, with a whistle. Generic, NOT the NBA logo. "+TRANSP),
-  ("regles","512 x 512", "Game icon: a shiny referee whistle in gold with a small striped black-and-white referee shirt pattern behind it and a basketball. No text. "+TRANSP),
   ("mix","512 x 512", "Game icon: a golden 'all-star' basketball covered in small stars, with a rainbow sparkle trail. "+TRANSP),
  ]),
  ("5. Effets des grandes animations", "fx", [
@@ -82,7 +81,39 @@ GROUPS = [
  ]),
 ]
 
-def md():
+DEFENDER = ("an ORIGINAL cartoon basketball defender from the opposing team: athletic teenage boy, brown skin, short black hair, "
+ "determined but friendly face, RED jersey with white trim and the number 0, red shorts, white sneakers. Same art style as the other characters. "
+ "Full body, seen from the front with a slight 3/4 turn, feet near the bottom edge of the image")
+BG = ("Vertical phone wallpaper, portrait 9:16. IMPORTANT: a white game card will cover the middle of the screen, so keep the centre calm and "
+ "simple and put the interesting details near the top, bottom and side edges. Rich but slightly dark colors so white text stays readable around it. "
+ "No text, no logos, no people. Full background, no transparency.")
+
+GROUPS2 = [
+ ("8. Le défenseur du mini-jeu (3 poses, même personnage)", "minigame", [
+  ("defender-stand","600 x 900 (vertical)", DEFENDER+". Pose: standing on the ground, both arms raised straight up above his head, hands open, ready to block a shot. "+TRANSP),
+  ("defender-jump","600 x 900 (vertical)", "SAME character as the previous image: "+DEFENDER+". Pose: jumping high in the air to block a shot, knees bent, both arms stretched straight up, hands open, sneakers off the ground. "+TRANSP),
+  ("defender-wide","900 x 900 (carré)", "SAME character as the previous image: "+DEFENDER+". Pose: standing in a low defensive stance, knees bent, both arms spread wide open to the sides at shoulder height, hands open. "+TRANSP),
+ ]),
+ ("9. Les fonds d'écran à débloquer", "bg", [
+  ("nuit","1080 x 1920 (vertical)", "A basketball arena at night: deep navy and purple, spotlights from the top corners, blurred crowd lights at the bottom. "+BG),
+  ("violet","1080 x 1920 (vertical)", "Luxurious purple and gold basketball theme: purple gradient with golden light rays, gold sparkles and a few golden basketballs floating near the edges. "+BG),
+  ("parquet","1080 x 1920 (vertical)", "Top-down view of a glossy wooden basketball court floor with a few painted court lines (white and orange) near the edges, warm light. "+BG),
+  ("street","1080 x 1920 (vertical)", "Outdoor street basketball playground at sunset: asphalt court with painted lines, a chain-link fence and a hoop at the top edge, city skyline silhouette, warm orange sky. No graffiti text. "+BG),
+  ("ocean","1080 x 1920 (vertical)", "Magical ocean theme: deep blue sea with light rays from the surface, bubbles, a few friendly fish and a basketball floating like a bubble near the edges. "+BG),
+  ("feu","1080 x 1920 (vertical)", "On-fire theme: dark red background with big cartoon flames rising from the bottom edge and glowing embers floating up, a flaming basketball in a top corner. "+BG),
+  ("galaxie","1080 x 1920 (vertical)", "Outer space theme: dark starry sky with a purple and blue nebula, colorful planets near the edges, one planet looks like a basketball, a small comet. "+BG),
+  ("or","1080 x 1920 (vertical)", "Legendary golden theme: shiny gold gradient with falling gold confetti, golden stars and a glowing golden trophy near the top edge. "+BG),
+ ]),
+ ("10. École des règles", "rules", [
+  ("whistle","512 x 512", "Game badge icon: a shiny golden referee whistle on a round dark navy medal with a thin gold ring, small sparkles. No text. "+TRANSP),
+ ]),
+]
+REGLES = [("4 bis. Icône de la catégorie « Règles »", "categories", [
+  ("regles","512 x 512", "Game icon: a shiny referee whistle in gold with a small striped black-and-white referee shirt pattern behind it and a basketball. No text. "+TRANSP),
+ ])]
+
+def md(groups=None):
+    groups=groups or (GROUPS+REGLES+GROUPS2)
     out=["# Prompts pour générer les images du Quiz NBA\n",
      "Générées avec Gemini ou ChatGPT, puis déposées dans `assets/img/<dossier>/<nom>.png`. "
      "Chaque image est **optionnelle** : tant qu'un fichier manque, le jeu garde son dessin actuel.\n",
@@ -92,17 +123,18 @@ def md():
      "3. **Transparence** : ChatGPT sait faire des PNG à fond transparent. Si Gemini ne le fait pas, demande « plain pure white background » : je détourerai les images.",
      "4. Renomme chaque fichier exactement comme indiqué (ex. `coach-happy.png`) et envoie-les-moi : je les redimensionne, je les compresse et je les mets dans le dépôt.\n",
      "## Guide de style (à coller en premier)\n", "```", STYLE, "```\n"]
-    for title,folder,items in GROUPS:
+    for title,folder,items in groups:
         out.append("## "+title+"\n")
         for name,size,prompt in items:
             out.append("### `assets/img/%s/%s.png` (%s)\n"%(folder,name,size))
             out.append("```\n"+prompt+"\n```\n")
     return "\n".join(out)
 
-def page():
-    data=[{"title":t,"folder":f,"items":[{"name":n,"size":s,"prompt":p} for n,s,p in it]} for t,f,it in GROUPS]
+def page(groups=None, title="Prompts images : Quiz NBA"):
+    groups=groups or (GROUPS+REGLES+GROUPS2)
+    data=[{"title":t,"folder":f,"items":[{"name":n,"size":s,"prompt":p} for n,s,p in it]} for t,f,it in groups]
     return """<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Prompts images Quiz NBA</title>
+<title>"""+html.escape(title)+"""</title>
 <style>
 :root{--bg:#f6f2ea;--card:#fff;--ink:#1b1733;--mut:#6b5f86;--line:#e2d8c6;--acc:#552583;--gold:#fdb927;--code:#f3eefb}
 @media (prefers-color-scheme:dark){:root{--bg:#0e1233;--card:#171c47;--ink:#f3f0ff;--mut:#b5acd6;--line:#2c3270;--acc:#c9a8ff;--code:#1f2560}}
@@ -117,7 +149,7 @@ button.done{background:#2e8b57}
 pre{white-space:pre-wrap;background:var(--code);border-radius:8px;padding:10px 12px;margin:10px 0 0;font-size:13px;line-height:1.5;font-family:ui-monospace,Menlo,Consolas,monospace}
 .style pre{border-left:4px solid var(--gold)}
 </style></head><body><main>
-<h1>Prompts images : Quiz NBA</h1>
+<h1>"""+html.escape(title)+"""</h1>
 <p class="lead">Un bouton « Copier » par image. Chaque image est optionnelle : tant qu'elle manque, le jeu garde son dessin actuel.</p>
 <div class="steps"><ol>
 <li>Colle d'abord le <b>guide de style</b> dans Gemini ou ChatGPT, puis les prompts un par un.</li>
@@ -144,4 +176,5 @@ document.addEventListener('click',function(e){var b=e.target.closest('button[dat
 root=os.path.join(os.path.dirname(__file__),'..')
 open(os.path.join(root,'assets','PROMPTS-IMAGES.md'),'w',encoding='utf-8').write(md())
 open(os.path.join(root,'prompts-images.html'),'w',encoding='utf-8').write(page())
-print(sum(len(g[2]) for g in GROUPS),'prompts')
+open(os.path.join(root,'prompts-images-lot2.html'),'w',encoding='utf-8').write(page(REGLES+GROUPS2,'Prompts images : lot 2'))
+print(sum(len(g[2]) for g in GROUPS+REGLES+GROUPS2),'prompts au total,',sum(len(g[2]) for g in REGLES+GROUPS2),'dans le lot 2')
