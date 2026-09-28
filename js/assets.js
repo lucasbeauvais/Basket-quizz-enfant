@@ -2,6 +2,7 @@
    IMAGES DU JEU
    Chaque image est optionnelle : si le fichier existe dans
    assets/img/, il est utilisé ; sinon le jeu garde son dessin SVG.
+   Les images sont en WebP (tools/optimize_images.py les prépare).
    La liste complète (et les prompts pour les générer) est dans
    assets/PROMPTS-IMAGES.md
    ============================================================ */
@@ -17,7 +18,8 @@ var ASSET_LIST = [
 var Assets = {
   ok: {},
   base: 'assets/img/',
-  url: function(key){ return this.base + key + '.png'; },
+  /* ASSET_DATA (optionnel) : images intégrées dans la version « page unique » */
+  url: function(key){ return (window.ASSET_DATA&&ASSET_DATA[key]) || (this.base + key + '.webp'); },
   has: function(key){ return !!this.ok[key]; },
   /* charge tout en parallèle ; ne bloque jamais plus de 2,5 s */
   load: function(done){

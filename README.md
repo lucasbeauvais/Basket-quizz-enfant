@@ -51,9 +51,9 @@ prompts-images.html     les prompts pour générer les images, avec boutons « C
 
 ## Ajouter les images
 
-1. Ouvrir `prompts-images.html` (ou `assets/PROMPTS-IMAGES.md`) et générer les images avec Gemini ou ChatGPT.
-2. Déposer chaque PNG dans `assets/img/<dossier>/<nom>.png` avec le nom exact.
-3. C'est tout : le jeu utilise l'image dès qu'elle existe, sinon il garde le dessin.
+1. Ouvrir `prompts-images.html` (ou `assets/PROMPTS-IMAGES.md`) et générer les images avec Gemini ou ChatGPT, en PNG, avec les noms indiqués.
+2. Lancer `python3 tools/optimize_images.py <dossier des PNG>` : les images sont redimensionnées et converties en WebP dans `assets/img/` (31 images = 660 Ko au lieu de 28 Mo).
+3. Le jeu utilise l'image dès qu'elle existe, sinon il garde le dessin SVG.
 
 Pour modifier les prompts : éditer `tools/build_prompts.py` puis lancer `python3 tools/build_prompts.py`.
 

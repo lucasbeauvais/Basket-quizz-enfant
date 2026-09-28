@@ -382,12 +382,12 @@ var BAD=["Raté... mais un champion se relève toujours. On y retourne !","Kobe 
    JOUEURS (avatars inspirés de vrais joueurs, dessins originaux)
    ============================================================ */
 var PLAYERS=[
- {id:'p1',name:"L'Alien",     inspi:'Victor Wembanyama',   num:'1',  c1:'#1b1b1b',c2:'#c4ced4',skin:'#8a5a3a',hair:'curly',need:0},
- {id:'p2',name:'Le Roi',      inspi:'LeBron James',        num:'23', c1:'#552583',c2:'#fdb927',skin:'#6b4226',hair:'band', need:0},
- {id:'p3',name:'Air',         inspi:'Michael Jordan',      num:'23', c1:'#ce1141',c2:'#000000',skin:'#5a3620',hair:'bald', need:0},
- {id:'p4',name:'Chef',        inspi:'Stephen Curry',       num:'30', c1:'#1d428a',c2:'#ffc72c',skin:'#a8724a',hair:'short',need:0},
- {id:'p5',name:'Greek Freak', inspi:'Giannis Antetokounmpo',num:'34',c1:'#00471b',c2:'#eee1c6',skin:'#5e3b22',hair:'short',need:3},
- {id:'p6',name:'Le Joker',    inspi:'Nikola Jokic',        num:'15', c1:'#0e2240',c2:'#fec524',skin:'#f1c9a5',hair:'brown',need:6},
- {id:'p7',name:'TP',          inspi:'Tony Parker',         num:'9',  c1:'#c4ced4',c2:'#000000',skin:'#9a6a45',hair:'short',need:9},
- {id:'p8',name:'Le Big',      inspi:"Shaquille O'Neal",    num:'32', c1:'#0077c0',c2:'#ffffff',skin:'#4a2c18',hair:'bald', need:12}
+ {id:'p1',name:"L'Alien",     inspi:'Victor Wembanyama',   num:'1',  c1:'#3d2470',c2:'#d9dde6',skin:'#8a5a3a',hair:'curly',need:0},
+ {id:'p2',name:'Le Roi',      inspi:'LeBron James',        num:'23', c1:'#f2b01e',c2:'#552583',skin:'#6b4226',hair:'band', need:0},
+ {id:'p3',name:'Air',         inspi:'Michael Jordan',      num:'23', c1:'#2a7de1',c2:'#ffffff',skin:'#5a3620',hair:'bald', need:0},
+ {id:'p4',name:'Chef',        inspi:'Stephen Curry',       num:'30', c1:'#e8752a',c2:'#1b1733',skin:'#a8724a',hair:'short',need:0},
+ {id:'p5',name:'Greek Freak', inspi:'Giannis Antetokounmpo',num:'34',c1:'#0f7c78',c2:'#eee1c6',skin:'#5e3b22',hair:'short',need:3},
+ {id:'p6',name:'Le Joker',    inspi:'Nikola Jokic',        num:'15', c1:'#6fb52c',c2:'#5b2a86',skin:'#f1c9a5',hair:'brown',need:6},
+ {id:'p7',name:'TP',          inspi:'Tony Parker',         num:'9',  c1:'#1e3f9a',c2:'#ffffff',skin:'#9a6a45',hair:'short',need:9},
+ {id:'p8',name:'Le Big',      inspi:"Shaquille O'Neal",    num:'32', c1:'#d0202e',c2:'#ffffff',skin:'#4a2c18',hair:'bald', need:12}
 ];
