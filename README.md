@@ -57,4 +57,4 @@ prompts-images.html     les prompts pour générer les images, avec boutons « C
 
 Pour modifier les prompts : éditer `tools/build_prompts.py` puis lancer `python3 tools/build_prompts.py`.
 
-Jeu familial non officiel, sans lien avec la NBA. Les personnages sont des dessins originaux inspirés de vrais joueurs.
+Jeu familial non officiel, sans lien avec la NBA. Les joueurs sont des personnages inventés ; seul Coach Mamba est inspiré de Kobe Bryant.

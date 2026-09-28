@@ -379,15 +379,16 @@ var GOOD=["Tu as la mentalité Mamba !","Rien que le filet.","Magnifique ! Même
 var BAD=["Raté... mais un champion se relève toujours. On y retourne !","Kobe a raté des milliers de tirs avant de devenir une légende. À toi de rebondir !","Le ballon a tourné puis ressorti. Pas grave, on remet ça !","Contré par la défense ! On respire et on repart.","Pas cette fois. Retiens bien la réponse, elle reviendra !"];
 
 /* ============================================================
-   JOUEURS (avatars inspirés de vrais joueurs, dessins originaux)
+   JOUEURS : personnages inventés (seul Coach Mamba est inspiré
+   d'un vrai joueur, Kobe Bryant). tag = sa petite histoire.
    ============================================================ */
 var PLAYERS=[
- {id:'p1',name:"L'Alien",     inspi:'Victor Wembanyama',   num:'1',  c1:'#3d2470',c2:'#d9dde6',skin:'#8a5a3a',hair:'curly',need:0},
- {id:'p2',name:'Le Roi',      inspi:'LeBron James',        num:'23', c1:'#f2b01e',c2:'#552583',skin:'#6b4226',hair:'band', need:0},
- {id:'p3',name:'Air',         inspi:'Michael Jordan',      num:'23', c1:'#2a7de1',c2:'#ffffff',skin:'#5a3620',hair:'bald', need:0},
- {id:'p4',name:'Chef',        inspi:'Stephen Curry',       num:'30', c1:'#e8752a',c2:'#1b1733',skin:'#a8724a',hair:'short',need:0},
- {id:'p5',name:'Greek Freak', inspi:'Giannis Antetokounmpo',num:'34',c1:'#0f7c78',c2:'#eee1c6',skin:'#5e3b22',hair:'short',need:3},
- {id:'p6',name:'Le Joker',    inspi:'Nikola Jokic',        num:'15', c1:'#6fb52c',c2:'#5b2a86',skin:'#f1c9a5',hair:'brown',need:6},
- {id:'p7',name:'TP',          inspi:'Tony Parker',         num:'9',  c1:'#1e3f9a',c2:'#ffffff',skin:'#9a6a45',hair:'short',need:9},
- {id:'p8',name:'Le Big',      inspi:"Shaquille O'Neal",    num:'32', c1:'#d0202e',c2:'#ffffff',skin:'#4a2c18',hair:'bald', need:12}
+ {id:'p1',name:'Cosmo',       tag:"Venu d'une autre galaxie : ses tirs partent en orbite.",          num:'42', c1:'#3d2470',c2:'#d9dde6',skin:'#8a5a3a',hair:'curly',need:0},
+ {id:'p2',name:'Roi Rebond',  tag:"Aucun rebond ne lui échappe : la raquette, c'est son royaume.",   num:'11', c1:'#f2b01e',c2:'#552583',skin:'#6b4226',hair:'band', need:0},
+ {id:'p3',name:'Jet',         tag:"Il décolle comme un avion et plane jusqu'au panier.",             num:'5',  c1:'#2a7de1',c2:'#ffffff',skin:'#5a3620',hair:'bald', need:0},
+ {id:'p4',name:'Chef Swish',  tag:"Il cuisine des tirs à 3 points et les sert tout chauds.",         num:'3',  c1:'#e8752a',c2:'#1b1733',skin:'#a8724a',hair:'short',need:0},
+ {id:'p5',name:'Olympe',      tag:"Le champion des Jeux : il ne vise que la médaille d'or.",         num:'12', c1:'#0f7c78',c2:'#eee1c6',skin:'#5e3b22',hair:'short',need:3},
+ {id:'p6',name:'Le Magicien', tag:"Ses passes sortent de sa manche comme des cartes magiques.",      num:'7',  c1:'#6fb52c',c2:'#5b2a86',skin:'#f1c9a5',hair:'brown',need:6},
+ {id:'p7',name:'Lightning',   tag:"Rapide comme l'éclair : personne ne le rattrape en contre-attaque.", num:'10', c1:'#1e3f9a',c2:'#ffffff',skin:'#9a6a45',hair:'short',need:9},
+ {id:'p8',name:'Dunkman',     tag:"Le plus costaud de la ligue : il casse tous les paniers !",       num:'50', c1:'#d0202e',c2:'#ffffff',skin:'#4a2c18',hair:'bald', need:12}
 ];

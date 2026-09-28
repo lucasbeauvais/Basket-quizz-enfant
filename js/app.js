@@ -44,10 +44,10 @@ muteBtn.onclick=function(){Sfx.toggle();paintMute();};paintMute();
 
 /* ===== GRILLE DES JOUEURS ===== */
 function playerGrid(selId){var grid='';for(var i=0;i<PLAYERS.length;i++){var p=PLAYERS[i],sel=(p.id===selId);
-  if(playerUnlocked(p)){grid+='<button class="mascot'+(sel?' sel':'')+'" data-av="'+p.id+'">'+avatarHTML(p.id,50)+'<div class="mtx"><b>'+p.name+'</b><span>inspiré de '+p.inspi+'</span></div></button>';}
-  else{grid+='<div class="mascot locked">'+avatarHTML(p.id,50)+'<div class="mtx"><b>'+p.name+'</b><span>inspiré de '+p.inspi+'</span></div><div class="mlock">'+lockSVG()+' '+p.need+' ★</div></div>';}}
+  if(playerUnlocked(p)){grid+='<button class="mascot'+(sel?' sel':'')+'" data-av="'+p.id+'">'+avatarHTML(p.id,50)+'<div class="mtx"><b>'+p.name+'</b><span>'+p.tag+'</span></div></button>';}
+  else{grid+='<div class="mascot locked">'+avatarHTML(p.id,50)+'<div class="mtx"><b>'+p.name+'</b><span>'+p.tag+'</span></div><div class="mlock">'+lockSVG()+' '+p.need+' ★</div></div>';}}
   return '<div class="mascotgrid">'+grid+'</div>';}
-function popIn(sel){if(!window.gsap||reduceMotion)return;gsap.from(view.querySelectorAll(sel),{y:24,opacity:0,duration:.4,stagger:.05,ease:'back.out(1.6)'});}
+function popIn(sel){if(!window.gsap||reduceMotion)return;gsap.from(view.querySelectorAll(sel),{y:24,opacity:0,duration:.4,stagger:.05,ease:'back.out(1.6)',clearProps:'transform,opacity'});}
 
 /* ===== ÉCRAN PROFIL ===== */
 var pendingAvatar='p1';
@@ -214,7 +214,7 @@ function resultScreen(){hideProg();var earned=starsFromScore(correct,ROUND);var 
     '<div class="scorecard">'+rows+'</div>'+
     '<button class="btn big" id="again">Rejouer</button>'+
     '<button class="btn ghost big" id="home" style="margin-top:10px">Retour au vestiaire</button>'+
-    '<div class="footer">Jeu familial non officiel, sans lien avec la NBA. Les joueurs et '+COACH_NAME+' sont des dessins originaux inspirés de vrais champions.</div></div>';
+    '<div class="footer">Jeu familial non officiel, sans lien avec la NBA. Les joueurs sont des personnages inventés ; '+COACH_NAME+' est un dessin inspiré de Kobe Bryant.</div></div>';
   /* compteur de points qui défile + étoiles qui tombent une par une */
   var el=document.getElementById('ptscount');
   if(window.gsap&&!reduceMotion){

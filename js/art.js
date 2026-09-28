@@ -1,6 +1,6 @@
 /* ============================================================
    DESSINS (SVG, aucune image externe)
-   Tous les personnages sont des dessins originaux "inspirés de" :
+   Tous les personnages sont des dessins originaux (joueurs inventés) :
    aucune photo ni logo officiel.
    ============================================================ */
 var VB='0 0 400 230';

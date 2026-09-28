@@ -33,21 +33,21 @@ GROUPS = [
   ("coach-cheer","1024 x 1024", "SAME character as the previous image: "+COACH+", both fists raised, shouting with joy, confetti flying around him. "+PORTRAIT+" Background: gold #fdb927 to orange #e8752a."),
  ]),
  ("3. Les 8 joueurs (avatars)", "players", [
-  ("p1","1024 x 1024", "Original cartoon basketball player nicknamed 'The Alien': an extremely tall and slender young man, very long arms, short curly dark hair, brown skin, "
+  ("p1","1024 x 1024", "Original cartoon basketball player nicknamed 'Cosmo': an extremely tall and slender young man, very long arms, short curly dark hair, brown skin, "
    "calm friendly smile, black and silver jersey with the number 1, a few small glowing stars and planets floating around him. "+PORTRAIT+" Background: black to silver-grey."),
-  ("p2","1024 x 1024", "Original cartoon basketball player nicknamed 'The King': a powerful athletic man, dark brown skin, short dark hair, trimmed beard, white headband, "
+  ("p2","1024 x 1024", "Original cartoon basketball player nicknamed 'King Rebound': a powerful athletic man, dark brown skin, short dark hair, trimmed beard, white headband, "
    "purple and gold jersey with the number 23, a small golden crown floating just above his head. "+PORTRAIT+" Background: purple #552583 to gold #fdb927."),
-  ("p3","1024 x 1024", "Original cartoon basketball player nicknamed 'Air': an athletic man, dark brown skin, shaved head, huge happy smile, red and black jersey with the number 23, "
+  ("p3","1024 x 1024", "Original cartoon basketball player nicknamed 'Jet': an athletic man, dark brown skin, shaved head, huge happy smile, red and black jersey with the number 23, "
    "white air-swirl wing shapes behind his shoulders as if he could fly. "+PORTRAIT+" Background: red #ce1141 to black."),
-  ("p4","1024 x 1024", "Original cartoon basketball player nicknamed 'Chef': a slim guard, light brown skin, short dark hair, cheeky boyish smile, royal blue and yellow jersey with the number 30, "
+  ("p4","1024 x 1024", "Original cartoon basketball player nicknamed 'Chef Swish': a slim guard, light brown skin, short dark hair, cheeky boyish smile, royal blue and yellow jersey with the number 30, "
    "wearing a tiny white chef's hat, spinning a basketball on one finger. "+PORTRAIT+" Background: royal blue #1d428a to yellow #ffc72c."),
-  ("p5","1024 x 1024", "Original cartoon basketball player nicknamed 'Greek Freak': a very tall muscular man with very long arms, dark brown skin, short dark hair, big determined smile, "
+  ("p5","1024 x 1024", "Original cartoon basketball player nicknamed 'Olympus': a very tall muscular man with very long arms, dark brown skin, short dark hair, big determined smile, "
    "dark green and cream jersey with the number 34, a golden laurel wreath floating behind his head. "+PORTRAIT+" Background: green #00471b to cream #eee1c6."),
-  ("p6","1024 x 1024", "Original cartoon basketball player nicknamed 'The Joker': a big tall man, light skin, short brown hair, relaxed playful grin, navy and gold jersey with the number 15, "
+  ("p6","1024 x 1024", "Original cartoon basketball player nicknamed 'The Magician': a big tall man, light skin, short brown hair, relaxed playful grin, navy and gold jersey with the number 15, "
    "holding a playing card with a jester picture (no letters) between two fingers. "+PORTRAIT+" Background: navy #0e2240 to gold #fec524."),
-  ("p7","1024 x 1024", "Original cartoon basketball player nicknamed 'TP': a quick point guard, light brown skin, short dark hair, smiling, silver and black jersey with the number 9, "
+  ("p7","1024 x 1024", "Original cartoon basketball player nicknamed 'Lightning': a quick point guard, light brown skin, short dark hair, smiling, silver and black jersey with the number 9, "
    "small blue-white-red French flag pin on the jersey, speed lines behind him. "+PORTRAIT+" Background: silver #c4ced4 to black."),
-  ("p8","1024 x 1024", "Original cartoon basketball player nicknamed 'The Big': a huge and very strong center, dark brown skin, shaved head, joyful laugh, blue and white jersey with the number 32, "
+  ("p8","1024 x 1024", "Original cartoon basketball player nicknamed 'Dunkman': a huge and very strong center, dark brown skin, shaved head, joyful laugh, blue and white jersey with the number 32, "
    "holding a basketball in one giant hand, a few glass shards flying behind him like he just broke a backboard. "+PORTRAIT+" Background: blue #0077c0 to white."),
  ]),
  ("4. Icônes des catégories", "categories", [

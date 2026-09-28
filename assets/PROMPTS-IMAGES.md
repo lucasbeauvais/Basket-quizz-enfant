@@ -60,49 +60,49 @@ SAME character as the previous image: 'Coach Mamba', an original cartoon basketb
 ### `assets/img/players/p1.png` (1024 x 1024)
 
 ```
-Original cartoon basketball player nicknamed 'The Alien': an extremely tall and slender young man, very long arms, short curly dark hair, brown skin, calm friendly smile, black and silver jersey with the number 1, a few small glowing stars and planets floating around him. Square 1:1 bust portrait (head and shoulders, head in the upper-middle), facing the viewer with a slight 3/4 turn, on a smooth radial-gradient background in the colors given. Leave some space around the head: the image will be cropped into a circle. Background: black to silver-grey.
+Original cartoon basketball player nicknamed 'Cosmo': an extremely tall and slender young man, very long arms, short curly dark hair, brown skin, calm friendly smile, black and silver jersey with the number 1, a few small glowing stars and planets floating around him. Square 1:1 bust portrait (head and shoulders, head in the upper-middle), facing the viewer with a slight 3/4 turn, on a smooth radial-gradient background in the colors given. Leave some space around the head: the image will be cropped into a circle. Background: black to silver-grey.
 ```
 
 ### `assets/img/players/p2.png` (1024 x 1024)
 
 ```
-Original cartoon basketball player nicknamed 'The King': a powerful athletic man, dark brown skin, short dark hair, trimmed beard, white headband, purple and gold jersey with the number 23, a small golden crown floating just above his head. Square 1:1 bust portrait (head and shoulders, head in the upper-middle), facing the viewer with a slight 3/4 turn, on a smooth radial-gradient background in the colors given. Leave some space around the head: the image will be cropped into a circle. Background: purple #552583 to gold #fdb927.
+Original cartoon basketball player nicknamed 'King Rebound': a powerful athletic man, dark brown skin, short dark hair, trimmed beard, white headband, purple and gold jersey with the number 23, a small golden crown floating just above his head. Square 1:1 bust portrait (head and shoulders, head in the upper-middle), facing the viewer with a slight 3/4 turn, on a smooth radial-gradient background in the colors given. Leave some space around the head: the image will be cropped into a circle. Background: purple #552583 to gold #fdb927.
 ```
 
 ### `assets/img/players/p3.png` (1024 x 1024)
 
 ```
-Original cartoon basketball player nicknamed 'Air': an athletic man, dark brown skin, shaved head, huge happy smile, red and black jersey with the number 23, white air-swirl wing shapes behind his shoulders as if he could fly. Square 1:1 bust portrait (head and shoulders, head in the upper-middle), facing the viewer with a slight 3/4 turn, on a smooth radial-gradient background in the colors given. Leave some space around the head: the image will be cropped into a circle. Background: red #ce1141 to black.
+Original cartoon basketball player nicknamed 'Jet': an athletic man, dark brown skin, shaved head, huge happy smile, red and black jersey with the number 23, white air-swirl wing shapes behind his shoulders as if he could fly. Square 1:1 bust portrait (head and shoulders, head in the upper-middle), facing the viewer with a slight 3/4 turn, on a smooth radial-gradient background in the colors given. Leave some space around the head: the image will be cropped into a circle. Background: red #ce1141 to black.
 ```
 
 ### `assets/img/players/p4.png` (1024 x 1024)
 
 ```
-Original cartoon basketball player nicknamed 'Chef': a slim guard, light brown skin, short dark hair, cheeky boyish smile, royal blue and yellow jersey with the number 30, wearing a tiny white chef's hat, spinning a basketball on one finger. Square 1:1 bust portrait (head and shoulders, head in the upper-middle), facing the viewer with a slight 3/4 turn, on a smooth radial-gradient background in the colors given. Leave some space around the head: the image will be cropped into a circle. Background: royal blue #1d428a to yellow #ffc72c.
+Original cartoon basketball player nicknamed 'Chef Swish': a slim guard, light brown skin, short dark hair, cheeky boyish smile, royal blue and yellow jersey with the number 30, wearing a tiny white chef's hat, spinning a basketball on one finger. Square 1:1 bust portrait (head and shoulders, head in the upper-middle), facing the viewer with a slight 3/4 turn, on a smooth radial-gradient background in the colors given. Leave some space around the head: the image will be cropped into a circle. Background: royal blue #1d428a to yellow #ffc72c.
 ```
 
 ### `assets/img/players/p5.png` (1024 x 1024)
 
 ```
-Original cartoon basketball player nicknamed 'Greek Freak': a very tall muscular man with very long arms, dark brown skin, short dark hair, big determined smile, dark green and cream jersey with the number 34, a golden laurel wreath floating behind his head. Square 1:1 bust portrait (head and shoulders, head in the upper-middle), facing the viewer with a slight 3/4 turn, on a smooth radial-gradient background in the colors given. Leave some space around the head: the image will be cropped into a circle. Background: green #00471b to cream #eee1c6.
+Original cartoon basketball player nicknamed 'Olympus': a very tall muscular man with very long arms, dark brown skin, short dark hair, big determined smile, dark green and cream jersey with the number 34, a golden laurel wreath floating behind his head. Square 1:1 bust portrait (head and shoulders, head in the upper-middle), facing the viewer with a slight 3/4 turn, on a smooth radial-gradient background in the colors given. Leave some space around the head: the image will be cropped into a circle. Background: green #00471b to cream #eee1c6.
 ```
 
 ### `assets/img/players/p6.png` (1024 x 1024)
 
 ```
-Original cartoon basketball player nicknamed 'The Joker': a big tall man, light skin, short brown hair, relaxed playful grin, navy and gold jersey with the number 15, holding a playing card with a jester picture (no letters) between two fingers. Square 1:1 bust portrait (head and shoulders, head in the upper-middle), facing the viewer with a slight 3/4 turn, on a smooth radial-gradient background in the colors given. Leave some space around the head: the image will be cropped into a circle. Background: navy #0e2240 to gold #fec524.
+Original cartoon basketball player nicknamed 'The Magician': a big tall man, light skin, short brown hair, relaxed playful grin, navy and gold jersey with the number 15, holding a playing card with a jester picture (no letters) between two fingers. Square 1:1 bust portrait (head and shoulders, head in the upper-middle), facing the viewer with a slight 3/4 turn, on a smooth radial-gradient background in the colors given. Leave some space around the head: the image will be cropped into a circle. Background: navy #0e2240 to gold #fec524.
 ```
 
 ### `assets/img/players/p7.png` (1024 x 1024)
 
 ```
-Original cartoon basketball player nicknamed 'TP': a quick point guard, light brown skin, short dark hair, smiling, silver and black jersey with the number 9, small blue-white-red French flag pin on the jersey, speed lines behind him. Square 1:1 bust portrait (head and shoulders, head in the upper-middle), facing the viewer with a slight 3/4 turn, on a smooth radial-gradient background in the colors given. Leave some space around the head: the image will be cropped into a circle. Background: silver #c4ced4 to black.
+Original cartoon basketball player nicknamed 'Lightning': a quick point guard, light brown skin, short dark hair, smiling, silver and black jersey with the number 9, small blue-white-red French flag pin on the jersey, speed lines behind him. Square 1:1 bust portrait (head and shoulders, head in the upper-middle), facing the viewer with a slight 3/4 turn, on a smooth radial-gradient background in the colors given. Leave some space around the head: the image will be cropped into a circle. Background: silver #c4ced4 to black.
 ```
 
 ### `assets/img/players/p8.png` (1024 x 1024)
 
 ```
-Original cartoon basketball player nicknamed 'The Big': a huge and very strong center, dark brown skin, shaved head, joyful laugh, blue and white jersey with the number 32, holding a basketball in one giant hand, a few glass shards flying behind him like he just broke a backboard. Square 1:1 bust portrait (head and shoulders, head in the upper-middle), facing the viewer with a slight 3/4 turn, on a smooth radial-gradient background in the colors given. Leave some space around the head: the image will be cropped into a circle. Background: blue #0077c0 to white.
+Original cartoon basketball player nicknamed 'Dunkman': a huge and very strong center, dark brown skin, shaved head, joyful laugh, blue and white jersey with the number 32, holding a basketball in one giant hand, a few glass shards flying behind him like he just broke a backboard. Square 1:1 bust portrait (head and shoulders, head in the upper-middle), facing the viewer with a slight 3/4 turn, on a smooth radial-gradient background in the colors given. Leave some space around the head: the image will be cropped into a circle. Background: blue #0077c0 to white.
 ```
 
 ## 4. Icônes des catégories
