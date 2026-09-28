@@ -100,7 +100,7 @@ function screenCollection(){hideProg();
 /* ===== JEU ===== */
 var quizMode=null;
 function startRound(level,custom){quizMode=custom||null;curLevel=level;order=custom?custom.questions:buildRound(level);ROUND=order.length;current=0;points=0;correct=0;results=[];streak=0;maxStreak=0;bonusBalls=0;shotPts=0;bonusQ=custom?null:pickBonus();showProg();Sfx.whistle();renderQuestion();}
-function playHeader(){return '<div class="playbar"><div class="pb-av">'+avatarHTML(profile.avatar,32)+'</div><div class="pb-name">'+esc(profile.name)+'</div>'+
+function playHeader(){return '<button class="quitbtn" id="quitbtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>'+(quizMode?'École des règles':'Vestiaire')+'</button><div class="playbar"><div class="pb-av">'+avatarHTML(profile.avatar,32)+'</div><div class="pb-name">'+esc(profile.name)+'</div>'+
   '<div class="pb-balls" id="pbballs" title="Ballons bonus">'+(bonusBalls?'🏀 x'+bonusBalls:'')+'</div>'+
   '<div class="pb-streak'+(onFire()?' fire':'')+'" id="pbstreak"'+(streak>=2?'':' style="display:none"')+'>'+(onFire()?'🔥 ':'')+'Série x'+streak+'</div>'+
   '<div class="pb-score" id="pbscore">'+points+' pts</div></div>';}
@@ -108,6 +108,20 @@ function refreshBar(){var s=document.getElementById('pbscore');if(s)s.textConten
 function catBadge(){if(quizMode)return '<span class="leveldot"><i style="background:'+quizMode.color+'"></i>'+quizMode.label+'</span>';if(curLevel==='all')return '<span class="leveldot"><i style="background:linear-gradient(90deg,#552583,#1d428a,#0055a4,#c8102e)"></i>Match des étoiles</span>';var L=LEVELS[curLevel];return '<span class="leveldot"><i style="background:'+L.color+'"></i>'+L.name+'</span>';}
 function choicesHTML(qd){var idx=shuffle([0,1,2,3].slice(0,qd.choices.length)),letters=['A','B','C','D'],ch='';for(var i=0;i<idx.length;i++){var oi=idx[i];ch+='<button class="choice" data-oi="'+oi+'"><span class="letter">'+letters[i]+'</span><span>'+qd.choices[oi]+'</span></button>';}return ch;}
 function markChoices(qd,clicked){var btns=view.querySelectorAll('.choice');for(var i=0;i<btns.length;i++){var oi=parseInt(btns[i].getAttribute('data-oi'),10);btns[i].setAttribute('disabled','disabled');if(oi===qd.correct)btns[i].className='choice correct';else if(btns[i]===clicked)btns[i].className='choice wrong';}}
+/* Quitter le match : confirmation dans la page (les fenêtres confirm() sont bloquées sur certains navigateurs) */
+function bindQuit(){var b=document.getElementById('quitbtn');if(b)b.onclick=askQuit;}
+function askQuit(){
+  if(document.querySelector('.quitask'))return;
+  var el=document.createElement('div');el.className='quitask';
+  el.innerHTML='<div class="quitcard"><b>Quitter le match ?</b><p>Les points de ce match ne seront pas gardés.</p>'+
+    '<div class="quitrow"><button class="btn ghost" id="qno">Continuer</button><button class="btn" id="qyes">Quitter</button></div></div>';
+  document.body.appendChild(el);
+  if(window.gsap&&!reduceMotion)gsap.from(el.firstChild,{scale:.8,opacity:0,duration:.25,ease:'back.out(2)'});
+  function close(){if(el.parentNode)el.parentNode.removeChild(el);}
+  el.onclick=function(e){if(e.target===el)close();};
+  el.querySelector('#qno').onclick=close;
+  el.querySelector('#qyes').onclick=function(){close();hideProg();var m=quizMode;quizMode=null;streak=0;if(m)screenRules();else screenHome();window.scrollTo(0,0);};
+}
 function renderQuestion(){answered=false;var qd=order[current];progTxt.textContent='Question '+(current+1)+' / '+ROUND;progBar.style.width=(current/ROUND*100)+'%';
   view.innerHTML=playHeader()+
     '<div class="meta"><span class="badge theme">'+qd.theme+'</span><span class="badge ref">'+qd.rule+'</span>'+catBadge()+'</div>'+
@@ -120,6 +134,7 @@ function renderQuestion(){answered=false;var qd=order[current];progTxt.textConte
     '<div class="nextrow" id="nextrow"></div>';
   if(window.gsap&&!reduceMotion){gsap.from('.scene',{scale:.92,opacity:0,duration:.4,ease:'back.out(1.7)'});gsap.from('.choice',{x:40,opacity:0,duration:.35,stagger:.06,ease:'power2.out',delay:.1});}
   var btns=view.querySelectorAll('.choice');for(var b=0;b<btns.length;b++)btns[b].onclick=onAnswer;
+  bindQuit();
   document.getElementById('hintbtn').onclick=function(){Sfx.pop();var h=document.getElementById('hint');h.classList.add('show');this.style.opacity='.5';if(window.gsap)gsap.from(h,{y:-10,opacity:0,duration:.3});};}
 
 /* Enchaîne : dunk/3 pts -> (gants en mousse | en feu) -> "+3" qui vole jusqu'au score */
@@ -165,7 +180,7 @@ function renderBonus(){var qd=bonusQ;progTxt.textContent='Bonus';progBar.style.w
     '<div class="explain" id="explain"><b id="verdict"></b><span id="exptxt"></span></div>'+
     '<div class="nextrow" id="nextrow"><button class="btn" id="nextbtn">Séance de tirs</button></div>';
   var btns=view.querySelectorAll('.choice');for(var b=0;b<btns.length;b++)btns[b].onclick=onBonusAnswer;
-  document.getElementById('nextbtn').onclick=screenShootout;}
+  document.getElementById('nextbtn').onclick=screenShootout;bindQuit();}
 function onBonusAnswer(){var qd=bonusQ;var good=(parseInt(this.getAttribute('data-oi'),10)===qd.correct);markChoices(qd,this);
   var exp=document.getElementById('explain');exp.className='explain show '+(good?'good':'bad');
   if(good){bonusBalls++;refreshBar();Sfx.good();FX.shot('dunk',playerById(profile.avatar));}else{doShake();FX.wrong();}
