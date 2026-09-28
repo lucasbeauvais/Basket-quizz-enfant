@@ -139,7 +139,8 @@ var MiniGame = (function(){
     function drawBall(x,y,rot,gold){
       ctx.save(); ctx.translate(x,y); ctx.rotate(rot);
       var sk=(typeof ballSkin==='function')?ballSkin():{id:'classic',c:'#e8752a',l:'#6b2f08'};
-      if(Assets.has('fx/ball')&&sk.id==='classic'&&!gold){ ctx.drawImage(Assets.ok['fx/ball'],-R,-R,R*2,R*2); }
+      if(sk.img&&Assets.has(sk.img)&&!gold){ ctx.drawImage(Assets.ok[sk.img],-R,-R,R*2,R*2); }
+      else if(Assets.has('fx/ball')&&sk.id==='classic'&&!gold){ ctx.drawImage(Assets.ok['fx/ball'],-R,-R,R*2,R*2); }
       else{
         /* ballon de couleur (débloqué avec les badges) ; le money ball reste doré */
         var fill=gold?'#fdb927':sk.c, line=gold?'#6b2f08':sk.l;

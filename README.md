@@ -50,6 +50,7 @@ vendor/                 GSAP 3 et canvas-confetti (copiés pour marcher hors-lig
 assets/img/             images générées (Gemini / ChatGPT)
 prompts-images.html     tous les prompts pour générer les images, avec boutons « Copier »
 prompts-images-lot2.html  le 2e lot : défenseur, fonds d'écran, badge sifflet, icône règles
+prompts-images-lot3.html  le 3e lot : 8 ballons de style (débloqués avec les étoiles)
 ```
 
 ## Ajouter les images

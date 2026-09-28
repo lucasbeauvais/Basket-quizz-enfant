@@ -29,6 +29,9 @@ function arena(){
 var _rbId=0;
 function ballAt(x,y,r,skin){r=r||8;
   skin=skin||(typeof ballSkin==='function'?ballSkin():null)||{c:'#e8752a',l:'#6b2f08'};
+  /* ballon de style en image */
+  if(skin.img&&Assets.has(skin.img))return '<image href="'+Assets.url(skin.img)+'" x="'+(x-r)+'" y="'+(y-r)+'" width="'+(2*r)+'" height="'+(2*r)+'"/>';
+  if(skin.img)skin={c:'#e8752a',l:'#6b2f08'};
   var fill=skin.c,defs='',edge=skin.l;
   if(skin.c==='rainbow'){var id='rbw'+(_rbId++);defs='<defs><linearGradient id="'+id+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff4d6d"/><stop offset=".25" stop-color="#fdb927"/><stop offset=".5" stop-color="#2e9e5b"/><stop offset=".75" stop-color="#1f6feb"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>';fill='url(#'+id+')';}
   else if(skin.c==='#e8752a')edge='#a84a12';

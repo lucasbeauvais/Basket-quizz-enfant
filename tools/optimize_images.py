@@ -6,7 +6,7 @@ import sys, os, glob
 from PIL import Image
 # taille maximale (plus grand côté) selon le dossier : l'image n'est jamais affichée plus grande
 MAX = {'brand/logo':192,'brand/banner':1000,'coach':256,'players':256,'categories':160,
-       'fx/ball':128,'fx/trophy':360,'fx':640,'scenes':820,'minigame':720,'bg':1280,'rules':256}
+       'fx/ball':128,'fx/trophy':360,'fx':640,'scenes':820,'minigame':720,'bg':1280,'rules':256,'balls':256}
 def limit(key):
     for k in (key, key.split('/')[0]):
         if k in MAX: return MAX[k]

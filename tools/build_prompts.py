@@ -108,12 +108,29 @@ GROUPS2 = [
   ("whistle","512 x 512", "Game badge icon: a shiny golden referee whistle on a round dark navy medal with a thin gold ring, small sparkles. No text. "+TRANSP),
  ]),
 ]
+BALL = ("A single basketball seen perfectly from the front, perfectly round, filling the whole image edge to edge (no margin), "
+ "with the classic basketball seam lines clearly visible, soft studio shading, glossy cartoon 3D style like the other game items, "
+ "no shadow on the ground, no text. "+TRANSP+" Style of this ball: ")
+
+GROUPS3 = [
+ ("11. Ballons de style (débloqués avec les étoiles)", "balls", [
+  ("etoiles","512 x 512", BALL+"deep midnight blue leather covered with small shiny golden stars, gold seam lines."),
+  ("flammes","512 x 512", BALL+"orange ball with bright cartoon flames rising from the bottom and wrapping around it, red and yellow fire, dark seam lines."),
+  ("galaxie","512 x 512", BALL+"purple and blue galaxy pattern with nebula clouds, tiny planets and sparkling stardust, glowing white seam lines."),
+  ("leopard","512 x 512", BALL+"golden-orange ball with a leopard print pattern (black and brown spots), black seam lines."),
+  ("retro","512 x 512", BALL+"vintage 1950s brown leather ball, slightly worn, visible stitches along the seams, warm sepia tones."),
+  ("neon","512 x 512", BALL+"matte black ball with bright glowing neon seam lines in pink and cyan, soft neon glow around the lines."),
+  ("diamant","512 x 512", BALL+"made of shiny silver and diamond facets that sparkle, prism light reflections, elegant jewel look, silver seam lines."),
+  ("glace","512 x 512", BALL+"made of translucent light-blue ice with frost crystals and little snowflakes, white frosty seam lines."),
+ ]),
+]
+
 REGLES = [("4 bis. Icône de la catégorie « Règles »", "categories", [
   ("regles","512 x 512", "Game icon: a shiny referee whistle in gold with a small striped black-and-white referee shirt pattern behind it and a basketball. No text. "+TRANSP),
  ])]
 
 def md(groups=None):
-    groups=groups or (GROUPS+REGLES+GROUPS2)
+    groups=groups or (GROUPS+REGLES+GROUPS2+GROUPS3)
     out=["# Prompts pour générer les images du Quiz NBA\n",
      "Générées avec Gemini ou ChatGPT, puis déposées dans `assets/img/<dossier>/<nom>.png`. "
      "Chaque image est **optionnelle** : tant qu'un fichier manque, le jeu garde son dessin actuel.\n",
@@ -131,7 +148,7 @@ def md(groups=None):
     return "\n".join(out)
 
 def page(groups=None, title="Prompts images : Quiz NBA"):
-    groups=groups or (GROUPS+REGLES+GROUPS2)
+    groups=groups or (GROUPS+REGLES+GROUPS2+GROUPS3)
     data=[{"title":t,"folder":f,"items":[{"name":n,"size":s,"prompt":p} for n,s,p in it]} for t,f,it in groups]
     return """<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>"""+html.escape(title)+"""</title>
@@ -177,4 +194,5 @@ root=os.path.join(os.path.dirname(__file__),'..')
 open(os.path.join(root,'assets','PROMPTS-IMAGES.md'),'w',encoding='utf-8').write(md())
 open(os.path.join(root,'prompts-images.html'),'w',encoding='utf-8').write(page())
 open(os.path.join(root,'prompts-images-lot2.html'),'w',encoding='utf-8').write(page(REGLES+GROUPS2,'Prompts images : lot 2'))
-print(sum(len(g[2]) for g in GROUPS+REGLES+GROUPS2),'prompts au total,',sum(len(g[2]) for g in REGLES+GROUPS2),'dans le lot 2')
+open(os.path.join(root,'prompts-images-lot3.html'),'w',encoding='utf-8').write(page(GROUPS3,'Prompts images : lot 3 (ballons)'))
+print(sum(len(g[2]) for g in GROUPS+REGLES+GROUPS2+GROUPS3),'prompts au total,',sum(len(g[2]) for g in GROUPS3),'dans le lot 3')

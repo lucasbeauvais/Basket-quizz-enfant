@@ -205,7 +205,8 @@ function starsFromScore(s,total){if(s>=total)return 3;if(s>=total-1)return 2;if(
 function resultScreen(){hideProg();var earned=starsFromScore(correct,ROUND);var unlockMsg='',record=false;
   var ptsBefore=profile.careerPts||0;profile.played=(profile.played||0)+1;profile.careerPts=ptsBefore+points;var newBgs=bgsUnlockedBetween(ptsBefore,profile.careerPts);
   var key=curLevel;if(points>(profile.bestPts[key]||0)){profile.bestPts[key]=points;record=true;}
-  if(curLevel!=='all'){var before=totalStars();if(correct>(profile.best[curLevel]||0))profile.best[curLevel]=correct;if(earned>(profile.stars[curLevel]||0))profile.stars[curLevel]=earned;var after=totalStars();for(var i=0;i<PLAYERS.length;i++){if(PLAYERS[i].need>before&&PLAYERS[i].need<=after){unlockMsg='Nouveau joueur débloqué : '+PLAYERS[i].name+' !';}}}
+  var newStyleBalls=[];
+  if(curLevel!=='all'){var before=totalStars();if(correct>(profile.best[curLevel]||0))profile.best[curLevel]=correct;if(earned>(profile.stars[curLevel]||0))profile.stars[curLevel]=earned;var after=totalStars();newStyleBalls=ballsUnlockedByStars(before,after);for(var i=0;i<PLAYERS.length;i++){if(PLAYERS[i].need>before&&PLAYERS[i].need<=after){unlockMsg='Nouveau joueur débloqué : '+PLAYERS[i].name+' !';}}}
   persist();
   var starsHtml='';for(var s=0;s<3;s++)starsHtml+=starSVG(s<earned,40,false);
   var msg,sub;
@@ -222,6 +223,7 @@ function resultScreen(){hideProg();var earned=starsFromScore(correct,ROUND);var 
     '<div class="breakdown"><span>'+correct+'/'+ROUND+' bonnes réponses</span><span>Tirs : +'+shotPts+' pts</span>'+(maxStreak>=2?'<span>Meilleure série : '+maxStreak+'</span>':'')+'</div>'+
     '<div class="verdict">'+lvl+' &middot; '+sub+'</div>'+
     (unlockMsg?'<div class="unlock">'+starSVG(true,18)+unlockMsg+'</div>':'')+
+    (newStyleBalls.length?'<div class="unlock">'+ballIcon(newStyleBalls[newStyleBalls.length-1],22)+'Nouveau ballon de style : '+newStyleBalls.map(function(b){return b.name;}).join(', ')+' !</div>':'')+
     (newBgs.length?'<div class="unlock">'+starSVG(true,18)+'Nouveau fond d\'écran : '+bgNames(newBgs)+' ! (dans Mon vestiaire)</div>':'')+
     '<div class="scorecard">'+rows+'</div>'+
     '<button class="btn big" id="again">Rejouer</button>'+
@@ -237,7 +239,8 @@ function resultScreen(){hideProg();var earned=starsFromScore(correct,ROUND);var 
   }else el.textContent=points;
   if(correct===ROUND)FX.fireworks(3500);else if(earned>=2)FX.fireworks(1200);
   Sfx.buzzer();
-  seeBg(true);if(newBgs.length)setTimeout(function(){showBgUnlock(newBgs,function(){seeBg(true);});},1800);
+  seeBg(true);
+  if(newStyleBalls.length||newBgs.length)setTimeout(function(){showBallUnlock(newStyleBalls[newStyleBalls.length-1],function(){showBgUnlock(newBgs,function(){seeBg(true);});});},1800);
   document.getElementById('again').onclick=function(){startRound(curLevel);};
   document.getElementById('home').onclick=screenHome;}
 

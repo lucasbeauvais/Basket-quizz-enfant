@@ -49,26 +49,44 @@ var BALLS=[
   {id:'fouls',   name:'Rouge feu',     c:'#c8102e', l:'#fdb927', ch:'fouls'},
   {id:'mini',    name:'Turquoise',     c:'#0ea5a4', l:'#ffffff', ch:'mini'},
   {id:'signals', name:'Arbitre',       c:'#f4f4f4', l:'#1b1b1b', ch:'signals'},
-  {id:'spirit',  name:'Arc-en-ciel',   c:'rainbow', l:'#ffffff', ch:'spirit'}
+  {id:'spirit',  name:'Arc-en-ciel',   c:'rainbow', l:'#ffffff', ch:'spirit'},
+  /* ballons de STYLE (images assets/img/balls/<id>.webp), débloqués avec les étoiles des quiz.
+     Tant que l'image n'existe pas, le ballon n'apparaît pas. */
+  {id:'etoiles', name:'Étoiles',  img:'balls/etoiles', stars:2},
+  {id:'flammes', name:'Flammes',  img:'balls/flammes', stars:4},
+  {id:'galaxie', name:'Galaxie',  img:'balls/galaxie', stars:6},
+  {id:'leopard', name:'Léopard',  img:'balls/leopard', stars:8},
+  {id:'retro',   name:'Rétro',    img:'balls/retro',   stars:10},
+  {id:'neon',    name:'Néon',     img:'balls/neon',    stars:12},
+  {id:'diamant', name:'Diamant',  img:'balls/diamant', stars:14},
+  {id:'glace',   name:'Glace',    img:'balls/glace',   stars:15}
 ];
 function ballById(id){for(var i=0;i<BALLS.length;i++)if(BALLS[i].id===id)return BALLS[i];return BALLS[0];}
 function ballForChapter(chId){for(var i=0;i<BALLS.length;i++)if(BALLS[i].ch===chId)return BALLS[i];return null;}
-function ballUnlocked(b){return !b.ch||!!(profile&&profile.rules&&profile.rules.badges&&profile.rules.badges[b.ch]);}
+function ballAvailable(b){return !b.img||Assets.has(b.img);}
+function ballUnlocked(b){
+  if(!ballAvailable(b))return false;
+  if(b.stars)return !!profile&&totalStars()>=b.stars;
+  return !b.ch||!!(profile&&profile.rules&&profile.rules.badges&&profile.rules.badges[b.ch]);}
+/* ballons de style débloqués entre deux totaux d'étoiles (pour l'écran de résultat) */
+function ballsUnlockedByStars(before,after){var l=[];for(var i=0;i<BALLS.length;i++){var b=BALLS[i];if(b.stars&&ballAvailable(b)&&b.stars>before&&b.stars<=after)l.push(b);}return l;}
 /* ballon utilisé partout (animations, mini-jeu, illustrations) */
 function ballSkin(){if(!profile)return BALLS[0];var b=ballById(profile.ballSkin);return ballUnlocked(b)?b:BALLS[0];}
 function ballIcon(b,size){size=size||44;var r=size/2-2;return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'" aria-hidden="true">'+ballAt(size/2,size/2,r,b)+'</svg>';}
 function chapterNumber(chId){for(var i=0;i<RULE_CHAPTERS.length;i++)if(RULE_CHAPTERS[i].id===chId)return i+1;return 0;}
-function ballGrid(){var cur=ballSkin().id,h='';
-  for(var i=0;i<BALLS.length;i++){var b=BALLS[i],u=ballUnlocked(b),sel=(b.id===cur);
-    h+=u?'<button class="ballopt'+(sel?' sel':'')+'" data-ball="'+b.id+'">'+ballIcon(b,46)+'<b>'+b.name+'</b>'+(sel?'<small>Choisi</small>':'')+'</button>'
-        :'<div class="ballopt locked">'+ballIcon(b,46)+'<b>'+b.name+'</b><small class="bglock">'+lockSVG()+' Chapitre '+chapterNumber(b.ch)+'</small></div>';}
-  return '<div class="ballgrid">'+h+'</div>';}
+function ballGrid(){var cur=ballSkin().id,h='',styles='';
+  for(var i=0;i<BALLS.length;i++){var b=BALLS[i];if(!ballAvailable(b))continue;var u=ballUnlocked(b),sel=(b.id===cur);
+    var cell=u?'<button class="ballopt'+(sel?' sel':'')+'" data-ball="'+b.id+'">'+ballIcon(b,46)+'<b>'+b.name+'</b>'+(sel?'<small>Choisi</small>':'')+'</button>'
+        :'<div class="ballopt locked">'+ballIcon(b,46)+'<b>'+b.name+'</b><small class="bglock">'+lockSVG()+' '+(b.stars?b.stars+' ★':'Chapitre '+chapterNumber(b.ch))+'</small></div>';
+    if(b.stars)styles+=cell;else h+=cell;}
+  return '<div class="ballgrid">'+h+'</div>'+
+    (styles?'<div class="sectitle" style="margin-top:14px">Ballons de style <small>(se débloquent avec les étoiles des quiz)</small></div><div class="ballgrid">'+styles+'</div>':'');}
 /* révélation d'un nouveau ballon (après un badge sifflet) */
 function showBallUnlock(b,after){
   if(!b){after&&after();return;}
   var el=document.createElement('div');el.className='bgreveal ballreveal';
   el.setAttribute('style',bgStyle(null,.55));
-  el.innerHTML='<div class="br-ball">'+ballIcon(b,180)+'</div><div class="bgr-box"><div class="bgr-kicker">Badge sifflet = nouveau ballon !</div><div class="bgr-name">'+b.name+'</div>'+
+  el.innerHTML='<div class="br-ball">'+ballIcon(b,180)+'</div><div class="bgr-box"><div class="bgr-kicker">'+(b.stars?'Tes étoiles débloquent un nouveau ballon !':'Badge sifflet = nouveau ballon !')+'</div><div class="bgr-name">'+b.name+'</div>'+
     '<button class="btn big shootbtn" id="ballequip">Je l\'utilise !</button><button class="btn ghost big bgr-later" id="balllater">Plus tard</button></div>';
   document.body.appendChild(el);Sfx.horn();FX.fireworks(1500);
   if(window.gsap&&!reduceMotion){gsap.from(el,{opacity:0,duration:.35});gsap.fromTo(el.querySelector('.br-ball'),{scale:0,rotation:-540},{scale:1,rotation:0,duration:1.1,ease:'back.out(1.6)'});gsap.to(el.querySelector('.br-ball'),{y:-18,duration:.45,yoyo:true,repeat:-1,ease:'sine.inOut',delay:1.1});gsap.from(el.querySelector('.bgr-box'),{y:60,opacity:0,duration:.5,delay:.5,ease:'back.out(1.8)'});}

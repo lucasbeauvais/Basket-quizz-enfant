@@ -300,3 +300,53 @@ Legendary golden theme: shiny gold gradient with falling gold confetti, golden s
 ```
 Game badge icon: a shiny golden referee whistle on a round dark navy medal with a thin gold ring, small sparkles. No text. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off.
 ```
+
+## 11. Ballons de style (débloqués avec les étoiles)
+
+### `assets/img/balls/etoiles.png` (512 x 512)
+
+```
+A single basketball seen perfectly from the front, perfectly round, filling the whole image edge to edge (no margin), with the classic basketball seam lines clearly visible, soft studio shading, glossy cartoon 3D style like the other game items, no shadow on the ground, no text. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off. Style of this ball: deep midnight blue leather covered with small shiny golden stars, gold seam lines.
+```
+
+### `assets/img/balls/flammes.png` (512 x 512)
+
+```
+A single basketball seen perfectly from the front, perfectly round, filling the whole image edge to edge (no margin), with the classic basketball seam lines clearly visible, soft studio shading, glossy cartoon 3D style like the other game items, no shadow on the ground, no text. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off. Style of this ball: orange ball with bright cartoon flames rising from the bottom and wrapping around it, red and yellow fire, dark seam lines.
+```
+
+### `assets/img/balls/galaxie.png` (512 x 512)
+
+```
+A single basketball seen perfectly from the front, perfectly round, filling the whole image edge to edge (no margin), with the classic basketball seam lines clearly visible, soft studio shading, glossy cartoon 3D style like the other game items, no shadow on the ground, no text. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off. Style of this ball: purple and blue galaxy pattern with nebula clouds, tiny planets and sparkling stardust, glowing white seam lines.
+```
+
+### `assets/img/balls/leopard.png` (512 x 512)
+
+```
+A single basketball seen perfectly from the front, perfectly round, filling the whole image edge to edge (no margin), with the classic basketball seam lines clearly visible, soft studio shading, glossy cartoon 3D style like the other game items, no shadow on the ground, no text. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off. Style of this ball: golden-orange ball with a leopard print pattern (black and brown spots), black seam lines.
+```
+
+### `assets/img/balls/retro.png` (512 x 512)
+
+```
+A single basketball seen perfectly from the front, perfectly round, filling the whole image edge to edge (no margin), with the classic basketball seam lines clearly visible, soft studio shading, glossy cartoon 3D style like the other game items, no shadow on the ground, no text. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off. Style of this ball: vintage 1950s brown leather ball, slightly worn, visible stitches along the seams, warm sepia tones.
+```
+
+### `assets/img/balls/neon.png` (512 x 512)
+
+```
+A single basketball seen perfectly from the front, perfectly round, filling the whole image edge to edge (no margin), with the classic basketball seam lines clearly visible, soft studio shading, glossy cartoon 3D style like the other game items, no shadow on the ground, no text. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off. Style of this ball: matte black ball with bright glowing neon seam lines in pink and cyan, soft neon glow around the lines.
+```
+
+### `assets/img/balls/diamant.png` (512 x 512)
+
+```
+A single basketball seen perfectly from the front, perfectly round, filling the whole image edge to edge (no margin), with the classic basketball seam lines clearly visible, soft studio shading, glossy cartoon 3D style like the other game items, no shadow on the ground, no text. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off. Style of this ball: made of shiny silver and diamond facets that sparkle, prism light reflections, elegant jewel look, silver seam lines.
+```
+
+### `assets/img/balls/glace.png` (512 x 512)
+
+```
+A single basketball seen perfectly from the front, perfectly round, filling the whole image edge to edge (no margin), with the classic basketball seam lines clearly visible, soft studio shading, glossy cartoon 3D style like the other game items, no shadow on the ground, no text. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off. Style of this ball: made of translucent light-blue ice with frost crystals and little snowflakes, white frosty seam lines.
+```
