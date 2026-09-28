@@ -24,10 +24,18 @@ function arena(){
   s+='<line x1="0" y1="146" x2="400" y2="146" stroke="#fff" stroke-width="2"/>';
   return s;
 }
-function ballAt(x,y,r){r=r||8;
-  return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="#e8752a" stroke="#a84a12" stroke-width="1"/>'+
-    '<path d="M'+(x-r)+' '+y+' h'+(2*r)+' M'+x+' '+(y-r)+' v'+(2*r)+'" stroke="#6b2f08" stroke-width="1"/>'+
-    '<path d="M'+(x-r*.8)+' '+(y-r*.6)+' Q'+x+' '+y+' '+(x-r*.8)+' '+(y+r*.6)+' M'+(x+r*.8)+' '+(y-r*.6)+' Q'+x+' '+y+' '+(x+r*.8)+' '+(y+r*.6)+'" stroke="#6b2f08" stroke-width=".9" fill="none"/>';
+/* Ballon SVG. skin = {c: couleur (ou 'rainbow'), l: couleur des lignes} ; par défaut le ballon choisi
+   dans « Mon vestiaire » (ballons débloqués avec les badges de l'école des règles). */
+var _rbId=0;
+function ballAt(x,y,r,skin){r=r||8;
+  skin=skin||(typeof ballSkin==='function'?ballSkin():null)||{c:'#e8752a',l:'#6b2f08'};
+  var fill=skin.c,defs='',edge=skin.l;
+  if(skin.c==='rainbow'){var id='rbw'+(_rbId++);defs='<defs><linearGradient id="'+id+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff4d6d"/><stop offset=".25" stop-color="#fdb927"/><stop offset=".5" stop-color="#2e9e5b"/><stop offset=".75" stop-color="#1f6feb"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>';fill='url(#'+id+')';}
+  else if(skin.c==='#e8752a')edge='#a84a12';
+  return defs+'<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+fill+'" stroke="'+edge+'" stroke-width="1"/>'+
+    '<path d="M'+(x-r)+' '+y+' h'+(2*r)+' M'+x+' '+(y-r)+' v'+(2*r)+'" stroke="'+skin.l+'" stroke-width="1"/>'+
+    '<path d="M'+(x-r*.8)+' '+(y-r*.6)+' Q'+x+' '+y+' '+(x-r*.8)+' '+(y+r*.6)+' M'+(x+r*.8)+' '+(y-r*.6)+' Q'+x+' '+y+' '+(x+r*.8)+' '+(y+r*.6)+'" stroke="'+skin.l+'" stroke-width=".9" fill="none"/>'+
+    '<ellipse cx="'+(x-r*.35)+'" cy="'+(y-r*.4)+'" rx="'+(r*.32)+'" ry="'+(r*.2)+'" fill="#fff" opacity=".28" transform="rotate(-30 '+(x-r*.35)+' '+(y-r*.4)+')"/>';
 }
 /* Maillot geant (c1 = couleur, c2 = bordure, num = numero ou "?") */
 function jersey(c1,c2,num){

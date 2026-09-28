@@ -13,7 +13,7 @@ Un bloc éducatif pour connaître les règles comme un arbitre (règles officiel
 
 - **8 chapitres** : le match et le terrain, marquer des points, bouger avec le ballon, les règles du temps, les contacts et les fautes, spécial mini-basket (U9/U11 et passage en U13), les gestes de l'arbitre, l'esprit du basket.
 - **Fiches illustrées** : la règle, « chez les jeunes » (les adaptations du mini-basket), le geste de l'arbitre dessiné, et le truc du coach. On passe d'une fiche à l'autre avec les boutons ou en glissant le doigt.
-- **Quiz de chapitre** : 4 bonnes réponses sur 5 pour gagner le badge sifflet. Les 8 badges donnent le **diplôme d'arbitre junior** au nom de l'enfant.
+- **Quiz de chapitre** : 4 bonnes réponses sur 5 pour gagner le badge sifflet. Chaque badge débloque un **ballon de couleur** (Émeraude, Or massif, Bleu éclair, Violet chrono, Rouge feu, Turquoise, Arbitre, Arc-en-ciel), à choisir dans Mon vestiaire : il sert dans le mini-jeu et les animations. Les 8 badges donnent le **diplôme d'arbitre junior** au nom de l'enfant.
 - Les 52 questions forment aussi la catégorie « Règles FIBA jeunes » du quiz principal.
 
 ## Ce qui rend le jeu dynamique

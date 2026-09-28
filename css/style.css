@@ -411,3 +411,21 @@ button.playercard:hover{border-color:var(--orange)}
 .bgr-kicker{color:var(--gold);font-weight:900;letter-spacing:1.2px;text-transform:uppercase;font-size:13px}
 .bgr-name{color:#fff;font-family:Impact,"Arial Black",Helvetica,sans-serif;font-size:40px;line-height:1.1;margin:4px 0 2px;text-shadow:0 3px 0 #1b1733}
 .btn.ghost.bgr-later{color:#fff;border-color:rgba(255,255,255,.6);margin-top:10px}
+
+/* ===== BALLONS DE COULEUR ===== */
+.ballgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.ballopt{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;background:#fff;border:2px solid var(--line);border-radius:14px;padding:9px 6px 8px;font:inherit;cursor:pointer;text-align:center}
+.ballopt.sel{border-color:var(--orange);background:#fff1e4}
+.ballopt b{font-size:11.5px;color:var(--ink);line-height:1.2}
+.ballopt small{font-size:10.5px;font-weight:800;color:var(--orange2)}
+.ballopt.locked{cursor:default;background:#f1ece2}
+.ballopt.locked svg:first-child{filter:grayscale(1);opacity:.4}
+.ballopt.locked b{opacity:.55}
+.ballopt .bglock{display:inline-flex;align-items:center;gap:3px;background:#1b1733;color:#fdb927;border-radius:99px;padding:2px 7px}
+.ballopt .bglock svg{stroke:#fdb927;width:11px;height:11px}
+.rch-badge{display:flex;flex-direction:column;align-items:center;gap:3px}
+.rch-ball{line-height:0}
+.rch-ball.off{filter:grayscale(1);opacity:.45}
+.unlock svg{flex:0 0 auto}
+.bgreveal.ballreveal{flex-direction:column;justify-content:center;align-items:center;gap:18px}
+.br-ball{line-height:0;filter:drop-shadow(0 12px 18px rgba(0,0,0,.5))}

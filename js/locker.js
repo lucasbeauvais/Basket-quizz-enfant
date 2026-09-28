@@ -36,6 +36,47 @@ function applyBg(){
   document.body.style.backgroundSize=Assets.has('bg/'+b.id)?'':(b.size||'');
   document.body.style.backgroundAttachment='fixed';
 }
+/* ============================================================
+   BALLONS DE COULEUR : un par badge sifflet de l'école des règles
+   ch = id du chapitre qui le débloque (null = dès le début)
+   ============================================================ */
+var BALLS=[
+  {id:'classic', name:'Classique',     c:'#e8752a', l:'#6b2f08', ch:null},
+  {id:'match',   name:'Émeraude',      c:'#2e9e5b', l:'#0b3d22', ch:'match'},
+  {id:'points',  name:'Or massif',     c:'#fdb927', l:'#8a6420', ch:'points'},
+  {id:'ball',    name:'Bleu éclair',   c:'#1f6feb', l:'#ffffff', ch:'ball'},
+  {id:'clock',   name:'Violet chrono', c:'#8b5cf6', l:'#2a0f4a', ch:'clock'},
+  {id:'fouls',   name:'Rouge feu',     c:'#c8102e', l:'#fdb927', ch:'fouls'},
+  {id:'mini',    name:'Turquoise',     c:'#0ea5a4', l:'#ffffff', ch:'mini'},
+  {id:'signals', name:'Arbitre',       c:'#f4f4f4', l:'#1b1b1b', ch:'signals'},
+  {id:'spirit',  name:'Arc-en-ciel',   c:'rainbow', l:'#ffffff', ch:'spirit'}
+];
+function ballById(id){for(var i=0;i<BALLS.length;i++)if(BALLS[i].id===id)return BALLS[i];return BALLS[0];}
+function ballForChapter(chId){for(var i=0;i<BALLS.length;i++)if(BALLS[i].ch===chId)return BALLS[i];return null;}
+function ballUnlocked(b){return !b.ch||!!(profile&&profile.rules&&profile.rules.badges&&profile.rules.badges[b.ch]);}
+/* ballon utilisé partout (animations, mini-jeu, illustrations) */
+function ballSkin(){if(!profile)return BALLS[0];var b=ballById(profile.ballSkin);return ballUnlocked(b)?b:BALLS[0];}
+function ballIcon(b,size){size=size||44;var r=size/2-2;return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'" aria-hidden="true">'+ballAt(size/2,size/2,r,b)+'</svg>';}
+function chapterNumber(chId){for(var i=0;i<RULE_CHAPTERS.length;i++)if(RULE_CHAPTERS[i].id===chId)return i+1;return 0;}
+function ballGrid(){var cur=ballSkin().id,h='';
+  for(var i=0;i<BALLS.length;i++){var b=BALLS[i],u=ballUnlocked(b),sel=(b.id===cur);
+    h+=u?'<button class="ballopt'+(sel?' sel':'')+'" data-ball="'+b.id+'">'+ballIcon(b,46)+'<b>'+b.name+'</b>'+(sel?'<small>Choisi</small>':'')+'</button>'
+        :'<div class="ballopt locked">'+ballIcon(b,46)+'<b>'+b.name+'</b><small class="bglock">'+lockSVG()+' Chapitre '+chapterNumber(b.ch)+'</small></div>';}
+  return '<div class="ballgrid">'+h+'</div>';}
+/* révélation d'un nouveau ballon (après un badge sifflet) */
+function showBallUnlock(b,after){
+  if(!b){after&&after();return;}
+  var el=document.createElement('div');el.className='bgreveal ballreveal';
+  el.setAttribute('style',bgStyle(null,.55));
+  el.innerHTML='<div class="br-ball">'+ballIcon(b,180)+'</div><div class="bgr-box"><div class="bgr-kicker">Badge sifflet = nouveau ballon !</div><div class="bgr-name">'+b.name+'</div>'+
+    '<button class="btn big shootbtn" id="ballequip">Je l\'utilise !</button><button class="btn ghost big bgr-later" id="balllater">Plus tard</button></div>';
+  document.body.appendChild(el);Sfx.horn();FX.fireworks(1500);
+  if(window.gsap&&!reduceMotion){gsap.from(el,{opacity:0,duration:.35});gsap.fromTo(el.querySelector('.br-ball'),{scale:0,rotation:-540},{scale:1,rotation:0,duration:1.1,ease:'back.out(1.6)'});gsap.to(el.querySelector('.br-ball'),{y:-18,duration:.45,yoyo:true,repeat:-1,ease:'sine.inOut',delay:1.1});gsap.from(el.querySelector('.bgr-box'),{y:60,opacity:0,duration:.5,delay:.5,ease:'back.out(1.8)'});}
+  function close(){if(window.gsap)gsap.killTweensOf(el.querySelector('.br-ball'));if(el.parentNode)el.parentNode.removeChild(el);after&&after();}
+  el.querySelector('#ballequip').onclick=function(){profile.ballSkin=b.id;persist();Sfx.pop();close();};
+  el.querySelector('#balllater').onclick=close;
+}
+
 /* fond actuel, pour habiller un élément (carte joueur, mini-jeu, révélation) */
 function currentBg(){var b=bgById(profile&&profile.bg);if(profile&&!bgUnlocked(b))b=BACKGROUNDS[0];return b;}
 function bgStyle(b,shade){b=b||currentBg();var s=bgCss(b);
@@ -83,6 +124,8 @@ function screenLocker(){hideProg();
       '<div><b>'+(profile.played||0)+'</b><span>matchs joués</span></div></div>'+
     '<div class="sectitle">Mon joueur <small>(se débloquent avec les étoiles)</small></div>'+
     playerGrid(profile.avatar)+
+    '<div class="sectitle" style="margin-top:18px">Mon ballon <small>(1 ballon par badge sifflet de l\'école des règles)</small></div>'+
+    ballGrid()+
     '<div class="sectitle" style="margin-top:18px">Mon fond d\'écran <small>(se débloquent avec les points)</small></div>'+
     (nextBg?'<p class="hintnote left">Prochain fond : <b>'+nextBg.name+'</b> à '+nextBg.need+' points (encore '+(nextBg.need-pts)+').</p>':'<p class="hintnote left">Tous les fonds sont débloqués, bravo !</p>')+
     '<div class="bggrid">'+bgs+'</div>'+
@@ -94,6 +137,7 @@ function screenLocker(){hideProg();
   document.getElementById('lsave').onclick=function(){var el=document.getElementById('lname'),v=(el.value||'').trim();if(!v){el.focus();el.classList.add('shake');setTimeout(function(){el.classList.remove('shake');},450);return;}profile.name=v;persist();Sfx.pop();this.textContent='✓';var t=this;setTimeout(function(){t.textContent='OK';},1200);};
   var ms=view.querySelectorAll('.mascot[data-av]');for(var k=0;k<ms.length;k++){ms[k].onclick=function(){Sfx.pop();profile.avatar=this.getAttribute('data-av');persist();var y=window.scrollY;screenLocker();window.scrollTo(0,y);};}
   var bs=view.querySelectorAll('.bgopt[data-bg]');for(var m=0;m<bs.length;m++){bs[m].onclick=function(){Sfx.pop();profile.bg=this.getAttribute('data-bg');persist();applyBg();var y=window.scrollY;screenLocker();window.scrollTo(0,y);};}
+  var bl=view.querySelectorAll('.ballopt[data-ball]');for(var q=0;q<bl.length;q++){bl[q].onclick=function(){Sfx.pop();profile.ballSkin=this.getAttribute('data-ball');persist();var y=window.scrollY;screenLocker();window.scrollTo(0,y);};}
   document.getElementById('lreset').onclick=askReset;
 }
 function askReset(){

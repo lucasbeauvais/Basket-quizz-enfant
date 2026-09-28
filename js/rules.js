@@ -36,9 +36,9 @@ function screenRules(){hideProg();var r=rulesState(),n=rulesBadgeCount(),N=RULE_
     var status=got?'<span class="rstat ok">Badge gagné</span>':(read?'<span class="rstat">Quiz à réussir</span>':'<span class="rstat new">À lire</span>');
     list+='<button class="module rch" data-ch="'+i+'">'+miniBadge(ch.color,String(i+1))+
       '<div class="m-txt"><b>'+ch.title+'</b><span>'+ch.sub+' &middot; '+ch.cards.length+' fiches</span>'+status+'</div>'+
-      '<div class="rch-badge">'+whistleSVG(34,got)+'</div></button>';}
+      '<div class="rch-badge">'+whistleSVG(34,got)+'<span class="rch-ball'+(got?'':' off')+'" title="Ballon à gagner">'+ballIcon(ballForChapter(ch.id),24)+'</span></div></button>';}
   view.innerHTML=
-    '<div class="rhero">'+whistleSVG(64,true)+'<div><h1 class="h1 left">L\'école des règles</h1><p>Les règles officielles FIBA, expliquées pour les jeunes joueurs. Lis les fiches, puis réussis le quiz ('+RULES_PASS+' bonnes réponses sur '+RULES_Q+') pour gagner le badge sifflet.</p></div></div>'+
+    '<div class="rhero">'+whistleSVG(64,true)+'<div><h1 class="h1 left">L\'école des règles</h1><p>Les règles officielles FIBA, expliquées pour les jeunes joueurs. Lis les fiches, puis réussis le quiz ('+RULES_PASS+' bonnes réponses sur '+RULES_Q+') pour gagner le badge sifflet. Chaque badge débloque un ballon de couleur !</p></div></div>'+
     '<div class="coachline">'+coachHTML(44,'thinking')+'<span><b>'+COACH_NAME+'</b> : pour passer au niveau supérieur, il faut connaître les règles aussi bien qu\'un arbitre. Au boulot, champion !</span></div>'+
     '<div class="rprog"><div class="rc-bar big"><i style="width:'+Math.round(n/N*100)+'%"></i></div><span>'+n+' / '+N+' badges</span></div>'+
     (n===N?'<button class="btn big shootbtn" id="diploma">Voir mon diplôme d\'arbitre</button>':'')+
@@ -91,6 +91,7 @@ function startChapterQuiz(ci){var ch=RULE_CHAPTERS[ci];
     onEnd:function(){chapterQuizResult(ci);}});}
 function chapterQuizResult(ci){hideProg();var ch=RULE_CHAPTERS[ci],r=rulesState(),passed=correct>=Math.min(RULES_PASS,ROUND),already=!!r.badges[ch.id];
   if(correct>(r.best[ch.id]||0))r.best[ch.id]=correct;
+  var newBall=(passed&&!already)?ballForChapter(ch.id):null;
   if(passed)r.badges[ch.id]=true;
   var ptsBefore=profile.careerPts||0;profile.careerPts=ptsBefore+points;persist();var newBgs=bgsUnlockedBetween(ptsBefore,profile.careerPts);
   var n=rulesBadgeCount(),N=RULE_CHAPTERS.length,allDone=(n===N);
@@ -102,6 +103,7 @@ function chapterQuizResult(ci){hideProg();var ch=RULE_CHAPTERS[ci],r=rulesState(
     '<div class="verdict">'+(passed?('Tu connais le chapitre « '+ch.title+' » comme un arbitre.'):('Il faut '+RULES_PASS+' bonnes réponses. Relis les fiches et retente ta chance !'))+'</div>'+
     '<div class="breakdown"><span>'+n+' / '+N+' badges</span><span>+'+points+' pts</span></div>'+
     (allDone&&passed&&!already?'<div class="unlock">'+starSVG(true,18)+'Tous les badges ! Ton diplôme d\'arbitre est prêt.</div>':'')+
+    (newBall?'<div class="unlock">'+ballIcon(newBall,22)+'Nouveau ballon : '+newBall.name+' ! (dans Mon vestiaire)</div>':'')+
     (newBgs.length?'<div class="unlock">'+starSVG(true,18)+'Nouveau fond d\'écran : '+bgNames(newBgs)+' !</div>':'')+
     (allDone?'<button class="btn big shootbtn" id="dip">Voir mon diplôme</button>':'')+
     (passed&&next?'<button class="btn big" id="nextch">Chapitre suivant : '+next.title+'</button>':'')+
@@ -112,7 +114,7 @@ function chapterQuizResult(ci){hideProg();var ch=RULE_CHAPTERS[ci],r=rulesState(
   function on(id,fn){var e=document.getElementById(id);if(e)e.onclick=fn;}
   on('dip',screenDiploma);on('nextch',function(){screenCard(ci+1,0,1);});on('reread',function(){screenCard(ci,0,0);});
   on('retry',function(){startChapterQuiz(ci);});on('tolist',screenRules);
-  seeBg(true);if(newBgs.length)setTimeout(function(){showBgUnlock(newBgs);},1500);
+  seeBg(true);if(newBall||newBgs.length)setTimeout(function(){showBallUnlock(newBall,function(){showBgUnlock(newBgs);});},1500);
   window.scrollTo(0,0);}
 
 /* ===== DIPLÔME ===== */

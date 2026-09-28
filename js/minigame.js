@@ -138,10 +138,14 @@ var MiniGame = (function(){
     /* ---- dessin ---- */
     function drawBall(x,y,rot,gold){
       ctx.save(); ctx.translate(x,y); ctx.rotate(rot);
-      if(Assets.has('fx/ball')){ ctx.drawImage(Assets.ok['fx/ball'],-R,-R,R*2,R*2); }
+      var sk=(typeof ballSkin==='function')?ballSkin():{id:'classic',c:'#e8752a',l:'#6b2f08'};
+      if(Assets.has('fx/ball')&&sk.id==='classic'&&!gold){ ctx.drawImage(Assets.ok['fx/ball'],-R,-R,R*2,R*2); }
       else{
-        ctx.beginPath(); ctx.arc(0,0,R,0,Math.PI*2); ctx.fillStyle=gold?'#fdb927':'#e8752a'; ctx.fill();
-        ctx.lineWidth=1.3; ctx.strokeStyle='#6b2f08'; ctx.stroke();
+        /* ballon de couleur (débloqué avec les badges) ; le money ball reste doré */
+        var fill=gold?'#fdb927':sk.c, line=gold?'#6b2f08':sk.l;
+        if(fill==='rainbow'){ fill=ctx.createLinearGradient(-R,-R,R,R); ['#ff4d6d','#fdb927','#2e9e5b','#1f6feb','#8b5cf6'].forEach(function(c,i){fill.addColorStop(i/4,c);}); }
+        ctx.beginPath(); ctx.arc(0,0,R,0,Math.PI*2); ctx.fillStyle=fill; ctx.fill();
+        ctx.lineWidth=1.3; ctx.strokeStyle=line; ctx.stroke();
         ctx.beginPath(); ctx.moveTo(-R,0); ctx.lineTo(R,0); ctx.moveTo(0,-R); ctx.lineTo(0,R);
         ctx.moveTo(-R*.75,-R*.65); ctx.quadraticCurveTo(0,0,-R*.75,R*.65); ctx.moveTo(R*.75,-R*.65); ctx.quadraticCurveTo(0,0,R*.75,R*.65); ctx.stroke();
       }
