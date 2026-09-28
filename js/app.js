@@ -71,32 +71,23 @@ function secretBox(){return '<div class="secret">'+coachHTML(54)+'<div class="s-
 function screenHome(){hideProg();var mods='';for(var i=0;i<LEVEL_ORDER.length;i++){var f=LEVEL_ORDER[i],L=LEVELS[f];var rec=profile.bestPts[f]?(' &middot; record '+profile.bestPts[f]+' pts'):'';mods+='<button class="module" data-lvl="'+f+'">'+categoryIcon(f)+'<div class="m-txt"><b>'+L.name+'</b><span>'+L.sub+rec+'</span></div><div class="m-stars">'+starRow(profile.stars[f]||0)+'</div></button>';}
   var p=playerById(profile.avatar);
   view.innerHTML=bannerHTML()+
-    '<div class="playercard"><div class="pc-av">'+avatarHTML(profile.avatar,58)+'</div><div class="pc-txt"><b>'+esc(profile.name)+'</b><span>'+p.name+' &middot; '+rankName()+'</span><span class="pc-pts">'+(profile.careerPts||0)+' points en carrière</span></div><div class="pc-stars">'+starSVG(true,18)+' '+totalStars()+'/'+maxStars()+'</div></div>'+
+    '<button class="playercard" id="pcard"><div class="pc-av">'+avatarHTML(profile.avatar,58)+'</div><div class="pc-txt"><b>'+esc(profile.name)+'</b><span>'+p.name+' &middot; '+rankName()+'</span><span class="pc-pts">'+(profile.careerPts||0)+' points en carrière</span></div><div class="pc-stars">'+starSVG(true,18)+' '+totalStars()+'/'+maxStars()+'</div></button>'+
     secretBox()+rulesHomeCard()+
     '<div class="sectitle">Choisis ta conférence</div>'+
     '<div class="modules">'+mods+'</div>'+
     '<button class="module mix" id="mix">'+categoryIcon('all')+'<div class="m-txt"><b>Match des étoiles</b><span>Toutes les questions mélangées'+(profile.bestPts.all?' &middot; record '+profile.bestPts.all+' pts':'')+'</span></div></button>'+
-    '<div class="homebtns"><button class="btn big shootbtn" id="train">🏀 Entraînement aux tirs</button><button class="btn ghost big" id="coll">Mes joueurs</button><button class="btn ghost big" id="edit">Modifier mon profil</button></div>';
+    '<div class="homebtns"><button class="btn big shootbtn" id="train">🏀 Entraînement aux tirs</button><button class="btn ghost big" id="coll">Mon vestiaire : joueur, fond d\'écran, profil</button></div>';
   popIn('.module,.secret,.playercard');
   var ms=view.querySelectorAll('.module[data-lvl]');for(var k=0;k<ms.length;k++){ms[k].onclick=function(){startRound(parseInt(this.getAttribute('data-lvl'),10));};}
   document.getElementById('nextsecret').onclick=function(){secretIdx=(secretIdx+1)%SECRETS.length;var t=document.getElementById('secrettxt');t.textContent=SECRETS[secretIdx];Sfx.pop();if(window.gsap)gsap.from(t,{opacity:0,y:8,duration:.3});};
   document.getElementById('mix').onclick=function(){startRound('all');};
   document.getElementById('rulesbtn').onclick=function(){Sfx.whistle();screenRules();};
   document.getElementById('train').onclick=function(){MiniGame.open({title:'Entraînement',shots:[{spot:'two'},{spot:'three'},{spot:'two'},{spot:'three'},{spot:'three',money:true}],onDone:function(){screenHome();}});};
-  document.getElementById('coll').onclick=screenCollection;
-  document.getElementById('edit').onclick=screenProfile;}
+  document.getElementById('coll').onclick=screenLocker;
+  document.getElementById('pcard').onclick=screenLocker;}
 
 /* ===== ÉCRAN JOUEURS ===== */
-function screenCollection(){hideProg();
-  view.innerHTML=bannerHTML()+
-    '<h1 class="h1">Mes joueurs</h1>'+
-    '<div class="coachline" style="justify-content:center">'+starSVG(true,16)+'<span>'+totalStars()+' / '+maxStars()+' étoiles &middot; gagne des étoiles pour tout débloquer</span></div>'+
-    playerGrid(profile.avatar)+
-    '<button class="btn ghost big" id="back" style="margin-top:16px">Retour</button>';
-  popIn('.mascot');
-  var ms=view.querySelectorAll('.mascot[data-av]');for(var k=0;k<ms.length;k++){ms[k].onclick=function(){Sfx.pop();profile.avatar=this.getAttribute('data-av');persist();screenCollection();};}
-  document.getElementById('back').onclick=screenHome;}
-
+function screenCollection(){screenLocker();}
 /* ===== JEU ===== */
 var quizMode=null;
 function startRound(level,custom){quizMode=custom||null;curLevel=level;order=custom?custom.questions:buildRound(level);ROUND=order.length;current=0;points=0;correct=0;results=[];streak=0;maxStreak=0;bonusBalls=0;shotPts=0;bonusQ=custom?null:pickBonus();showProg();Sfx.whistle();renderQuestion();}
@@ -207,7 +198,7 @@ function screenShootout(){progTxt.textContent='Séance de tirs';progBar.style.wi
 /* ===== RÉSULTAT + ÉTOILES ===== */
 function starsFromScore(s,total){if(s>=total)return 3;if(s>=total-1)return 2;if(s>=Math.ceil(total*0.6))return 1;return 0;}
 function resultScreen(){hideProg();var earned=starsFromScore(correct,ROUND);var unlockMsg='',record=false;
-  profile.played=(profile.played||0)+1;profile.careerPts=(profile.careerPts||0)+points;
+  var ptsBefore=profile.careerPts||0;profile.played=(profile.played||0)+1;profile.careerPts=ptsBefore+points;var newBgs=bgsUnlockedBetween(ptsBefore,profile.careerPts);
   var key=curLevel;if(points>(profile.bestPts[key]||0)){profile.bestPts[key]=points;record=true;}
   if(curLevel!=='all'){var before=totalStars();if(correct>(profile.best[curLevel]||0))profile.best[curLevel]=correct;if(earned>(profile.stars[curLevel]||0))profile.stars[curLevel]=earned;var after=totalStars();for(var i=0;i<PLAYERS.length;i++){if(PLAYERS[i].need>before&&PLAYERS[i].need<=after){unlockMsg='Nouveau joueur débloqué : '+PLAYERS[i].name+' !';}}}
   persist();
@@ -226,6 +217,7 @@ function resultScreen(){hideProg();var earned=starsFromScore(correct,ROUND);var 
     '<div class="breakdown"><span>'+correct+'/'+ROUND+' bonnes réponses</span><span>Tirs : +'+shotPts+' pts</span>'+(maxStreak>=2?'<span>Meilleure série : '+maxStreak+'</span>':'')+'</div>'+
     '<div class="verdict">'+lvl+' &middot; '+sub+'</div>'+
     (unlockMsg?'<div class="unlock">'+starSVG(true,18)+unlockMsg+'</div>':'')+
+    (newBgs.length?'<div class="unlock">'+starSVG(true,18)+'Nouveau fond d\'écran : '+newBgs.join(', ')+' ! (dans Mon vestiaire)</div>':'')+
     '<div class="scorecard">'+rows+'</div>'+
     '<button class="btn big" id="again">Rejouer</button>'+
     '<button class="btn ghost big" id="home" style="margin-top:10px">Retour au vestiaire</button>'+
@@ -246,6 +238,6 @@ function resultScreen(){hideProg();var earned=starsFromScore(correct,ROUND);var 
 /* ===== BOOT ===== */
 function applyBrand(){if(!Assets.has('brand/logo'))return;var ic=document.querySelector('.topbar > svg');if(ic)ic.outerHTML='<img class="brandlogo" src="'+Assets.url('brand/logo')+'" alt="">';var l=document.createElement('link');l.rel='icon';l.href=Assets.url('brand/logo');document.head.appendChild(l);}
 function boot(){applyBrand();var s=loadSave();var b=blankProfile();
-  if(s&&s.name){profile=s;for(var k in b){if(profile[k]===undefined)profile[k]=b[k];}screenHome();}
-  else{profile=b;screenProfile();}}
+  if(s&&s.name){profile=s;for(var k in b){if(profile[k]===undefined)profile[k]=b[k];}applyBg();screenHome();}
+  else{profile=b;applyBg();screenProfile();}}
 Assets.load(boot);

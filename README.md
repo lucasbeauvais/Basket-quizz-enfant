@@ -26,6 +26,7 @@ Un bloc éducatif pour connaître les règles comme un arbitre (règles officiel
 | Mauvaise réponse | Tampon « RATÉ ! » |
 | Fin du match | **Séance de tirs** : mini-jeu façon Angry Birds (on tire vers l'arrière, une courbe montre la visée, on relâche). +2 ou +3 par panier, +1 si « swish », dernier ballon « money ball » x2 |
 | Accueil | Bouton « Entraînement aux tirs » pour jouer au mini-jeu librement |
+| Mon vestiaire | Prénom, statistiques, choix du joueur (débloqués avec les étoiles), 9 fonds d'écran débloqués avec les points (100 à 3000 pts), remise à zéro du compte |
 
 Les bruitages sont générés par le navigateur (aucun fichier son) et se coupent avec le bouton haut-parleur.
 
@@ -38,6 +39,7 @@ js/data.js              questions, catégories, joueurs, secrets du coach  <- po
 js/rules-data.js        l'école des règles : fiches et quiz par chapitre
 js/rules-art.js         schémas de terrain et gestes de l'arbitre
 js/rules.js             écrans de l'école des règles et diplôme
+js/locker.js            Mon vestiaire : profil, joueurs, fonds d'écran, remise à zéro
 js/art.js               dessins SVG (utilisés tant qu'il n'y a pas d'image)
 js/assets.js            liste des images optionnelles
 js/fx.js                grandes animations (GSAP + canvas-confetti)

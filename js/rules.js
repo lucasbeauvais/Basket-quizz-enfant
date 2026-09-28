@@ -91,7 +91,7 @@ function startChapterQuiz(ci){var ch=RULE_CHAPTERS[ci];
 function chapterQuizResult(ci){hideProg();var ch=RULE_CHAPTERS[ci],r=rulesState(),passed=correct>=Math.min(RULES_PASS,ROUND),already=!!r.badges[ch.id];
   if(correct>(r.best[ch.id]||0))r.best[ch.id]=correct;
   if(passed)r.badges[ch.id]=true;
-  profile.careerPts=(profile.careerPts||0)+points;persist();
+  var ptsBefore=profile.careerPts||0;profile.careerPts=ptsBefore+points;persist();var newBgs=bgsUnlockedBetween(ptsBefore,profile.careerPts);
   var n=rulesBadgeCount(),N=RULE_CHAPTERS.length,allDone=(n===N);
   var next=RULE_CHAPTERS[ci+1];
   view.innerHTML='<div class="result">'+
@@ -101,6 +101,7 @@ function chapterQuizResult(ci){hideProg();var ch=RULE_CHAPTERS[ci],r=rulesState(
     '<div class="verdict">'+(passed?('Tu connais le chapitre « '+ch.title+' » comme un arbitre.'):('Il faut '+RULES_PASS+' bonnes réponses. Relis les fiches et retente ta chance !'))+'</div>'+
     '<div class="breakdown"><span>'+n+' / '+N+' badges</span><span>+'+points+' pts</span></div>'+
     (allDone&&passed&&!already?'<div class="unlock">'+starSVG(true,18)+'Tous les badges ! Ton diplôme d\'arbitre est prêt.</div>':'')+
+    (newBgs.length?'<div class="unlock">'+starSVG(true,18)+'Nouveau fond d\'écran : '+newBgs.join(', ')+' !</div>':'')+
     (allDone?'<button class="btn big shootbtn" id="dip">Voir mon diplôme</button>':'')+
     (passed&&next?'<button class="btn big" id="nextch">Chapitre suivant : '+next.title+'</button>':'')+
     (!passed?'<button class="btn big" id="reread">Relire les fiches</button><button class="btn ghost big" id="retry" style="margin-top:10px">Retenter le quiz</button>':'')+
