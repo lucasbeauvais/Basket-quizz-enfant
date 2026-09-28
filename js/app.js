@@ -82,7 +82,7 @@ function screenHome(){hideProg();var mods='';for(var i=0;i<LEVEL_ORDER.length;i+
   document.getElementById('nextsecret').onclick=function(){secretIdx=(secretIdx+1)%SECRETS.length;var t=document.getElementById('secrettxt');t.textContent=SECRETS[secretIdx];Sfx.pop();if(window.gsap)gsap.from(t,{opacity:0,y:8,duration:.3});};
   document.getElementById('mix').onclick=function(){startRound('all');};
   document.getElementById('rulesbtn').onclick=function(){Sfx.whistle();screenRules();};
-  document.getElementById('train').onclick=function(){MiniGame.open({title:'Entraînement',shots:[{spot:'two'},{spot:'three'},{spot:'two',defender:'arms'},{spot:'three',defender:'jump'},{spot:'three',money:true,defender:'jump'}],onDone:function(){screenHome();}});};
+  document.getElementById('train').onclick=function(){MiniGame.open({title:'Entraînement',shots:withDefenders([{spot:'two'},{spot:'three'},{spot:'two'},{spot:'three'},{spot:'three',money:true}],0.4),onDone:function(){screenHome();}});};
   document.getElementById('coll').onclick=screenLocker;
   document.getElementById('pcard').onclick=screenLocker;}
 
@@ -160,7 +160,7 @@ function onAnswer(){if(answered)return;answered=true;var qd=order[current];var c
     '<button class="btn" id="nextbtn">'+(last?(quizMode?'Voir mon badge':(bonusQ?'Question bonus':'Séance de tirs')):'Question suivante')+'</button>';
   row.classList.add('show');
   var bs=document.getElementById('bonusshot');
-  if(bs)bs.onclick=function(){bonusBalls=Math.max(0,bonusBalls-1);MiniGame.open({title:'Tir bonus',shots:[{spot:'three',defender:'arms'}],onDone:function(p){shotPts+=p;points+=p;refreshBar();bs.parentNode.removeChild(bs);}});};
+  if(bs)bs.onclick=function(){bonusBalls=Math.max(0,bonusBalls-1);MiniGame.open({title:'Tir bonus',shots:withDefenders([{spot:'three'}],0.5),onDone:function(p){shotPts+=p;points+=p;refreshBar();bs.parentNode.removeChild(bs);}});};
   document.getElementById('nextbtn').onclick=function(){if(!last){current++;renderQuestion();window.scrollTo(0,0);}else if(quizMode){quizMode.onEnd();}else if(bonusQ){renderBonus();}else{screenShootout();}};}
 function renderBonus(){var qd=bonusQ;progTxt.textContent='Bonus';progBar.style.width='100%';
   view.innerHTML=playHeader()+
@@ -182,14 +182,16 @@ function shootoutShots(){
   var n=Math.min(8,2+bonusBalls+(correct===ROUND?1:0)),s=[];
   for(var i=0;i<n;i++)s.push({spot:(i%2===0)?'two':'three'});
   s[n-1]={spot:'three',money:true};
-  /* un défenseur sur certains paniers : bras levés, puis qui saute */
-  for(var j=1;j<n;j++){if(j%2===1)s[j].defender='jump';else if(j>=2)s[j].defender='arms';}
+  for(var j=1;j<n;j++){var d=randomDefender(0.4);if(d)s[j].defender=d;}
   return s;}
+/* défenseur au hasard : soit personne, soit un défenseur (qui saute ou qui lève les bras) */
+function randomDefender(chance){return Math.random()<chance?(Math.random()<0.5?'jump':'arms'):null;}
+function withDefenders(shots,chance){for(var i=0;i<shots.length;i++){var d=randomDefender(chance);if(d)shots[i].defender=d;}return shots;}
 function screenShootout(){progTxt.textContent='Séance de tirs';progBar.style.width='100%';
   var shots=shootoutShots();
   view.innerHTML='<div class="shootintro">'+coachHTML(96,'cheer')+
     '<h2 class="h1">Séance de tirs !</h2>'+
-    '<p>'+COACH_NAME+' : tu as gagné <b>'+shots.length+' ballons</b>. Chaque panier rapporte des points en plus. Le dernier ballon, c\'est le <b>money ball</b> : il compte double ! Attention, sur les ballons marqués d\'une main, un défenseur essaie de contrer.</p>'+
+    '<p>'+COACH_NAME+' : tu as gagné <b>'+shots.length+' ballons</b>. Chaque panier rapporte des points en plus. Le dernier ballon, c\'est le <b>money ball</b> : il compte double ! Attention : sur les ballons marqués d\'une main, un défenseur surprise essaie de contrer !</p>'+
     '<div class="balls">'+shots.map(function(s){return '<span class="ballchip'+(s.money?' money':'')+(s.defender?' def':'')+'">'+(s.spot==='three'?'+3':'+2')+'</span>';}).join('')+'</div>'+
     '<button class="btn big shootbtn" id="goshoot">🏀 Aller shooter !</button>'+
     '<button class="btn ghost big" id="skipshoot" style="margin-top:10px">Voir mon résultat</button></div>';

@@ -24,7 +24,7 @@ Un bloc éducatif pour connaître les règles comme un arbitre (règles officiel
 | 3 bonnes réponses d'affilée | Gants en mousse « #1 » + explosion + canons à confettis, **1 ballon bonus** et un tir à 3 points bonus tout de suite |
 | 5 bonnes réponses d'affilée | EN FEU : ballon en flammes, les réponses valent **+6** tant que la série continue |
 | Mauvaise réponse | Tampon « RATÉ ! » |
-| Fin du match | **Séance de tirs** : mini-jeu façon Angry Birds (on tire vers l'arrière, une courbe montre la visée, on relâche). +2 ou +3 par panier, +1 si « swish », dernier ballon « money ball » x2. Sur certains paniers, un défenseur essaie de contrer (il saute en rythme ou agite les bras) : il faut choisir le bon moment ou lober, +1 si on passe par-dessus |
+| Fin du match | **Séance de tirs** : mini-jeu façon Angry Birds (on tire vers l'arrière, une courbe montre la visée, on relâche). +2 ou +3 par panier, +1 si « swish », dernier ballon « money ball » x2. Au hasard, un défenseur surprise essaie de contrer (il saute en rythme ou agite les bras) : il faut choisir le bon moment ou lober, +1 si on passe par-dessus |
 | Accueil | Bouton « Entraînement aux tirs » pour jouer au mini-jeu librement |
 | Mon vestiaire | Prénom, statistiques, choix du joueur (débloqués avec les étoiles), 9 fonds d'écran débloqués avec les points (100 à 3000 pts), remise à zéro du compte |
 
