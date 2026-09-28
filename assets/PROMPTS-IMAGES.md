@@ -131,6 +131,12 @@ Game icon: a basketball with a blue-white-red swoosh around it and a tiny Eiffel
 Game icon: a basketball hoop with backboard and net, in red, white and blue colors, with a whistle. Generic, NOT the NBA logo. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off.
 ```
 
+### `assets/img/categories/regles.png` (512 x 512)
+
+```
+Game icon: a shiny referee whistle in gold with a small striped black-and-white referee shirt pattern behind it and a basketball. No text. Transparent background (PNG with alpha channel), subject centered with a small margin, nothing cut off.
+```
+
 ### `assets/img/categories/mix.png` (512 x 512)
 
 ```

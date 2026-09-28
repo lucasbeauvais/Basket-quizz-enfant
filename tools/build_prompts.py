@@ -55,6 +55,7 @@ GROUPS = [
   ("stars","512 x 512", "Game icon: a basketball with a bright blue and yellow lightning bolt striking through it, electric sparks. "+TRANSP),
   ("france","512 x 512", "Game icon: a basketball with a blue-white-red swoosh around it and a tiny Eiffel Tower silhouette next to it. "+TRANSP),
   ("nba","512 x 512", "Game icon: a basketball hoop with backboard and net, in red, white and blue colors, with a whistle. Generic, NOT the NBA logo. "+TRANSP),
+  ("regles","512 x 512", "Game icon: a shiny referee whistle in gold with a small striped black-and-white referee shirt pattern behind it and a basketball. No text. "+TRANSP),
   ("mix","512 x 512", "Game icon: a golden 'all-star' basketball covered in small stars, with a rainbow sparkle trail. "+TRANSP),
  ]),
  ("5. Effets des grandes animations", "fx", [

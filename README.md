@@ -7,6 +7,15 @@ Quiz de basket pour enfants : 54 questions sur les légendes (Jordan, Kobe...), 
 Ouvrir `index.html` dans un navigateur (ordinateur, tablette ou téléphone). Aucune installation, ça marche aussi hors-ligne.
 Pour y jouer en ligne : GitHub > Settings > Pages > branche `main`, dossier `/`.
 
+## L'école des règles FIBA
+
+Un bloc éducatif pour connaître les règles comme un arbitre (règles officielles FIBA, utilisées par la FFBB, simplifiées pour les enfants) :
+
+- **8 chapitres** : le match et le terrain, marquer des points, bouger avec le ballon, les règles du temps, les contacts et les fautes, spécial mini-basket (U9/U11 et passage en U13), les gestes de l'arbitre, l'esprit du basket.
+- **Fiches illustrées** : la règle, « chez les jeunes » (les adaptations du mini-basket), le geste de l'arbitre dessiné, et le truc du coach. On passe d'une fiche à l'autre avec les boutons ou en glissant le doigt.
+- **Quiz de chapitre** : 4 bonnes réponses sur 5 pour gagner le badge sifflet. Les 8 badges donnent le **diplôme d'arbitre junior** au nom de l'enfant.
+- Les 52 questions forment aussi la catégorie « Règles FIBA jeunes » du quiz principal.
+
 ## Ce qui rend le jeu dynamique
 
 | Moment | Effet |
@@ -26,6 +35,9 @@ Les bruitages sont générés par le navigateur (aucun fichier son) et se coupen
 index.html              la page
 css/style.css           les styles
 js/data.js              questions, catégories, joueurs, secrets du coach  <- pour ajouter des questions
+js/rules-data.js        l'école des règles : fiches et quiz par chapitre
+js/rules-art.js         schémas de terrain et gestes de l'arbitre
+js/rules.js             écrans de l'école des règles et diplôme
 js/art.js               dessins SVG (utilisés tant qu'il n'y a pas d'image)
 js/assets.js            liste des images optionnelles
 js/fx.js                grandes animations (GSAP + canvas-confetti)

@@ -9,7 +9,7 @@ var ASSET_LIST = [
   'brand/logo','brand/banner',
   'coach/coach-mamba','coach/coach-happy','coach/coach-thinking','coach/coach-cheer',
   'players/p1','players/p2','players/p3','players/p4','players/p5','players/p6','players/p7','players/p8',
-  'categories/legendes','categories/stars','categories/france','categories/nba','categories/mix',
+  'categories/legendes','categories/stars','categories/france','categories/nba','categories/regles','categories/mix',
   'fx/foam-finger','fx/explosion','fx/fireball','fx/trophy','fx/ball',
   'scenes/trophy','scenes/mystery','scenes/globe','scenes/hoop','scenes/versus','scenes/chess',
   'minigame/court'

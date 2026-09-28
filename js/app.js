@@ -16,9 +16,10 @@ function doShake(){if(reduceMotion)return;var c=document.querySelector('.card');
 /* ===== SAUVEGARDE ===== */
 var SAVE_KEY='quiz_nba_legendes_v1';
 var profile=null;
-function blankProfile(){return {name:'',avatar:'p1',stars:{1:0,2:0,3:0,4:0},best:{1:0,2:0,3:0,4:0},bestPts:{1:0,2:0,3:0,4:0,all:0},careerPts:0,played:0};}
+function blankProfile(){return {name:'',avatar:'p1',stars:{1:0,2:0,3:0,4:0,5:0},best:{1:0,2:0,3:0,4:0,5:0},bestPts:{1:0,2:0,3:0,4:0,5:0,all:0},rules:{read:{},badges:{},best:{}},careerPts:0,played:0};}
 function loadSave(){try{var s=localStorage.getItem(SAVE_KEY);return s?JSON.parse(s):null;}catch(e){return null;}}
 function persist(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(profile));}catch(e){}}
+function maxStars(){return LEVEL_ORDER.length*3;}
 function totalStars(){var t=0;for(var i=0;i<LEVEL_ORDER.length;i++)t+=(profile.stars[LEVEL_ORDER[i]]||0);return t;}
 function rankName(){var t=totalStars();if(t>=12)return'Légende (GOAT)';if(t>=9)return'MVP';if(t>=6)return'All-Star';if(t>=3)return'Titulaire';return'Rookie';}
 function playerById(id){for(var i=0;i<PLAYERS.length;i++)if(PLAYERS[i].id===id)return PLAYERS[i];return PLAYERS[0];}
@@ -70,8 +71,8 @@ function secretBox(){return '<div class="secret">'+coachHTML(54)+'<div class="s-
 function screenHome(){hideProg();var mods='';for(var i=0;i<LEVEL_ORDER.length;i++){var f=LEVEL_ORDER[i],L=LEVELS[f];var rec=profile.bestPts[f]?(' &middot; record '+profile.bestPts[f]+' pts'):'';mods+='<button class="module" data-lvl="'+f+'">'+categoryIcon(f)+'<div class="m-txt"><b>'+L.name+'</b><span>'+L.sub+rec+'</span></div><div class="m-stars">'+starRow(profile.stars[f]||0)+'</div></button>';}
   var p=playerById(profile.avatar);
   view.innerHTML=bannerHTML()+
-    '<div class="playercard"><div class="pc-av">'+avatarHTML(profile.avatar,58)+'</div><div class="pc-txt"><b>'+esc(profile.name)+'</b><span>'+p.name+' &middot; '+rankName()+'</span><span class="pc-pts">'+(profile.careerPts||0)+' points en carrière</span></div><div class="pc-stars">'+starSVG(true,18)+' '+totalStars()+'/12</div></div>'+
-    secretBox()+
+    '<div class="playercard"><div class="pc-av">'+avatarHTML(profile.avatar,58)+'</div><div class="pc-txt"><b>'+esc(profile.name)+'</b><span>'+p.name+' &middot; '+rankName()+'</span><span class="pc-pts">'+(profile.careerPts||0)+' points en carrière</span></div><div class="pc-stars">'+starSVG(true,18)+' '+totalStars()+'/'+maxStars()+'</div></div>'+
+    secretBox()+rulesHomeCard()+
     '<div class="sectitle">Choisis ta conférence</div>'+
     '<div class="modules">'+mods+'</div>'+
     '<button class="module mix" id="mix">'+categoryIcon('all')+'<div class="m-txt"><b>Match des étoiles</b><span>Toutes les questions mélangées'+(profile.bestPts.all?' &middot; record '+profile.bestPts.all+' pts':'')+'</span></div></button>'+
@@ -80,6 +81,7 @@ function screenHome(){hideProg();var mods='';for(var i=0;i<LEVEL_ORDER.length;i+
   var ms=view.querySelectorAll('.module[data-lvl]');for(var k=0;k<ms.length;k++){ms[k].onclick=function(){startRound(parseInt(this.getAttribute('data-lvl'),10));};}
   document.getElementById('nextsecret').onclick=function(){secretIdx=(secretIdx+1)%SECRETS.length;var t=document.getElementById('secrettxt');t.textContent=SECRETS[secretIdx];Sfx.pop();if(window.gsap)gsap.from(t,{opacity:0,y:8,duration:.3});};
   document.getElementById('mix').onclick=function(){startRound('all');};
+  document.getElementById('rulesbtn').onclick=function(){Sfx.whistle();screenRules();};
   document.getElementById('train').onclick=function(){MiniGame.open({title:'Entraînement',shots:[{spot:'two'},{spot:'three'},{spot:'two'},{spot:'three'},{spot:'three',money:true}],onDone:function(){screenHome();}});};
   document.getElementById('coll').onclick=screenCollection;
   document.getElementById('edit').onclick=screenProfile;}
@@ -88,7 +90,7 @@ function screenHome(){hideProg();var mods='';for(var i=0;i<LEVEL_ORDER.length;i+
 function screenCollection(){hideProg();
   view.innerHTML=bannerHTML()+
     '<h1 class="h1">Mes joueurs</h1>'+
-    '<div class="coachline" style="justify-content:center">'+starSVG(true,16)+'<span>'+totalStars()+' / 12 étoiles &middot; gagne des étoiles pour tout débloquer</span></div>'+
+    '<div class="coachline" style="justify-content:center">'+starSVG(true,16)+'<span>'+totalStars()+' / '+maxStars()+' étoiles &middot; gagne des étoiles pour tout débloquer</span></div>'+
     playerGrid(profile.avatar)+
     '<button class="btn ghost big" id="back" style="margin-top:16px">Retour</button>';
   popIn('.mascot');
@@ -96,13 +98,14 @@ function screenCollection(){hideProg();
   document.getElementById('back').onclick=screenHome;}
 
 /* ===== JEU ===== */
-function startRound(level){curLevel=level;order=buildRound(level);ROUND=order.length;current=0;points=0;correct=0;results=[];streak=0;maxStreak=0;bonusBalls=0;shotPts=0;bonusQ=pickBonus();showProg();Sfx.whistle();renderQuestion();}
+var quizMode=null;
+function startRound(level,custom){quizMode=custom||null;curLevel=level;order=custom?custom.questions:buildRound(level);ROUND=order.length;current=0;points=0;correct=0;results=[];streak=0;maxStreak=0;bonusBalls=0;shotPts=0;bonusQ=custom?null:pickBonus();showProg();Sfx.whistle();renderQuestion();}
 function playHeader(){return '<div class="playbar"><div class="pb-av">'+avatarHTML(profile.avatar,32)+'</div><div class="pb-name">'+esc(profile.name)+'</div>'+
   '<div class="pb-balls" id="pbballs" title="Ballons bonus">'+(bonusBalls?'🏀 x'+bonusBalls:'')+'</div>'+
   '<div class="pb-streak'+(onFire()?' fire':'')+'" id="pbstreak"'+(streak>=2?'':' style="display:none"')+'>'+(onFire()?'🔥 ':'')+'Série x'+streak+'</div>'+
   '<div class="pb-score" id="pbscore">'+points+' pts</div></div>';}
 function refreshBar(){var s=document.getElementById('pbscore');if(s)s.textContent=points+' pts';var st=document.getElementById('pbstreak');if(st){st.style.display=streak>=2?'':'none';st.className='pb-streak'+(onFire()?' fire':'');st.textContent=(onFire()?'🔥 ':'')+'Série x'+streak;}var b=document.getElementById('pbballs');if(b)b.textContent=bonusBalls?'🏀 x'+bonusBalls:'';}
-function catBadge(){if(curLevel==='all')return '<span class="leveldot"><i style="background:linear-gradient(90deg,#552583,#1d428a,#0055a4,#c8102e)"></i>Match des étoiles</span>';var L=LEVELS[curLevel];return '<span class="leveldot"><i style="background:'+L.color+'"></i>'+L.name+'</span>';}
+function catBadge(){if(quizMode)return '<span class="leveldot"><i style="background:'+quizMode.color+'"></i>'+quizMode.label+'</span>';if(curLevel==='all')return '<span class="leveldot"><i style="background:linear-gradient(90deg,#552583,#1d428a,#0055a4,#c8102e)"></i>Match des étoiles</span>';var L=LEVELS[curLevel];return '<span class="leveldot"><i style="background:'+L.color+'"></i>'+L.name+'</span>';}
 function choicesHTML(qd){var idx=shuffle([0,1,2,3].slice(0,qd.choices.length)),letters=['A','B','C','D'],ch='';for(var i=0;i<idx.length;i++){var oi=idx[i];ch+='<button class="choice" data-oi="'+oi+'"><span class="letter">'+letters[i]+'</span><span>'+qd.choices[oi]+'</span></button>';}return ch;}
 function markChoices(qd,clicked){var btns=view.querySelectorAll('.choice');for(var i=0;i<btns.length;i++){var oi=parseInt(btns[i].getAttribute('data-oi'),10);btns[i].setAttribute('disabled','disabled');if(oi===qd.correct)btns[i].className='choice correct';else if(btns[i]===clicked)btns[i].className='choice wrong';}}
 function renderQuestion(){answered=false;var qd=order[current];progTxt.textContent='Question '+(current+1)+' / '+ROUND;progBar.style.width=(current/ROUND*100)+'%';
@@ -148,11 +151,11 @@ function onAnswer(){if(answered)return;answered=true;var qd=order[current];var c
   var last=(current+1>=ROUND);
   var row=document.getElementById('nextrow');
   row.innerHTML=(good&&streak%3===0?'<button class="btn shootbtn" id="bonusshot">🏀 Tir bonus à 3 points !</button>':'')+
-    '<button class="btn" id="nextbtn">'+(last?(bonusQ?'Question bonus':'Séance de tirs'):'Question suivante')+'</button>';
+    '<button class="btn" id="nextbtn">'+(last?(quizMode?'Voir mon badge':(bonusQ?'Question bonus':'Séance de tirs')):'Question suivante')+'</button>';
   row.classList.add('show');
   var bs=document.getElementById('bonusshot');
   if(bs)bs.onclick=function(){bonusBalls=Math.max(0,bonusBalls-1);MiniGame.open({title:'Tir bonus',shots:[{spot:'three'}],onDone:function(p){shotPts+=p;points+=p;refreshBar();bs.parentNode.removeChild(bs);}});};
-  document.getElementById('nextbtn').onclick=function(){if(!last){current++;renderQuestion();window.scrollTo(0,0);}else if(bonusQ){renderBonus();}else{screenShootout();}};}
+  document.getElementById('nextbtn').onclick=function(){if(!last){current++;renderQuestion();window.scrollTo(0,0);}else if(quizMode){quizMode.onEnd();}else if(bonusQ){renderBonus();}else{screenShootout();}};}
 function renderBonus(){var qd=bonusQ;progTxt.textContent='Bonus';progBar.style.width='100%';
   view.innerHTML=playHeader()+
     '<div class="meta"><span class="badge theme" style="background:#8a6420">Bonus culture</span><span class="badge ref">Basket</span><span class="leveldot"><i style="background:#fdb927"></i>Pour la gloire</span></div>'+
