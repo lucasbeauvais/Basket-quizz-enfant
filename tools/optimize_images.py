@@ -16,6 +16,8 @@ tot=0
 for f in sorted(glob.glob(os.path.join(src,'**','*.png'),recursive=True)):
     rel=f.replace('\\','/').split('assets/img/')[-1][:-4]
     im=Image.open(f).convert('RGBA'); m=limit(rel)
+    if rel.startswith('minigame/defender'):  # rogne les marges transparentes (mains au bord de l'image)
+        im=im.crop(im.getchannel('A').point(lambda v:255 if v>40 else 0).getbbox())
     if max(im.size)>m: im.thumbnail((m,m),Image.LANCZOS)
     opaque=im.getchannel('A').getextrema()[0]==255
     out=os.path.join(root,rel+'.webp'); os.makedirs(os.path.dirname(out),exist_ok=True)

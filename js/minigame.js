@@ -86,7 +86,17 @@ var MiniGame = (function(){
       }else{
         var a=(Math.sin(defT*Math.PI*2/1.3)+1)/2; hy=sh+2-a*60; hx=36-a*24;
       }
-      return {x:def.x, feet:DEF_FEET-off, sh:sh-off+crouch, hy:hy-off+crouch, hx:hx, off:off, wide:(def.mode==='arms'&&hx>24)};
+      var P={x:def.x, feet:DEF_FEET-off, sh:sh-off+crouch, hy:hy-off+crouch, hx:hx, off:off, wide:(def.mode==='arms'&&hx>24)};
+      /* avec les images : on place l'image pour que ses mains tombent sur P.hy, et les mains
+         (zone qui contre) suivent exactement l'image. Mesures faites sur les images rognées. */
+      var key='minigame/defender-'+(P.off>4?'jump':(P.wide?'wide':'stand'));
+      if(!Assets.has(key))key='minigame/defender-stand';
+      if(Assets.has(key)){
+        var im=Assets.ok[key], fr=(key.slice(-4)==='wide')?{hy:0.24,hx:0.45}:{hy:0.06,hx:0.30};
+        var h=(P.feet-P.hy)/(1-fr.hy), w=h*im.width/im.height;
+        P.img={im:im,top:P.hy-fr.hy*h,h:h,w:w}; P.hx=fr.hx*w;
+      }
+      return P;
     }
     function hitDefender(){
       if(!def||blocked||ball.vx<=0)return;
@@ -167,12 +177,9 @@ var MiniGame = (function(){
     function drawDefender(){
       if(!def)return; var P=defPose(), x=P.x, SK='#8a5a3a', J='#c8102e';
       /* image du défenseur si elle existe (saute / bras levés / bras écartés) */
-      var key='minigame/defender-'+(P.off>4?'jump':(P.wide?'wide':'stand'));
-      if(!Assets.has(key))key='minigame/defender-stand';
-      if(Assets.has(key)){
-        var im=Assets.ok[key], top=Math.min(P.hy,P.sh-30)-10, h=P.feet-top+4, w=h*im.width/im.height;
+      if(P.img){
         ctx.fillStyle='rgba(0,0,0,.25)'; ctx.beginPath(); ctx.ellipse(x,DEF_FEET+2,18-P.off*0.06,4,0,0,Math.PI*2); ctx.fill();
-        ctx.drawImage(im,x-w/2,top,w,h); return;
+        ctx.drawImage(P.img.im,x-P.img.w/2,P.img.top,P.img.w,P.img.h); return;
       }
       ctx.fillStyle='rgba(0,0,0,.25)'; ctx.beginPath(); ctx.ellipse(x,DEF_FEET+2,18-P.off*0.06,4,0,0,Math.PI*2); ctx.fill();
       ctx.lineCap='round';
