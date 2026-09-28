@@ -102,7 +102,7 @@ function chapterQuizResult(ci){hideProg();var ch=RULE_CHAPTERS[ci],r=rulesState(
     '<div class="verdict">'+(passed?('Tu connais le chapitre « '+ch.title+' » comme un arbitre.'):('Il faut '+RULES_PASS+' bonnes réponses. Relis les fiches et retente ta chance !'))+'</div>'+
     '<div class="breakdown"><span>'+n+' / '+N+' badges</span><span>+'+points+' pts</span></div>'+
     (allDone&&passed&&!already?'<div class="unlock">'+starSVG(true,18)+'Tous les badges ! Ton diplôme d\'arbitre est prêt.</div>':'')+
-    (newBgs.length?'<div class="unlock">'+starSVG(true,18)+'Nouveau fond d\'écran : '+newBgs.join(', ')+' !</div>':'')+
+    (newBgs.length?'<div class="unlock">'+starSVG(true,18)+'Nouveau fond d\'écran : '+bgNames(newBgs)+' !</div>':'')+
     (allDone?'<button class="btn big shootbtn" id="dip">Voir mon diplôme</button>':'')+
     (passed&&next?'<button class="btn big" id="nextch">Chapitre suivant : '+next.title+'</button>':'')+
     (!passed?'<button class="btn big" id="reread">Relire les fiches</button><button class="btn ghost big" id="retry" style="margin-top:10px">Retenter le quiz</button>':'')+
@@ -112,6 +112,7 @@ function chapterQuizResult(ci){hideProg();var ch=RULE_CHAPTERS[ci],r=rulesState(
   function on(id,fn){var e=document.getElementById(id);if(e)e.onclick=fn;}
   on('dip',screenDiploma);on('nextch',function(){screenCard(ci+1,0,1);});on('reread',function(){screenCard(ci,0,0);});
   on('retry',function(){startChapterQuiz(ci);});on('tolist',screenRules);
+  seeBg(true);if(newBgs.length)setTimeout(function(){showBgUnlock(newBgs);},1500);
   window.scrollTo(0,0);}
 
 /* ===== DIPLÔME ===== */
@@ -127,7 +128,7 @@ function screenDiploma(){hideProg();var d=new Date(),mois=['janvier','février',
     '<div class="d-sign"><div>'+coachHTML(46,'cheer')+'</div><div><b>'+COACH_NAME+'</b><span>le '+d.getDate()+' '+mois[d.getMonth()]+' '+d.getFullYear()+'</span></div></div>'+
     '</div>'+
     '<button class="btn ghost big" id="back" style="margin-top:14px">Retour à l\'école des règles</button>';
-  FX.fireworks(3000);Sfx.cheer();
+  FX.fireworks(3000);Sfx.cheer();seeBg(true);
   if(window.gsap&&!reduceMotion){gsap.from('.diploma',{scale:.7,rotation:-4,opacity:0,duration:.7,ease:'back.out(1.6)'});gsap.from('.dbadge',{scale:0,stagger:.08,delay:.5,duration:.4,ease:'back.out(3)'});}
   document.getElementById('back').onclick=screenRules;
   window.scrollTo(0,0);}

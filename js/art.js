@@ -188,7 +188,22 @@ function figSVG(p){
     '<line x1="11" y1="-70" x2="14" y2="-98" stroke="'+p.skin+'" stroke-width="6" stroke-linecap="round"/>'+
     headSVG(0,-86,11,p.skin,p.hair);
 }
+/* Joueur des animations : le joueur rouge (images du défenseur), retourné vers la droite
+   pour tirer vers le panier. Pieds à l'origine (0,0), mains en haut. Sinon, dessin figSVG. */
+function fxPlayer(p,pose){
+  var key='minigame/defender-'+(pose||'stand');
+  if(!Assets.has(key))key='minigame/defender-stand';
+  if(!Assets.has(key))return figSVG(p);
+  var im=Assets.ok[key],H=124,w=H*im.width/im.height;
+  return '<ellipse cx="0" cy="2" rx="18" ry="4" fill="#000" opacity=".3"/>'+
+    '<g transform="scale(-1,1)"><image href="'+Assets.url(key)+'" x="'+(-w/2)+'" y="'+(-H)+'" width="'+w+'" height="'+H+'"/></g>';
+}
 function fxCourt(){
+  /* décor réaliste : l'image de la salle du mini-jeu, cadrée pour que le parquet commence vers y=170 */
+  if(Assets.has('minigame/court'))return '<rect width="400" height="260" fill="#0b0f2e"/>'+
+    '<image href="'+Assets.url('minigame/court')+'" x="0" y="-393" width="400" height="716" preserveAspectRatio="none"/>'+
+    '<rect x="352" y="60" width="8" height="160" fill="#9aa0b8"/>'+
+    '<rect x="330" y="20" width="10" height="84" fill="#fff" stroke="#c9c2b0"/><rect x="340" y="60" width="14" height="6" fill="#9aa0b8"/>';
   var s='<rect width="400" height="260" fill="#141a45"/>';
   var cols=['#e8752a','#fdb927','#6a5acd','#c0392b','#2e9e5b','#ffffff'];
   for(var r=0;r<4;r++){for(var x=8+(r%2)*9;x<400;x+=18){s+='<circle cx="'+x+'" cy="'+(120+r*11)+'" r="4.5" fill="'+cols[(x+r*5)%cols.length]+'" opacity=".35"/>';}}
@@ -207,7 +222,7 @@ function fxRimNet(netCls){
 function dunkSVG(p,big){
   return '<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">'+fxCourt()+
     '<g class="fx-drop">'+ballAt(300,70,11)+'</g>'+
-    '<g class="fx-jump"><g transform="translate(90,222)">'+figSVG(p)+'<g class="fx-hand">'+ballAt(14,-106,11)+'</g></g></g>'+
+    '<g class="fx-jump"><g transform="translate(90,222)">'+fxPlayer(p,'jump')+'<g class="fx-hand">'+ballAt(12,-126,11)+'</g></g></g>'+
     fxRimNet('d')+
     '<g class="fx-word"><text x="150" y="70" font-family="Impact,Arial Black,Helvetica" font-size="'+(big?44:52)+'" fill="#fdb927" stroke="#1b1733" stroke-width="3" text-anchor="middle" paint-order="stroke">'+(big?'MÉGA DUNK !':'DUNK !')+'</text>'+
     '<text x="150" y="98" font-family="Helvetica,Arial" font-size="18" font-weight="900" fill="#fff" text-anchor="middle">+2 POINTS</text></g>'+
@@ -218,7 +233,7 @@ function threeSVG(p){
     '<path d="M0 250 Q180 196 200 168" stroke="#fff" stroke-width="2" fill="none" opacity=".7"/>'+
     '<text x="120" y="244" font-family="Helvetica,Arial" font-size="11" font-weight="900" fill="#fff" opacity=".9">LIGNE À 3 POINTS</text>'+
     '<path class="fx-trail" d="M96 112 Q200 -40 300 70" stroke="#fdb927" stroke-width="2.5" fill="none"/>'+
-    '<g class="fx-shooter"><g transform="translate(70,232)">'+figSVG(p)+'</g></g>'+
+    '<g class="fx-shooter"><g transform="translate(70,232)">'+fxPlayer(p,'stand')+'</g></g>'+
     '<g class="fx-bx"><g class="fx-by"><g class="fx-bd">'+ballAt(94,108,11)+'</g></g></g>'+
     fxRimNet('t')+
     '<g class="fx-word t"><text x="200" y="58" font-family="Impact,Arial Black,Helvetica" font-size="48" fill="#fdb927" stroke="#1b1733" stroke-width="3" text-anchor="middle" paint-order="stroke">SWISH ! +3</text></g>'+

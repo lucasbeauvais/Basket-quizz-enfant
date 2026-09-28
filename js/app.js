@@ -30,7 +30,7 @@ var view=document.getElementById('view');
 var progWrap=document.getElementById('prog');
 var progTxt=document.getElementById('progtxt');
 var progBar=document.getElementById('progbar');
-function hideProg(){progWrap.style.display='none';}
+function hideProg(){progWrap.style.display='none';seeBg(false);}
 function showProg(){progWrap.style.display='block';}
 var order=[],current=0,points=0,correct=0,results=[],answered=false,curLevel=1,ROUND=10,TARGET=10,streak=0,maxStreak=0,bonusBalls=0,shotPts=0,shotCount=0;
 function poolFor(level){if(level==='all')return BANK.slice();var p=[];for(var i=0;i<BANK.length;i++)if(BANK[i].level===level)p.push(BANK[i]);return p;}
@@ -70,8 +70,8 @@ var secretIdx=Math.floor(Math.random()*SECRETS.length);
 function secretBox(){return '<div class="secret">'+coachHTML(54)+'<div class="s-txt"><b>Le secret de '+COACH_NAME+'</b><span id="secrettxt">'+SECRETS[secretIdx]+'</span><br><button id="nextsecret">Un autre secret</button></div></div>';}
 function screenHome(){hideProg();var mods='';for(var i=0;i<LEVEL_ORDER.length;i++){var f=LEVEL_ORDER[i],L=LEVELS[f];var rec=profile.bestPts[f]?(' &middot; record '+profile.bestPts[f]+' pts'):'';mods+='<button class="module" data-lvl="'+f+'">'+categoryIcon(f)+'<div class="m-txt"><b>'+L.name+'</b><span>'+L.sub+rec+'</span></div><div class="m-stars">'+starRow(profile.stars[f]||0)+'</div></button>';}
   var p=playerById(profile.avatar);
-  view.innerHTML=bannerHTML()+
-    '<button class="playercard" id="pcard"><div class="pc-av">'+avatarHTML(profile.avatar,58)+'</div><div class="pc-txt"><b>'+esc(profile.name)+'</b><span>'+p.name+' &middot; '+rankName()+'</span><span class="pc-pts">'+(profile.careerPts||0)+' points en carrière</span></div><div class="pc-stars">'+starSVG(true,18)+' '+totalStars()+'/'+maxStars()+'</div></button>'+
+  view.innerHTML=
+    '<button class="playercard pc-wall" id="pcard" style="'+bgStyle(null,.2)+'"><div class="pc-av">'+avatarHTML(profile.avatar,64)+'</div><div class="pc-txt"><b>'+esc(profile.name)+'</b><span>'+p.name+' &middot; '+rankName()+'</span><span class="pc-pts">'+(profile.careerPts||0)+' points en carrière</span></div><div class="pc-stars">'+starSVG(true,18)+' '+totalStars()+'/'+maxStars()+'</div><span class="pc-bgname">Fond : '+currentBg().name+' &middot; changer</span></button>'+
     secretBox()+rulesHomeCard()+
     '<div class="sectitle">Choisis ta conférence</div>'+
     '<div class="modules">'+mods+'</div>'+
@@ -113,7 +113,7 @@ function askQuit(){
   el.querySelector('#qno').onclick=close;
   el.querySelector('#qyes').onclick=function(){close();hideProg();var m=quizMode;quizMode=null;streak=0;if(m)screenRules();else screenHome();window.scrollTo(0,0);};
 }
-function renderQuestion(){answered=false;var qd=order[current];progTxt.textContent='Question '+(current+1)+' / '+ROUND;progBar.style.width=(current/ROUND*100)+'%';
+function renderQuestion(){seeBg(false);answered=false;var qd=order[current];progTxt.textContent='Question '+(current+1)+' / '+ROUND;progBar.style.width=(current/ROUND*100)+'%';
   view.innerHTML=playHeader()+
     '<div class="meta"><span class="badge theme">'+qd.theme+'</span><span class="badge ref">'+qd.rule+'</span>'+catBadge()+'</div>'+
     (qd.scene?qd.scene():'')+
@@ -162,7 +162,7 @@ function onAnswer(){if(answered)return;answered=true;var qd=order[current];var c
   var bs=document.getElementById('bonusshot');
   if(bs)bs.onclick=function(){bonusBalls=Math.max(0,bonusBalls-1);MiniGame.open({title:'Tir bonus',shots:withDefenders([{spot:'three'}],0.5),onDone:function(p){shotPts+=p;points+=p;refreshBar();bs.parentNode.removeChild(bs);}});};
   document.getElementById('nextbtn').onclick=function(){if(!last){current++;renderQuestion();window.scrollTo(0,0);}else if(quizMode){quizMode.onEnd();}else if(bonusQ){renderBonus();}else{screenShootout();}};}
-function renderBonus(){var qd=bonusQ;progTxt.textContent='Bonus';progBar.style.width='100%';
+function renderBonus(){seeBg(false);var qd=bonusQ;progTxt.textContent='Bonus';progBar.style.width='100%';
   view.innerHTML=playHeader()+
     '<div class="meta"><span class="badge theme" style="background:#8a6420">Bonus culture</span><span class="badge ref">Basket</span><span class="leveldot"><i style="background:#fdb927"></i>Pour la gloire</span></div>'+
     '<div class="coachline">'+coachHTML(40,'happy')+'<span><b>'+COACH_NAME+'</b> : celle-là, c\'est pour le plaisir... mais si tu trouves, tu gagnes un ballon en plus !</span></div>'+
@@ -187,7 +187,7 @@ function shootoutShots(){
 /* défenseur au hasard : soit personne, soit un défenseur (qui saute ou qui lève les bras) */
 function randomDefender(chance){return Math.random()<chance?(Math.random()<0.5?'jump':'arms'):null;}
 function withDefenders(shots,chance){for(var i=0;i<shots.length;i++){var d=randomDefender(chance);if(d)shots[i].defender=d;}return shots;}
-function screenShootout(){progTxt.textContent='Séance de tirs';progBar.style.width='100%';
+function screenShootout(){seeBg(true);progTxt.textContent='Séance de tirs';progBar.style.width='100%';
   var shots=shootoutShots();
   view.innerHTML='<div class="shootintro">'+coachHTML(96,'cheer')+
     '<h2 class="h1">Séance de tirs !</h2>'+
@@ -222,7 +222,7 @@ function resultScreen(){hideProg();var earned=starsFromScore(correct,ROUND);var 
     '<div class="breakdown"><span>'+correct+'/'+ROUND+' bonnes réponses</span><span>Tirs : +'+shotPts+' pts</span>'+(maxStreak>=2?'<span>Meilleure série : '+maxStreak+'</span>':'')+'</div>'+
     '<div class="verdict">'+lvl+' &middot; '+sub+'</div>'+
     (unlockMsg?'<div class="unlock">'+starSVG(true,18)+unlockMsg+'</div>':'')+
-    (newBgs.length?'<div class="unlock">'+starSVG(true,18)+'Nouveau fond d\'écran : '+newBgs.join(', ')+' ! (dans Mon vestiaire)</div>':'')+
+    (newBgs.length?'<div class="unlock">'+starSVG(true,18)+'Nouveau fond d\'écran : '+bgNames(newBgs)+' ! (dans Mon vestiaire)</div>':'')+
     '<div class="scorecard">'+rows+'</div>'+
     '<button class="btn big" id="again">Rejouer</button>'+
     '<button class="btn ghost big" id="home" style="margin-top:10px">Retour au vestiaire</button>'+
@@ -237,6 +237,7 @@ function resultScreen(){hideProg();var earned=starsFromScore(correct,ROUND);var 
   }else el.textContent=points;
   if(correct===ROUND)FX.fireworks(3500);else if(earned>=2)FX.fireworks(1200);
   Sfx.buzzer();
+  seeBg(true);if(newBgs.length)setTimeout(function(){showBgUnlock(newBgs,function(){seeBg(true);});},1800);
   document.getElementById('again').onclick=function(){startRound(curLevel);};
   document.getElementById('home').onclick=screenHome;}
 

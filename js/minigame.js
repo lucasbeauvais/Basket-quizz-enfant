@@ -19,6 +19,7 @@ var MiniGame = (function(){
       '<div class="mg-top"><div class="mg-title">'+(cfg.title||'Séance de tirs')+'</div><button class="mg-skip">Passer</button></div>'+
       '<div class="mg-wrap"><canvas class="mg-canvas"></canvas><div class="mg-help">Pose ton doigt, tire vers l\'arrière, relâche !</div></div>'+
       '<div class="mg-end" style="display:none"></div>';
+    root.setAttribute('style',bgStyle(null,.5)); /* le mini-jeu se joue sur le fond d'écran choisi */
     document.body.appendChild(root);
     var canvas=root.querySelector('canvas'), ctx=canvas.getContext('2d'), help=root.querySelector('.mg-help');
     var scale=1, dpr=Math.min(window.devicePixelRatio||1,2), raf=0, closed=false;

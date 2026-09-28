@@ -25,8 +25,8 @@ var BACKGROUNDS=[
 function bgById(id){for(var i=0;i<BACKGROUNDS.length;i++)if(BACKGROUNDS[i].id===id)return BACKGROUNDS[i];return BACKGROUNDS[0];}
 function bgUnlocked(b){return (profile.careerPts||0)>=b.need;}
 function bgCss(b){
-  if(Assets.has('bg/'+b.id))return 'linear-gradient(rgba(8,10,30,.15),rgba(8,10,30,.15)),url("'+Assets.url('bg/'+b.id)+'") center/cover';
-  if(b.img&&Assets.has(b.img))return 'linear-gradient(rgba(8,10,30,.35),rgba(8,10,30,.35)),url("'+Assets.url(b.img)+'") center/cover';
+  if(Assets.has('bg/'+b.id))return 'linear-gradient(rgba(8,10,30,.15),rgba(8,10,30,.15)),url('+"'"+Assets.url('bg/'+b.id)+"'"+') center/cover';
+  if(b.img&&Assets.has(b.img))return 'linear-gradient(rgba(8,10,30,.35),rgba(8,10,30,.35)),url('+"'"+Assets.url(b.img)+"'"+') center/cover';
   if(b.img)return BACKGROUNDS[0].css;
   return b.css;
 }
@@ -36,8 +36,30 @@ function applyBg(){
   document.body.style.backgroundSize=Assets.has('bg/'+b.id)?'':(b.size||'');
   document.body.style.backgroundAttachment='fixed';
 }
+/* fond actuel, pour habiller un élément (carte joueur, mini-jeu, révélation) */
+function currentBg(){var b=bgById(profile&&profile.bg);if(profile&&!bgUnlocked(b))b=BACKGROUNDS[0];return b;}
+function bgStyle(b,shade){b=b||currentBg();var s=bgCss(b);
+  if(shade)s='linear-gradient(rgba(8,10,30,'+shade+'),rgba(8,10,30,'+shade+')),'+s;
+  /* cadré sur le bas de l'image : c'est là que les fonds ont leurs détails (flammes, ballon, trophées) */
+  return 'background:'+s+';'+(b.size&&!Assets.has('bg/'+b.id)?'background-size:'+b.size+';':'')+(Assets.has('bg/'+b.id)?'background-position:center 85%;':'');}
+/* écrans de fête : la carte devient plus transparente pour montrer le fond */
+function seeBg(on){var c=document.querySelector('.card');if(c)c.classList.toggle('see-bg',!!on);}
 /* fonds débloqués entre deux totaux de points (pour l'écran de résultat) */
-function bgsUnlockedBetween(before,after){var l=[];for(var i=0;i<BACKGROUNDS.length;i++){var n=BACKGROUNDS[i].need;if(n>before&&n<=after)l.push(BACKGROUNDS[i].name);}return l;}
+function bgsUnlockedBetween(before,after){var l=[];for(var i=0;i<BACKGROUNDS.length;i++){var n=BACKGROUNDS[i].need;if(n>before&&n<=after)l.push(BACKGROUNDS[i]);}return l;}
+function bgNames(list){return list.map(function(b){return b.name;}).join(', ');}
+/* révélation plein écran d'un nouveau fond, avec bouton pour l'équiper tout de suite */
+function showBgUnlock(list,after){
+  if(!list||!list.length){after&&after();return;}
+  var b=list[list.length-1],el=document.createElement('div');el.className='bgreveal';
+  el.setAttribute('style',bgStyle(b,.15));
+  el.innerHTML='<div class="bgr-box"><div class="bgr-kicker">Nouveau fond d\'écran débloqué !</div><div class="bgr-name">'+b.name+'</div>'+
+    '<button class="btn big shootbtn" id="bgequip">Je l\'équipe !</button><button class="btn ghost big bgr-later" id="bglater">Plus tard</button></div>';
+  document.body.appendChild(el);Sfx.horn();FX.fireworks(1500);
+  if(window.gsap&&!reduceMotion){gsap.from(el,{opacity:0,duration:.4});gsap.from(el.querySelector('.bgr-box'),{y:60,scale:.8,opacity:0,duration:.6,delay:.3,ease:'back.out(1.8)'});}
+  function close(){if(el.parentNode)el.parentNode.removeChild(el);after&&after();}
+  el.querySelector('#bgequip').onclick=function(){profile.bg=b.id;persist();applyBg();Sfx.pop();close();};
+  el.querySelector('#bglater').onclick=close;
+}
 
 /* ===== ÉCRAN MON VESTIAIRE ===== */
 function screenLocker(){hideProg();
