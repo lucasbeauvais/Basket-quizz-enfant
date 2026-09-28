@@ -82,7 +82,7 @@ function screenHome(){hideProg();var mods='';for(var i=0;i<LEVEL_ORDER.length;i+
   document.getElementById('nextsecret').onclick=function(){secretIdx=(secretIdx+1)%SECRETS.length;var t=document.getElementById('secrettxt');t.textContent=SECRETS[secretIdx];Sfx.pop();if(window.gsap)gsap.from(t,{opacity:0,y:8,duration:.3});};
   document.getElementById('mix').onclick=function(){startRound('all');};
   document.getElementById('rulesbtn').onclick=function(){Sfx.whistle();screenRules();};
-  document.getElementById('train').onclick=function(){MiniGame.open({title:'Entraînement',shots:[{spot:'two'},{spot:'three'},{spot:'two'},{spot:'three'},{spot:'three',money:true}],onDone:function(){screenHome();}});};
+  document.getElementById('train').onclick=function(){MiniGame.open({title:'Entraînement',shots:[{spot:'two'},{spot:'three'},{spot:'two',defender:'arms'},{spot:'three',defender:'jump'},{spot:'three',money:true,defender:'jump'}],onDone:function(){screenHome();}});};
   document.getElementById('coll').onclick=screenLocker;
   document.getElementById('pcard').onclick=screenLocker;}
 
@@ -160,7 +160,7 @@ function onAnswer(){if(answered)return;answered=true;var qd=order[current];var c
     '<button class="btn" id="nextbtn">'+(last?(quizMode?'Voir mon badge':(bonusQ?'Question bonus':'Séance de tirs')):'Question suivante')+'</button>';
   row.classList.add('show');
   var bs=document.getElementById('bonusshot');
-  if(bs)bs.onclick=function(){bonusBalls=Math.max(0,bonusBalls-1);MiniGame.open({title:'Tir bonus',shots:[{spot:'three'}],onDone:function(p){shotPts+=p;points+=p;refreshBar();bs.parentNode.removeChild(bs);}});};
+  if(bs)bs.onclick=function(){bonusBalls=Math.max(0,bonusBalls-1);MiniGame.open({title:'Tir bonus',shots:[{spot:'three',defender:'arms'}],onDone:function(p){shotPts+=p;points+=p;refreshBar();bs.parentNode.removeChild(bs);}});};
   document.getElementById('nextbtn').onclick=function(){if(!last){current++;renderQuestion();window.scrollTo(0,0);}else if(quizMode){quizMode.onEnd();}else if(bonusQ){renderBonus();}else{screenShootout();}};}
 function renderBonus(){var qd=bonusQ;progTxt.textContent='Bonus';progBar.style.width='100%';
   view.innerHTML=playHeader()+
@@ -181,13 +181,16 @@ function onBonusAnswer(){var qd=bonusQ;var good=(parseInt(this.getAttribute('dat
 function shootoutShots(){
   var n=Math.min(8,2+bonusBalls+(correct===ROUND?1:0)),s=[];
   for(var i=0;i<n;i++)s.push({spot:(i%2===0)?'two':'three'});
-  s[n-1]={spot:'three',money:true};return s;}
+  s[n-1]={spot:'three',money:true};
+  /* un défenseur sur certains paniers : bras levés, puis qui saute */
+  for(var j=1;j<n;j++){if(j%2===1)s[j].defender='jump';else if(j>=2)s[j].defender='arms';}
+  return s;}
 function screenShootout(){progTxt.textContent='Séance de tirs';progBar.style.width='100%';
   var shots=shootoutShots();
   view.innerHTML='<div class="shootintro">'+coachHTML(96,'cheer')+
     '<h2 class="h1">Séance de tirs !</h2>'+
-    '<p>'+COACH_NAME+' : tu as gagné <b>'+shots.length+' ballons</b>. Chaque panier rapporte des points en plus. Le dernier ballon, c\'est le <b>money ball</b> : il compte double !</p>'+
-    '<div class="balls">'+shots.map(function(s){return '<span class="ballchip'+(s.money?' money':'')+'">'+(s.spot==='three'?'+3':'+2')+'</span>';}).join('')+'</div>'+
+    '<p>'+COACH_NAME+' : tu as gagné <b>'+shots.length+' ballons</b>. Chaque panier rapporte des points en plus. Le dernier ballon, c\'est le <b>money ball</b> : il compte double ! Attention, sur les ballons marqués d\'une main, un défenseur essaie de contrer.</p>'+
+    '<div class="balls">'+shots.map(function(s){return '<span class="ballchip'+(s.money?' money':'')+(s.defender?' def':'')+'">'+(s.spot==='three'?'+3':'+2')+'</span>';}).join('')+'</div>'+
     '<button class="btn big shootbtn" id="goshoot">🏀 Aller shooter !</button>'+
     '<button class="btn ghost big" id="skipshoot" style="margin-top:10px">Voir mon résultat</button></div>';
   if(window.gsap&&!reduceMotion){gsap.from('.shootintro > *',{y:30,opacity:0,stagger:.08,duration:.4,ease:'back.out(1.7)'});gsap.from('.ballchip',{scale:0,stagger:.08,delay:.4,duration:.4,ease:'back.out(3)'});}

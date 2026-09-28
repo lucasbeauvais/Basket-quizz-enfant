@@ -2,7 +2,10 @@
    MINI-JEU DE TIR (façon Angry Birds)
    On pose le doigt n'importe où, on tire vers l'arrière (vers le
    bas et la gauche), une courbe montre la trajectoire, on relâche !
-   MiniGame.open({title, intro, shots:[{spot:'three'|'two', money:true}], onDone:function(points, made){}})
+   MiniGame.open({title, intro, shots:[{spot:'three'|'two', money:true, defender:'jump'|'arms'}], onDone:function(points, made){}})
+   defender : un joueur adverse se place devant le tireur et essaie de
+   contrer. 'jump' = il saute en rythme (il s'accroupit juste avant),
+   'arms' = il agite les bras. Passer par-dessus rapporte +1.
    ============================================================ */
 var MiniGame = (function(){
   var W=360, H=600, FLOOR=548, G=1150, VMAX=1250, PULLMAX=150, R=13;
@@ -30,10 +33,13 @@ var MiniGame = (function(){
 
     /* ---- état du tir ---- */
     var ball, state, drag=null, net=0, floatTxt=[], resultTimer=0, shotTime=0, touchedRim=false, scored=false, bounces=0;
+    var def=null, defT=0, blocked=false, DEF_FEET=522;
     function spot(){ return SPOTS[shots[idx].spot]||SPOTS.three; }
     function setupShot(){
       var s=spot(); ball={x:s.x,y:s.y,vx:0,vy:0,rot:0}; state='aim'; drag=null;
-      touchedRim=false; scored=false; bounces=0; shotTime=0; resultTimer=0;
+      touchedRim=false; scored=false; bounces=0; shotTime=0; resultTimer=0; blocked=false;
+      var m=shots[idx].defender; def=m?{mode:m,x:(shots[idx].spot==='two'?204:132)}:null; defT=Math.random()*1.7;
+      if(def){ help.textContent=m==='jump'?'Un défenseur saute pour contrer : tire quand il retombe !':'Un défenseur lève les bras : passe par-dessus !'; help.style.opacity=1; }
     }
     setupShot();
 
@@ -69,8 +75,33 @@ var MiniGame = (function(){
         touchedRim=true;
       }
     }
+    /* position du défenseur : pieds, épaules, mains (selon le temps) */
+    function defPose(){
+      var sh=DEF_FEET-82, off=0, crouch=0, hy, hx=12;
+      if(def.mode==='jump'){
+        var ph=defT%1.7;
+        if(ph>=0.95){ off=150*Math.sin(Math.PI*(ph-0.95)/0.75); }
+        else if(ph>0.7){ crouch=10*Math.sin(Math.PI*(ph-0.7)/0.25); }
+        hy=sh-48;
+      }else{
+        var a=(Math.sin(defT*Math.PI*2/1.3)+1)/2; hy=sh+2-a*60; hx=36-a*24;
+      }
+      return {x:def.x, feet:DEF_FEET-off, sh:sh-off+crouch, hy:hy-off+crouch, hx:hx, off:off};
+    }
+    function hitDefender(){
+      if(!def||blocked||ball.vx<=0)return;
+      var P=defPose(), hit=false;
+      for(var s=-1;s<=1;s+=2){ var dx=ball.x-(P.x+s*P.hx), dy=ball.y-P.hy; if(dx*dx+dy*dy<(R+10)*(R+10))hit=true; }
+      var cx=Math.max(P.x-15,Math.min(ball.x,P.x+15)), cy=Math.max(P.sh-30,Math.min(ball.y,P.feet));
+      if((ball.x-cx)*(ball.x-cx)+(ball.y-cy)*(ball.y-cy)<R*R)hit=true;
+      if(hit){
+        blocked=true; ball.vx=-Math.abs(ball.vx)*0.3-40; ball.vy=Math.max(160,Math.abs(ball.vy)*0.3);
+        floatTxt.push({x:P.x+30,y:P.hy-10,t:0,txt:'CONTRÉ !'}); Sfx.rim(); Sfx.bad();
+      }
+    }
     function step(dt){
       var py=ball.y;
+      hitDefender();
       ball.vy+=G*dt; ball.x+=ball.vx*dt; ball.y+=ball.vy*dt; ball.rot+=ball.vx*dt*0.05;
       hitPoint(RIM_F,RIM_Y); hitPoint(RIM_B,RIM_Y);
       /* panneau */
@@ -85,9 +116,9 @@ var MiniGame = (function(){
       if(ball.x<R&&ball.vx<0){ ball.x=R; ball.vx=-ball.vx*0.6; }
     }
     function onScore(){
-      var s=spot(), money=!!shots[idx].money, pts=s.pts*(money?2:1)+(touchedRim?0:1);
+      var s=spot(), money=!!shots[idx].money, pts=s.pts*(money?2:1)+(touchedRim?0:1)+(def?1:0);
       total+=pts; made++;
-      floatTxt.push({x:296,y:RIM_Y-30,t:0,txt:'+'+pts+(touchedRim?'':' SWISH !')});
+      floatTxt.push({x:296,y:RIM_Y-30,t:0,txt:'+'+pts+(def?' PAR-DESSUS !':(touchedRim?'':' SWISH !'))});
       Sfx.swish(); setTimeout(Sfx.cheer,100);
       var r=canvas.getBoundingClientRect();
       FX.confAt(r.left+296*scale, r.top+RIM_Y*scale,{particleCount:money?140:80,spread:90,startVelocity:30,colors:money?['#fdb927','#fff3b0','#ffffff']:undefined});
@@ -132,6 +163,23 @@ var MiniGame = (function(){
       for(var i=0;i<=5;i++){ var tx=RIM_F+i*(RIM_B-RIM_F)/5, bx=RIM_F+10+i*(RIM_B-RIM_F-20)/5; ctx.moveTo(tx,RIM_Y); ctx.lineTo(bx,nb); }
       for(var j=1;j<=3;j++){ var yy=RIM_Y+(nb-RIM_Y)*j/3, inset=10*j/3; ctx.moveTo(RIM_F+inset,yy); ctx.lineTo(RIM_B-inset,yy); }
       ctx.stroke();
+    }
+    function drawDefender(){
+      if(!def)return; var P=defPose(), x=P.x, SK='#8a5a3a', J='#c8102e';
+      ctx.fillStyle='rgba(0,0,0,.25)'; ctx.beginPath(); ctx.ellipse(x,DEF_FEET+2,18-P.off*0.06,4,0,0,Math.PI*2); ctx.fill();
+      ctx.lineCap='round';
+      ctx.strokeStyle='#1b1733'; ctx.lineWidth=7;
+      ctx.beginPath(); ctx.moveTo(x-6,P.sh+44); ctx.lineTo(x-9,P.feet); ctx.moveTo(x+6,P.sh+44); ctx.lineTo(x+9,P.feet); ctx.stroke();
+      ctx.fillStyle='#fff'; ctx.fillRect(x-14,P.feet-4,11,5); ctx.fillRect(x+3,P.feet-4,11,5);
+      ctx.fillStyle=J; ctx.beginPath(); ctx.roundRect?ctx.roundRect(x-15,P.sh,30,48,7):ctx.rect(x-15,P.sh,30,48); ctx.fill();
+      ctx.fillStyle='#fff'; ctx.font='900 13px Impact,Arial Black,Helvetica'; ctx.textAlign='center'; ctx.fillText('0',x,P.sh+26);
+      ctx.strokeStyle=SK; ctx.lineWidth=6;
+      ctx.beginPath(); ctx.moveTo(x-12,P.sh+5); ctx.lineTo(x-P.hx,P.hy); ctx.moveTo(x+12,P.sh+5); ctx.lineTo(x+P.hx,P.hy); ctx.stroke();
+      ctx.fillStyle=SK; ctx.beginPath(); ctx.arc(x-P.hx,P.hy,6,0,Math.PI*2); ctx.arc(x+P.hx,P.hy,6,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x,P.sh-14,12,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#1a1008'; ctx.beginPath(); ctx.arc(x,P.sh-19,11,Math.PI,0); ctx.fill();
+      ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(x+4,P.sh-13,2.2,0,Math.PI*2); ctx.fill();
+      ctx.lineCap='butt';
     }
     function drawRim(){ ctx.strokeStyle='#e8752a'; ctx.lineWidth=6; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(RIM_F,RIM_Y); ctx.lineTo(BOARD_X,RIM_Y); ctx.stroke(); ctx.lineCap='butt'; }
     function drawAim(){
@@ -185,7 +233,8 @@ var MiniGame = (function(){
       }
       net=Math.max(0,net-dt*1.6);
       ctx.setTransform(scale*dpr,0,0,scale*dpr,0,0);
-      drawBg(); drawHoop();
+      if(def)defT+=dt;
+      drawBg(); drawHoop(); drawDefender();
       if(state==='aim')drawAim();
       drawBall(ball.x,ball.y,ball.rot,shots[Math.min(idx,shots.length-1)].money);
       drawRim(); drawHUD(); drawFloat(dt);
