@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz NBA - Deviens une légende</title>
+<style>
+  :root{
+    --night:#0e1233;
+    --night2:#1c2257;
+    --purple:#552583;
+    --gold:#fdb927;
+    --orange:#e8752a;
+    --orange2:#c95e14;
+    --paper:#f8f4ec;
+    --paper2:#ece3d2;
+    --ink:#1b1733;
+    --line:#ddd2bd;
+    --ok:#2e8b57;
+    --ko:#c81d25;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:
+      radial-gradient(circle at 15% -10%, #6a2fa3 0%, rgba(106,47,163,0) 45%),
+      radial-gradient(circle at 95% 110%, #c95e14 0%, rgba(201,94,20,0) 40%),
+      var(--night);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:18px 14px 40px;
+  }
+  .wrap{width:100%;max-width:560px}
+  .card{background:var(--paper);border-radius:16px;box-shadow:0 18px 40px rgba(0,0,0,.5);overflow:hidden;border:1px solid var(--line)}
+  .topbar{background:var(--night);color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px;border-bottom:4px solid var(--gold)}
+  .topbar svg{flex:0 0 auto}
+  .brand{font-size:19px;font-weight:900;letter-spacing:.5px;line-height:1.1;text-transform:uppercase}
+  .brand small{display:block;font-size:11px;opacity:.75;letter-spacing:1.4px;margin-top:3px;font-weight:600}
+  .progress{margin-left:auto;font-size:12px;text-align:right;opacity:.9}
+  .track{height:6px;background:rgba(255,255,255,.18);border-radius:99px;margin-top:6px;width:96px;overflow:hidden}
+  .track > i{display:block;height:100%;background:var(--gold);width:0;transition:width .35s ease}
+  .body{padding:20px 20px 22px}
+
+  .btn{appearance:none;border:0;cursor:pointer;font:inherit;background:var(--orange);color:#fff;padding:14px 22px;border-radius:12px;font-size:16px;font-weight:700;box-shadow:0 6px 0 #9a4510;transition:transform .06s ease, box-shadow .06s ease}
+  .btn:active{transform:translateY(3px);box-shadow:0 3px 0 #9a4510}
+  .btn.big{margin-top:16px;width:100%}
+  .btn.ghost{background:transparent;color:var(--purple);box-shadow:none;border:1.5px solid var(--purple)}
+  .btn.ghost:active{transform:none}
+  .mixbtn{margin-top:12px;width:100%;appearance:none;border:1.5px dashed var(--purple);background:transparent;color:var(--purple);font:inherit;font-size:14px;font-weight:700;padding:11px;border-radius:11px;cursor:pointer}
+  .mixbtn:active{transform:translateY(1px)}
+
+  .meta{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+  .badge{font-size:11px;letter-spacing:.5px;text-transform:uppercase;padding:5px 10px;border-radius:99px;font-weight:700}
+  .badge.theme{background:var(--purple);color:#fff}
+  .badge.ref{background:var(--paper2);color:#5a4a2e;border:1px solid var(--line)}
+  .leveldot{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:11px;color:#6b5f86;font-weight:700}
+  .leveldot i{width:11px;height:11px;border-radius:50%;display:inline-block}
+  .scene{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line);background:#141a45;margin-bottom:14px}
+  .qtext{font-size:17px;line-height:1.45;font-weight:700;color:var(--ink);margin:2px 0 14px}
+  .choices{display:flex;flex-direction:column;gap:10px}
+  .choice{text-align:left;background:#fff;border:1.5px solid var(--line);color:var(--ink);padding:13px 14px;border-radius:11px;font-size:15px;cursor:pointer;font:inherit;display:flex;gap:11px;align-items:flex-start;transition:border-color .12s ease, background .12s ease}
+  .choice:hover{border-color:var(--orange)}
+  .choice .letter{flex:0 0 auto;width:24px;height:24px;border-radius:7px;background:var(--paper2);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#5a4a2e}
+  .choice.correct{border-color:var(--ok);background:#eaf5ee}
+  .choice.correct .letter{background:var(--ok);color:#fff}
+  .choice.wrong{border-color:var(--ko);background:#fbeceb}
+  .choice.wrong .letter{background:var(--ko);color:#fff}
+  .choice[disabled]{cursor:default}
+
+  .tools{display:flex;gap:10px;margin-top:14px;align-items:center}
+  .hintbtn{background:transparent;border:1.5px dashed var(--purple);color:var(--purple);padding:7px 12px 7px 8px;border-radius:10px;font:inherit;font-size:13.5px;cursor:pointer;font-weight:700;display:flex;gap:8px;align-items:center}
+  .hintbtn:active{transform:translateY(1px)}
+  .hint{margin-top:12px;background:#f3ecfb;border:1px solid #dccbef;border-left:4px solid var(--purple);padding:11px 13px;border-radius:9px;font-size:14px;line-height:1.5;color:#3f2a5e;display:none}
+  .hint.show{display:block}
+  .hint b{color:var(--purple)}
+  .explain{margin-top:14px;padding:13px 14px;border-radius:11px;font-size:14.5px;line-height:1.55;display:none;border:1px solid var(--line)}
+  .explain.show{display:block}
+  .explain.good{background:#eaf5ee;border-color:#bfe0cb}
+  .explain.bad{background:#fbeceb;border-color:#f0c9c6}
+  .explain b{display:block;margin-bottom:4px;font-size:15px}
+  .nextrow{margin-top:16px;display:none}
+  .nextrow.show{display:flex}
+  .nextrow .btn{width:100%}
+
+  .result{text-align:center;padding:6px 4px}
+  .result h2{color:var(--purple);font-size:25px;font-weight:900;margin:14px 0 2px;text-transform:uppercase;letter-spacing:.5px}
+  .scorebig{font-size:60px;font-weight:900;color:var(--orange2);line-height:1;margin:6px 0}
+  .scorebig small{font-size:22px;color:#a08f6e}
+  .verdict{font-size:15px;color:#4d4468;max-width:420px;margin:8px auto 4px;line-height:1.55}
+  .scorecard{margin:18px 0 6px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .scorecard .row{display:flex;font-size:12.5px;border-bottom:1px solid var(--paper2)}
+  .scorecard .row:last-child{border-bottom:0}
+  .scorecard .row > div{padding:8px 10px}
+  .scorecard .row .n{width:34px;color:#a08f6e;font-weight:800;flex:0 0 auto;text-align:center;background:var(--paper)}
+  .scorecard .row .t{flex:1;text-align:left;color:#3b3552}
+  .scorecard .row .m{flex:0 0 auto;width:34px;text-align:center;font-weight:800}
+  .scorecard .row .m.y{color:var(--ok)}
+  .scorecard .row .m.x{color:var(--ko)}
+  .footer{margin-top:14px;font-size:11px;color:#8a7f9c;text-align:center;line-height:1.5}
+
+  .decor{margin:2px 0 14px;border-radius:12px;overflow:hidden;border:1px solid var(--line);line-height:0}
+  .playercard{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:11px 13px;margin-bottom:14px}
+  .pc-av{flex:0 0 auto;line-height:0}
+  .pc-txt{flex:1;min-width:0}
+  .pc-txt b{display:block;font-size:16px;color:var(--ink)}
+  .pc-txt span{font-size:12.5px;color:#6b5f86}
+  .pc-stars{flex:0 0 auto;display:flex;align-items:center;gap:4px;font-weight:900;color:#b07c00;font-size:14px}
+  .secret{display:flex;gap:11px;align-items:flex-start;background:var(--night);color:#fff;border-radius:14px;padding:12px 13px;margin-bottom:16px;border:2px solid var(--gold)}
+  .secret svg{flex:0 0 auto}
+  .secret .s-txt{flex:1;font-size:13.5px;line-height:1.5}
+  .secret .s-txt b{display:block;color:var(--gold);font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+  .secret button{margin-top:8px;background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:99px;padding:4px 11px;font:inherit;font-size:12px;cursor:pointer}
+  .sectitle{font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:#8a7f9c;margin:6px 0 10px;font-weight:800}
+  .modules{display:flex;flex-direction:column}
+  .module{display:flex;align-items:center;gap:13px;text-align:left;cursor:pointer;font:inherit;width:100%;background:#fff;border:1.5px solid var(--line);border-radius:13px;padding:12px 14px;margin-bottom:10px;transition:border-color .12s,transform .06s}
+  .module:hover{border-color:var(--orange)}
+  .module:active{transform:translateY(1px)}
+  .module .m-txt{flex:1;min-width:0}
+  .module .m-txt b{display:block;font-size:16px;color:var(--ink)}
+  .module .m-txt span{font-size:12.5px;color:#6b5f86}
+  .module .m-stars{flex:0 0 auto;display:flex;gap:1px}
+  .homebtns{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+  .coachline{display:flex;align-items:center;gap:9px;margin:6px 0 12px;font-size:13px;color:#4d4468;text-align:left;line-height:1.4}
+  .coachline b{color:var(--purple)}
+  .coachline svg{flex:0 0 auto}
+  .lbl{display:block;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#8a7f9c;font-weight:800;margin:14px 0 7px}
+  .nameinput{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:11px;font:inherit;font-size:16px;color:var(--ink);background:#fff}
+  .nameinput:focus{outline:none;border-color:var(--orange)}
+  .hintnote{font-size:12px;color:#6b5f86;margin:10px 0 0;text-align:center}
+  .mascotgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .mascot{position:relative;display:flex;align-items:center;gap:10px;background:#fff;border:2px solid var(--line);border-radius:16px;padding:8px 10px;cursor:pointer;text-align:left;font:inherit;transition:border-color .12s,transform .06s}
+  .mascot:active{transform:scale(.98)}
+  .mascot.sel{border-color:var(--orange);background:#fff1e4}
+  .mascot.locked{cursor:default}
+  .mascot .mtx{min-width:0}
+  .mascot .mtx b{display:block;font-size:14px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mascot .mtx span{display:block;font-size:10.5px;color:#6b5f86;line-height:1.3}
+  .mascot .mlock{position:absolute;inset:0;background:rgba(255,255,255,.78);border-radius:14px;display:flex;align-items:center;justify-content:center;gap:5px;font-size:12px;font-weight:900;color:#5a4a2e}
+  .playbar{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:11px;padding:6px 10px;margin-bottom:13px}
+  .playbar .pb-av{flex:0 0 auto;line-height:0}
+  .playbar .pb-name{font-weight:800;color:var(--ink);font-size:13px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .playbar .pb-score{font-weight:900;color:var(--orange2);font-size:13px}
+  .pb-streak{background:var(--orange);color:#fff;font-size:11px;font-weight:900;padding:2px 7px;border-radius:99px;white-space:nowrap}
+  .starsbig{display:flex;justify-content:center;gap:6px;margin:4px 0 2px}
+  .starpop{animation:starPop .5s ease-out}
+  @keyframes starPop{0%{transform:scale(0) rotate(-40deg);opacity:0}70%{transform:scale(1.25) rotate(8deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+  .unlock{display:flex;align-items:center;justify-content:center;gap:7px;background:#fff6e2;border:1px solid #eadcae;border-radius:10px;padding:9px;margin:12px 0 2px;font-size:13px;font-weight:800;color:#8a6420}
+  .bestrow{display:inline-block;margin-top:8px;font-size:12px;color:#6b5f86;background:#fff;border:1px solid var(--line);padding:4px 10px;border-radius:99px}
+  .confetti{position:fixed;width:9px;height:9px;border-radius:2px;pointer-events:none;z-index:80;will-change:transform,opacity;animation:confettiPop .9s ease-out forwards}
+  @keyframes confettiPop{0%{opacity:1;transform:translate(0,0) rotate(0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(.5)}}
+  .shake{animation:shk .42s cubic-bezier(.36,.07,.19,.97)}
+  @keyframes shk{10%,90%{transform:translateX(-1px)}20%,80%{transform:translateX(2px)}30%,50%,70%{transform:translateX(-5px)}40%,60%{transform:translateX(5px)}}
+
+  /* ---- animations DUNK / 3 POINTS ---- */
+  .shotfx{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(8,10,30,.6);cursor:pointer;animation:fxIn .15s ease-out}
+  .shotfx.out{animation:fxOut .3s ease-in forwards}
+  .shotfx svg{width:100%;max-width:440px;height:auto;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.6);border:3px solid var(--gold)}
+  @keyframes fxIn{from{opacity:0}to{opacity:1}}
+  @keyframes fxOut{from{opacity:1}to{opacity:0}}
+  .fx-jump{animation:fxJump 1.5s ease-in-out both}
+  @keyframes fxJump{
+    0%{transform:translate(0,0)}
+    18%{transform:translate(40px,6px)}
+    50%{transform:translate(196px,-60px)}
+    60%{transform:translate(202px,-42px)}
+    80%{transform:translate(202px,-40px)}
+    100%{transform:translate(190px,0)}}
+  .fx-hand{animation:fxHide 1.5s linear both}
+  @keyframes fxHide{0%,59%{opacity:1}60%,100%{opacity:0}}
+  .fx-drop{animation:fxDrop 1.5s linear both}
+  @keyframes fxDrop{
+    0%,59%{opacity:0;transform:translate(0,0)}
+    60%{opacity:1;transform:translate(0,0);animation-timing-function:ease-in}
+    78%{transform:translate(0,112px);animation-timing-function:ease-out}
+    88%{transform:translate(4px,84px);animation-timing-function:ease-in}
+    100%{opacity:1;transform:translate(8px,112px)}}
+  .fx-rim{animation:fxRim 1.5s ease-out both;transform-box:fill-box;transform-origin:right center}
+  @keyframes fxRim{0%,59%{transform:rotate(0)}66%{transform:rotate(-9deg)}80%,100%{transform:rotate(0)}}
+  .fx-net{transform-box:fill-box;transform-origin:center top}
+  .fx-net.d{animation:fxNet 1.5s ease-out both}
+  @keyframes fxNet{0%,59%{transform:scaleY(1)}68%{transform:scaleY(1.35)}85%,100%{transform:scaleY(1)}}
+  .fx-net.t{animation:fxNetT 1.7s ease-out both}
+  @keyframes fxNetT{0%,70%{transform:scaleY(1)}80%{transform:scaleY(1.35)}92%,100%{transform:scaleY(1)}}
+  .fx-word{transform-box:fill-box;transform-origin:center;animation:fxWord 1.5s ease-out both}
+  .fx-word.t{animation:fxWord 1.4s ease-out .5s both}
+  @keyframes fxWord{0%,58%{opacity:0;transform:scale(.2) rotate(-10deg)}70%{opacity:1;transform:scale(1.2) rotate(3deg)}80%,100%{opacity:1;transform:scale(1) rotate(-3deg)}}
+  .fx-shooter{animation:fxShoot 1.7s ease-out both}
+  @keyframes fxShoot{0%{transform:translateY(0)}14%{transform:translateY(5px)}28%{transform:translateY(-22px)}46%,100%{transform:translateY(0)}}
+  .fx-bx{animation:fxBX .9s linear .45s both}
+  @keyframes fxBX{from{transform:translateX(0)}to{transform:translateX(206px)}}
+  .fx-by{animation:fxBY .9s .45s both}
+  @keyframes fxBY{
+    0%{transform:translateY(0);animation-timing-function:cubic-bezier(.3,.7,.6,1)}
+    50%{transform:translateY(-120px);animation-timing-function:cubic-bezier(.4,0,.7,.35)}
+    100%{transform:translateY(-38px)}}
+  .fx-bd{animation:fxBD .4s ease-in 1.35s both}
+  @keyframes fxBD{from{transform:translateY(0)}to{transform:translateY(56px)}}
+  .fx-trail{stroke-dasharray:6 7;animation:fxTrail 1.7s linear both}
+  @keyframes fxTrail{0%,30%{opacity:0}45%,85%{opacity:.55}100%{opacity:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="topbar">
+      <svg width="32" height="32" viewBox="0 0 30 30" aria-hidden="true">
+        <circle cx="15" cy="15" r="13" fill="#e8752a" stroke="#fdb927" stroke-width="1.5"/>
+        <path d="M15 2 V28 M2 15 H28" stroke="#6b2f08" stroke-width="1.4"/>
+        <path d="M4 6 Q15 15 4 24 M26 6 Q15 15 26 24" stroke="#6b2f08" stroke-width="1.4" fill="none"/>
+      </svg>
+      <div class="brand">Quiz NBA<small>Deviens une légende du basket</small></div>
+      <div class="progress" id="prog" style="display:none">
+        <span id="progtxt">Question 1 / 10</span>
+        <div class="track"><i id="progbar"></i></div>
+      </div>
+    </div>
+    <div class="body" id="view"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   DESSINS (SVG, aucune image externe)
+   Tous les personnages sont des dessins originaux "inspirés de" :
+   aucune photo ni logo officiel.
+   ============================================================ */
+var VB='0 0 400 230';
+function svg(inner){
+  return '<svg class="scene" viewBox="'+VB+'" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">'+inner+'</svg>';
+}
+function tag(x,y,txt){
+  var w=txt.length*6.2+18;
+  if(x-w/2<4)x=w/2+4; if(x+w/2>396)x=396-w/2;
+  return '<rect x="'+(x-w/2)+'" y="'+(y-11)+'" width="'+w+'" height="19" rx="9.5" fill="#fdb927"/>'+
+    '<text x="'+x+'" y="'+(y+2)+'" font-family="Helvetica,Arial" font-size="11" font-weight="800" fill="#1b1733" text-anchor="middle">'+txt+'</text>';
+}
+/* Salle de match : fond sombre, projecteurs, public */
+function arena(){
+  var s='<rect width="400" height="230" fill="#141a45"/>'+
+    '<path d="M60 0 L0 150 L130 150 Z" fill="#ffffff" opacity=".05"/><path d="M340 0 L270 150 L400 150 Z" fill="#ffffff" opacity=".05"/>';
+  var cols=['#e8752a','#fdb927','#6a5acd','#c0392b','#2e9e5b','#ffffff'];
+  for(var r=0;r<3;r++){for(var x=8+(r%2)*9;x<400;x+=18){s+='<circle cx="'+x+'" cy="'+(112+r*11)+'" r="4.5" fill="'+cols[(x+r*3)%cols.length]+'" opacity=".35"/>';}}
+  s+='<rect y="146" width="400" height="84" fill="#d9a15a"/>';
+  for(var k=20;k<400;k+=34){s+='<line x1="'+k+'" y1="146" x2="'+k+'" y2="230" stroke="#c98c45" stroke-width="1"/>';}
+  s+='<line x1="0" y1="146" x2="400" y2="146" stroke="#fff" stroke-width="2"/>';
+  return s;
+}
+function ballAt(x,y,r){r=r||8;
+  return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="#e8752a" stroke="#a84a12" stroke-width="1"/>'+
+    '<path d="M'+(x-r)+' '+y+' h'+(2*r)+' M'+x+' '+(y-r)+' v'+(2*r)+'" stroke="#6b2f08" stroke-width="1"/>'+
+    '<path d="M'+(x-r*.8)+' '+(y-r*.6)+' Q'+x+' '+y+' '+(x-r*.8)+' '+(y+r*.6)+' M'+(x+r*.8)+' '+(y-r*.6)+' Q'+x+' '+y+' '+(x+r*.8)+' '+(y+r*.6)+'" stroke="#6b2f08" stroke-width=".9" fill="none"/>';
+}
+/* Maillot geant (c1 = couleur, c2 = bordure, num = numero ou "?") */
+function jersey(c1,c2,num){
+  return '<path d="M160 40 Q200 62 240 40 L262 50 L258 96 L246 100 L246 196 L154 196 L154 100 L142 96 L138 50 Z" fill="'+c1+'" stroke="'+c2+'" stroke-width="5" stroke-linejoin="round"/>'+
+    '<path d="M168 44 Q200 76 232 44" fill="none" stroke="'+c2+'" stroke-width="5"/>'+
+    '<text x="200" y="164" font-family="Impact,Arial Black,Helvetica" font-size="'+(String(num).length>1?58:66)+'" font-weight="900" fill="'+c2+'" text-anchor="middle">'+num+'</text>';
+}
+function sceneJersey(c1,c2,num,txt){ return svg(arena()+jersey(c1,c2,num)+tag(200,216,txt)); }
+/* Silhouette mystere dans un projecteur */
+function sceneMystery(txt,c){c=c||'#2a2f66';
+  return svg(arena()+'<path d="M200 0 L120 200 L280 200 Z" fill="#fff5c0" opacity=".16"/>'+
+    '<circle cx="200" cy="62" r="22" fill="'+c+'"/>'+
+    '<path d="M166 92 Q200 82 234 92 L240 178 L160 178 Z" fill="'+c+'"/>'+
+    '<text x="200" y="152" font-family="Impact,Arial Black,Helvetica" font-size="48" font-weight="900" fill="#fdb927" text-anchor="middle">?</text>'+
+    ballAt(258,168,13)+tag(200,214,txt));
+}
+/* Trophee dore */
+function sceneTrophy(txt){
+  return svg(arena()+'<path d="M200 0 L140 200 L260 200 Z" fill="#fff5c0" opacity=".14"/>'+
+    '<rect x="176" y="168" width="48" height="16" rx="3" fill="#8a6420"/>'+
+    '<path d="M186 168 L192 120 L208 120 L214 168 Z" fill="#f5c542" stroke="#b58a12" stroke-width="2"/>'+
+    '<path d="M168 60 L232 60 L222 118 L178 118 Z" fill="#fdd75a" stroke="#b58a12" stroke-width="2"/>'+
+    ballAt(200,44,17)+
+    '<g fill="#fff" opacity=".8"><circle cx="150" cy="60" r="2"/><circle cx="256" cy="88" r="2.4"/><circle cx="244" cy="40" r="1.6"/><circle cx="160" cy="104" r="1.6"/></g>'+
+    tag(200,214,txt));
+}
+/* Globe "d'ou vient-il ?" */
+function sceneGlobe(txt){
+  return svg(arena()+'<circle cx="200" cy="88" r="58" fill="#2f7fd1" stroke="#fff" stroke-width="3"/>'+
+    '<path d="M160 60 q20 -10 34 6 q10 14 -6 24 q-16 8 -10 26 q-18 -6 -22 -24 q-6 -18 4 -32 Z" fill="#46b36b"/>'+
+    '<path d="M214 46 q22 2 30 22 q-12 8 -24 2 q-10 -6 -6 -24 Z M222 100 q18 0 20 18 q-14 12 -26 4 Z" fill="#46b36b"/>'+
+    '<text x="200" y="108" font-family="Impact,Arial Black,Helvetica" font-size="52" font-weight="900" fill="#fdb927" text-anchor="middle" stroke="#1b1733" stroke-width="2">?</text>'+
+    tag(200,214,txt));
+}
+/* Tableau d'affichage */
+function sceneBoard(big,small,txt){
+  return svg(arena()+'<rect x="110" y="24" width="180" height="104" rx="10" fill="#0b0b14" stroke="#fdb927" stroke-width="3"/>'+
+    '<text x="200" y="92" font-family="Impact,Arial Black,Helvetica" font-size="56" fill="#ff5a3c" text-anchor="middle">'+big+'</text>'+
+    '<text x="200" y="116" font-family="Helvetica,Arial" font-size="12" font-weight="800" fill="#fdb927" text-anchor="middle">'+small+'</text>'+
+    ballAt(330,176,14)+tag(200,214,txt));
+}
+/* Panier vu de cote */
+function sceneHoop(txt,withPlayer){
+  var s=arena()+'<rect x="316" y="40" width="7" height="170" fill="#9aa0b8"/>'+
+    '<rect x="296" y="28" width="10" height="70" fill="#fff" stroke="#c9c2b0"/>'+
+    '<path d="M296 82 L256 82" stroke="#e8752a" stroke-width="4"/>'+
+    '<path d="M258 84 L264 110 M268 84 L270 110 M280 84 L278 110 M292 84 L286 110 M262 98 h26" stroke="#eee" stroke-width="1.3" fill="none"/>'+
+    '<line x1="40" y1="82" x2="40" y2="200" stroke="#fdb927" stroke-width="2" stroke-dasharray="5 4"/>'+
+    '<text x="46" y="140" font-family="Helvetica,Arial" font-size="13" font-weight="800" fill="#fdb927">?</text>';
+  if(withPlayer)s+=miniFig(150,200,'#552583','#fdb927','1');
+  return svg(s+tag(200,216,txt));
+}
+/* Chronometre des tirs */
+function sceneClock(n,txt){
+  return svg(arena()+'<rect x="140" y="26" width="120" height="92" rx="10" fill="#0b0b14" stroke="#9aa0b8" stroke-width="3"/>'+
+    '<text x="200" y="98" font-family="Impact,Arial Black,Helvetica" font-size="66" fill="#ff5a3c" text-anchor="middle">'+n+'</text>'+
+    miniFig(90,200,'#1d428a','#ffc72c','30')+ballAt(112,186,9)+tag(250,214,txt));
+}
+/* Deux equipes face a face */
+function sceneVersus(c1,c2,txt){
+  var s=arena();
+  for(var i=0;i<5;i++){s+=miniFig(40+i*28,196-(i%2)*6,c1,'#fff',''+(i+1));}
+  for(var j=0;j<5;j++){s+=miniFig(248+j*28,196-(j%2)*6,c2,'#fff',''+(j+1));}
+  s+='<text x="200" y="80" font-family="Impact,Arial Black,Helvetica" font-size="40" fill="#fdb927" text-anchor="middle">VS</text>';
+  return svg(s+tag(200,216,txt));
+}
+/* Petit joueur debout (pieds en x,y) */
+function miniFig(x,y,c1,c2,num){
+  return '<ellipse cx="'+x+'" cy="'+(y+2)+'" rx="11" ry="3" fill="#000" opacity=".2"/>'+
+    '<line x1="'+(x-4)+'" y1="'+(y-16)+'" x2="'+(x-5)+'" y2="'+y+'" stroke="#5a3a22" stroke-width="4" stroke-linecap="round"/>'+
+    '<line x1="'+(x+4)+'" y1="'+(y-16)+'" x2="'+(x+5)+'" y2="'+y+'" stroke="#5a3a22" stroke-width="4" stroke-linecap="round"/>'+
+    '<rect x="'+(x-9)+'" y="'+(y-40)+'" width="18" height="26" rx="5" fill="'+c1+'"/>'+
+    '<text x="'+x+'" y="'+(y-22)+'" font-family="Helvetica,Arial" font-size="9" font-weight="800" fill="'+c2+'" text-anchor="middle">'+num+'</text>'+
+    '<circle cx="'+x+'" cy="'+(y-48)+'" r="8" fill="#8d5a3b"/>';
+}
+/* Animal mystere (pour les logos d'equipe) */
+function sceneAnimal(txt){
+  return svg(arena()+'<circle cx="200" cy="84" r="60" fill="#c8102e" stroke="#fff" stroke-width="4"/>'+
+    '<text x="200" y="110" font-family="Impact,Arial Black,Helvetica" font-size="70" fill="#fff" text-anchor="middle">?</text>'+
+    tag(200,214,txt));
+}
+/* Echiquier */
+function sceneChess(txt){
+  var s=arena()+'<g transform="translate(140,24)">';
+  for(var r=0;r<6;r++)for(var c=0;c<6;c++){s+='<rect x="'+(c*20)+'" y="'+(r*20)+'" width="20" height="20" fill="'+((r+c)%2?'#6b4a2a':'#f1dfc0')+'"/>';}
+  s+='<path d="M50 64 q10 -18 20 0 l-3 6 h-14 Z M52 70 h16 v4 h-16 Z" fill="#1b1733"/>'+
+    '<path d="M72 44 q8 -14 16 0 l-2 6 h-12 Z M73 50 h14 v4 h-14 Z" fill="#fff" stroke="#1b1733"/></g>';
+  return svg(s+miniFig(300,200,'#1b1b1b','#c4ced4','1')+tag(200,214,txt));
+}
+
+/* ============================================================
+   CATEGORIES
+   ============================================================ */
+var LEVELS = {
+  1:{name:"Les Légendes",        sub:"Jordan, Kobe, Magic, Shaq...",        color:"#552583", sym:"★"},
+  2:{name:"Les Stars d'aujourd'hui", sub:"LeBron, Curry, Giannis, Jokic...", color:"#1d428a", sym:"⚡"},
+  3:{name:"Les Français en NBA", sub:"Wembanyama, Parker, Gobert...",       color:"#0055a4", sym:"FR"},
+  4:{name:"La NBA",              sub:"Équipes, règles et trophées",        color:"#c8102e", sym:"NBA"}
+};
+var LEVEL_ORDER=[1,2,3,4];
+
+/* ============================================================
+   BANQUE DE QUESTIONS
+   level : 1=Légendes | 2=Stars | 3=Français | 4=La NBA
+   hint  = le secret du coach (indice)
+   ============================================================ */
+var BANK = [
+
+  /* ===================== LES LÉGENDES ===================== */
+  { level:1, theme:"Michael Jordan", rule:"Les titres",
+    scene: sceneTrophy("Combien de trophées ?"),
+    q:"Combien de titres de champion NBA Michael Jordan a-t-il gagnés avec les Chicago Bulls ?",
+    choices:["6","2","10","1"], correct:0,
+    hint:"Autant que les faces d'un dé !",
+    explain:"Jordan a gagné 6 titres avec les Bulls : trois d'affilée (1991, 1992, 1993) puis encore trois d'affilée (1996, 1997, 1998). Et il a été élu meilleur joueur des Finales les 6 fois !" },
+  { level:1, theme:"Michael Jordan", rule:"Le maillot",
+    scene: sceneJersey("#ce1141","#000000","?","Quel numéro ?"),
+    q:"Quel numéro de maillot est devenu célèbre grâce à Michael Jordan ?",
+    choices:["Le 23","Le 8","Le 30","Le 1"], correct:0,
+    hint:"C'est aussi le numéro que LeBron James a choisi, en hommage à lui.",
+    explain:"Le 23 ! Jordan l'a rendu mythique. Beaucoup de joueurs l'ont ensuite porté en son honneur, comme LeBron James." },
+  { level:1, theme:"Michael Jordan", rule:"Surnom",
+    scene: sceneMystery("Pourquoi ce surnom ?","#ce1141"),
+    q:"Pourquoi appelait-on Michael Jordan « Air Jordan » ?",
+    choices:["Parce qu'il avait l'air de voler quand il dunkait","Parce qu'il adorait les avions","Parce qu'il soufflait très fort","Parce qu'il jouait toujours dehors"], correct:0,
+    hint:"Regarde ses dunks : il reste très, très longtemps en l'air...",
+    explain:"Jordan sautait si haut qu'on avait l'impression qu'il volait. En 1988, il a même dunké en s'envolant depuis la ligne des lancers francs ! Ses chaussures s'appellent aussi « Air Jordan »." },
+  { level:1, theme:"Michael Jordan", rule:"Autre sport",
+    scene: sceneMystery("Une pause surprise","#ce1141"),
+    q:"Michael Jordan a arrêté le basket pendant presque deux ans pour essayer un autre sport. Lequel ?",
+    choices:["Le baseball","Le football","Le tennis","La natation"], correct:0,
+    hint:"Un sport très populaire aux États-Unis, avec une batte et une balle.",
+    explain:"En 1993, Jordan est parti jouer au baseball. Puis en 1995, il est revenu aux Bulls avec un message tout simple : « I'm back » (je suis de retour) !" },
+  { level:1, theme:"Kobe Bryant", rule:"Surnom",
+    scene: sceneJersey("#552583","#fdb927","24","Un surnom de serpent"),
+    q:"Quel était le surnom de Kobe Bryant ?",
+    choices:["Black Mamba","King James","L'Alien","Air"], correct:0,
+    hint:"C'est un serpent très rapide et très précis... comme mon nom de coach !",
+    explain:"Kobe s'était lui-même surnommé « Black Mamba », un serpent rapide et précis. La « mentalité Mamba », c'est travailler dur tous les jours pour devenir meilleur." },
+  { level:1, theme:"Kobe Bryant", rule:"L'équipe",
+    scene: sceneMystery("20 saisons, 1 seule équipe","#552583"),
+    q:"Kobe Bryant a joué ses 20 saisons en NBA dans une seule équipe. Laquelle ?",
+    choices:["Los Angeles Lakers","Chicago Bulls","Boston Celtics","Miami Heat"], correct:0,
+    hint:"Une équipe violet et or, à Los Angeles.",
+    explain:"Kobe a passé toute sa carrière aux Lakers, de 1996 à 2016, et y a gagné 5 titres. C'est très rare de rester 20 ans dans la même équipe !" },
+  { level:1, theme:"Kobe Bryant", rule:"Le maillot",
+    scene: sceneJersey("#552583","#fdb927","?","Deux numéros"),
+    q:"Kobe a porté deux numéros différents aux Lakers. Lesquels ?",
+    choices:["Le 8 et le 24","Le 23 et le 45","Le 1 et le 2","Le 33 et le 34"], correct:0,
+    hint:"Le deuxième, c'est trois fois le premier.",
+    explain:"Kobe a porté le 8, puis le 24. Les Lakers ont retiré les DEUX maillots : plus personne ne pourra jamais les porter dans l'équipe." },
+  { level:1, theme:"Kobe Bryant", rule:"Record",
+    scene: sceneBoard("??","POINTS EN UN MATCH","Match de 2006"),
+    q:"En 2006, Kobe a marqué un nombre de points incroyable en un seul match. Combien ?",
+    choices:["81 points","50 points","100 points","25 points"], correct:0,
+    hint:"C'est plus de 80, mais moins de 100.",
+    explain:"81 points contre les Toronto Raptors ! C'est le 2e plus gros score de l'histoire de la NBA en un match, derrière les 100 points de Wilt Chamberlain." },
+  { level:1, theme:"Kobe Bryant", rule:"Surprise",
+    scene: sceneTrophy("Un trophée pas comme les autres"),
+    q:"En 2018, Kobe a gagné une récompense très surprenante pour un basketteur. Laquelle ?",
+    choices:["Un Oscar du cinéma","Une médaille de natation","Le Tour de France","Un prix de cuisine"], correct:0,
+    hint:"C'est le prix le plus célèbre du cinéma.",
+    explain:"Kobe a écrit un poème pour dire au revoir au basket, « Dear Basketball ». Il a été transformé en court dessin animé... qui a gagné un Oscar !" },
+  { level:1, theme:"Wilt Chamberlain", rule:"Record",
+    scene: sceneBoard("100","POINTS EN UN MATCH","Le record absolu"),
+    q:"Qui détient le record absolu de 100 points marqués en un seul match NBA ?",
+    choices:["Wilt Chamberlain","Michael Jordan","LeBron James","Stephen Curry"], correct:0,
+    hint:"Un géant des années 1960, bien avant Jordan.",
+    explain:"Wilt Chamberlain a marqué 100 points en 1962. Plus de 60 ans après, personne n'a fait mieux !" },
+  { level:1, theme:"Magic Johnson", rule:"Surnom",
+    scene: sceneJersey("#552583","#fdb927","32","Magic"),
+    q:"Pourquoi Earvin Johnson était-il surnommé « Magic » ?",
+    choices:["Pour ses passes et son jeu incroyables","Parce qu'il faisait des tours de magie","Parce qu'il disparaissait du terrain","Parce qu'il avait une baguette"], correct:0,
+    hint:"Sur le terrain, ses passes semblaient impossibles.",
+    explain:"Un journaliste l'a surnommé « Magic » quand il avait 15 ans, après un match fou. Meneur de 2,06 m, il faisait des passes magiques et a gagné 5 titres avec les Lakers." },
+  { level:1, theme:"Larry Bird", rule:"La rivalité",
+    scene: sceneVersus("#007a33","#552583","La grande rivalité"),
+    q:"Larry Bird, le grand rival de Magic Johnson, jouait dans quelle équipe ?",
+    choices:["Boston Celtics","Los Angeles Lakers","Chicago Bulls","New York Knicks"], correct:0,
+    hint:"Une équipe en vert, avec un trèfle.",
+    explain:"Bird jouait aux Boston Celtics (en vert) et Magic aux Lakers (en violet et or). Leur rivalité dans les années 1980 a rendu la NBA célèbre dans le monde entier." },
+  { level:1, theme:"Shaquille O'Neal", rule:"Le géant",
+    scene: sceneHoop("Attention au panneau !"),
+    q:"Shaquille O'Neal, surnommé « Shaq », était célèbre pour...",
+    choices:["Sa force énorme : il a même cassé des panneaux en dunkant","Ses tirs à 3 points","Sa toute petite taille","Ses lancers francs parfaits"], correct:0,
+    hint:"Il mesurait 2,16 m et pesait plus de 140 kg !",
+    explain:"Shaq était si fort qu'il a cassé des panneaux de basket en dunkant ! Il a gagné 4 titres. Petit secret : il ratait souvent ses lancers francs." },
+  { level:1, theme:"Kareem Abdul-Jabbar", rule:"Le tir",
+    scene: sceneHoop("Un tir impossible à contrer",true),
+    q:"Kareem Abdul-Jabbar avait un tir spécial, presque impossible à contrer. Comment s'appelle-t-il ?",
+    choices:["Le skyhook (le crochet du ciel)","Le tir du milieu du terrain","Le lancer à la cuillère","Le tir les yeux fermés"], correct:0,
+    hint:"Un grand geste du bras, loin au-dessus de la tête, comme un crochet.",
+    explain:"Le « skyhook » : bras tendu très haut, le ballon part au-dessus de tout le monde. Grâce à lui, Kareem a été le meilleur marqueur de l'histoire pendant 39 ans !" },
+
+  /* ===================== LES STARS D'AUJOURD'HUI ===================== */
+  { level:2, theme:"LeBron James", rule:"Surnom",
+    scene: sceneJersey("#552583","#fdb927","23","Un surnom royal"),
+    q:"Quel est le surnom de LeBron James ?",
+    choices:["King James (le Roi)","Black Mamba","L'Alien","Air"], correct:0,
+    hint:"Un roi porte une couronne...",
+    explain:"On l'appelle « King James », le Roi James. Il est considéré comme l'un des plus grands joueurs de tous les temps, avec Jordan." },
+  { level:2, theme:"LeBron James", rule:"Record",
+    scene: sceneBoard("40 000","POINTS EN CARRIÈRE","Un record historique"),
+    q:"En 2023, LeBron James a battu un record énorme. Lequel ?",
+    choices:["Il est devenu le meilleur marqueur de toute l'histoire de la NBA","Il est devenu le plus grand joueur","Il a fait 50 dunks dans un match","Il est devenu le plus jeune joueur"], correct:0,
+    hint:"Il a dépassé Kareem Abdul-Jabbar, qui avait ce record depuis 1984.",
+    explain:"LeBron est devenu le meilleur marqueur de l'histoire de la NBA, puis le premier à dépasser 40 000 points en carrière !" },
+  { level:2, theme:"LeBron James", rule:"En famille",
+    scene: sceneMystery("Une première en NBA","#552583"),
+    q:"En 2024, LeBron a fait quelque chose qu'aucun joueur n'avait jamais fait en NBA. Quoi ?",
+    choices:["Jouer dans la même équipe que son fils","Jouer avec son chien","Jouer pieds nus","Jouer contre Michael Jordan"], correct:0,
+    hint:"Son fils s'appelle Bronny.",
+    explain:"LeBron et son fils Bronny James ont joué ensemble aux Lakers : le tout premier duo père-fils sur le terrain en NBA !" },
+  { level:2, theme:"LeBron James", rule:"Les titres",
+    scene: sceneTrophy("Combien de bagues ?"),
+    q:"Combien de titres de champion NBA LeBron James a-t-il gagnés avec Miami, Cleveland et Los Angeles ?",
+    choices:["4","1","8","0"], correct:0,
+    hint:"2 avec Miami, 1 avec Cleveland, 1 avec Los Angeles.",
+    explain:"4 titres : 2012 et 2013 avec le Miami Heat, 2016 avec les Cleveland Cavaliers, et 2020 avec les Lakers. Et à chaque fois, il a été le meilleur joueur des Finales !" },
+  { level:2, theme:"Stephen Curry", rule:"Sa spécialité",
+    scene: sceneJersey("#1d428a","#ffc72c","30","Chef Curry"),
+    q:"Stephen Curry est surtout célèbre pour...",
+    choices:["Ses tirs à 3 points, même de très loin","Ses dunks géants","Ses contres","Sa taille de géant"], correct:0,
+    hint:"Il tire parfois presque depuis le milieu du terrain !",
+    explain:"Curry est le meilleur shooteur à 3 points de l'histoire : il en a marqué plus que n'importe qui. Il a changé la façon de jouer au basket !" },
+  { level:2, theme:"Stephen Curry", rule:"L'équipe",
+    scene: sceneMystery("Une seule équipe depuis 2009","#1d428a"),
+    q:"Dans quelle équipe Stephen Curry a-t-il gagné tous ses titres ?",
+    choices:["Golden State Warriors","Chicago Bulls","Boston Celtics","San Antonio Spurs"], correct:0,
+    hint:"Une équipe bleu et jaune, près de San Francisco.",
+    explain:"Curry joue aux Golden State Warriors depuis 2009. Il y a gagné 4 titres : 2015, 2017, 2018 et 2022." },
+  { level:2, theme:"Stephen Curry", rule:"En famille",
+    scene: sceneJersey("#1d428a","#ffc72c","30","Le numéro de papa"),
+    q:"Pourquoi Stephen Curry porte-t-il le numéro 30 ?",
+    choices:["C'était le numéro de son papa, qui jouait aussi en NBA","C'est son âge","Il est né un 30","Au hasard"], correct:0,
+    hint:"Son père, Dell Curry, était aussi un très bon shooteur.",
+    explain:"Son père Dell Curry a joué 16 saisons en NBA avec le 30. Stephen a repris le numéro de son papa !" },
+  { level:2, theme:"Giannis", rule:"Surnom",
+    scene: sceneJersey("#00471b","#eee1c6","34","Un phénomène venu de Grèce"),
+    q:"Quel est le surnom de Giannis Antetokounmpo ?",
+    choices:["Greek Freak (le phénomène grec)","King James","Chef Curry","Le Joker"], correct:0,
+    hint:"Il vient de Grèce et fait des choses incroyables.",
+    explain:"On l'appelle « Greek Freak ». Il a grandi en Grèce et a gagné le titre NBA en 2021 avec les Milwaukee Bucks." },
+  { level:2, theme:"Nikola Jokic", rule:"Son pays",
+    scene: sceneGlobe("D'où vient le Joker ?"),
+    q:"Nikola Jokic, surnommé « le Joker », vient de quel pays ?",
+    choices:["La Serbie","Les États-Unis","La France","Le Canada"], correct:0,
+    hint:"Un pays d'Europe, dans les Balkans.",
+    explain:"Jokic est serbe. Avec les Denver Nuggets, il a gagné le titre en 2023 et il a été élu plusieurs fois MVP, le meilleur joueur de la saison." },
+  { level:2, theme:"Nikola Jokic", rule:"Sa passion",
+    scene: sceneMystery("La passion du Joker","#0e2240"),
+    q:"En dehors du basket, quelle est la grande passion de Nikola Jokic ?",
+    choices:["Les chevaux","Les voitures de course","Les dinosaures","La danse"], correct:0,
+    hint:"Des animaux qui galopent !",
+    explain:"Jokic adore les chevaux, surtout les courses de trot. Il en possède plusieurs en Serbie !" },
+  { level:2, theme:"Luka Doncic", rule:"Son pays",
+    scene: sceneGlobe("D'où vient Luka ?"),
+    q:"Luka Doncic vient de quel pays ?",
+    choices:["La Slovénie","L'Espagne","L'Italie","L'Australie"], correct:0,
+    hint:"Un petit pays d'Europe, entre l'Italie et la Croatie.",
+    explain:"Luka est slovène. Il a commencé chez les pros au Real Madrid à seulement 16 ans avant de devenir une star de la NBA." },
+  { level:2, theme:"Titre 2025", rule:"Les champions",
+    scene: sceneTrophy("Les champions 2025"),
+    q:"En 2025, Shai Gilgeous-Alexander a été champion NBA et MVP. Avec quelle équipe ?",
+    choices:["Oklahoma City Thunder","Los Angeles Lakers","Boston Celtics","Chicago Bulls"], correct:0,
+    hint:"Le nom de l'équipe veut dire « le tonnerre ».",
+    explain:"Le Thunder d'Oklahoma City a gagné son premier titre en 2025. Shai, un Canadien, a été élu meilleur joueur de la saison ET des Finales !" },
+  { level:2, theme:"Kevin Durant", rule:"Les JO",
+    scene: sceneTrophy("Médailles d'or"),
+    q:"Kevin Durant détient un record aux Jeux olympiques. Combien de médailles d'or a-t-il gagnées ?",
+    choices:["4","1","2","10"], correct:0,
+    hint:"Londres, Rio, Tokyo et Paris...",
+    explain:"Durant a gagné l'or en 2012, 2016, 2020 et 2024 : c'est le seul basketteur avec 4 médailles d'or olympiques !" },
+
+  /* ===================== LES FRANÇAIS EN NBA ===================== */
+  { level:3, theme:"Wembanyama", rule:"Surnom",
+    scene: sceneJersey("#1b1b1b","#c4ced4","1","Venu d'une autre planète ?"),
+    q:"Quel est le surnom de Victor Wembanyama ?",
+    choices:["L'Alien","Le Roi","Air","Mamba"], correct:0,
+    hint:"On dit qu'il vient d'une autre planète tellement il est grand ET agile !",
+    explain:"C'est LeBron James qui l'a décrit comme un « alien » : un géant qui dribble et tire comme un petit. Le surnom lui est resté !" },
+  { level:3, theme:"Wembanyama", rule:"L'équipe",
+    scene: sceneJersey("#1b1b1b","#c4ced4","?","Noir et argent, au Texas"),
+    q:"Dans quelle équipe NBA joue Victor Wembanyama ?",
+    choices:["San Antonio Spurs","Los Angeles Lakers","Chicago Bulls","Paris Basketball"], correct:0,
+    hint:"Une équipe du Texas, en noir et argent... comme Tony Parker avant lui !",
+    explain:"Wemby joue aux San Antonio Spurs, l'équipe où Tony Parker et Boris Diaw ont été champions." },
+  { level:3, theme:"Wembanyama", rule:"La draft",
+    scene: sceneBoard("#?","DRAFT 2023","Le choix des équipes"),
+    q:"À la draft 2023 (quand les équipes choisissent les nouveaux joueurs), en quelle position Wemby a-t-il été choisi ?",
+    choices:["Numéro 1, le tout premier","Numéro 10","Numéro 30","Il n'a pas été choisi"], correct:0,
+    hint:"Tout le monde le voulait !",
+    explain:"Wemby a été le tout premier choix de la draft 2023. Toutes les équipes rêvaient de l'avoir." },
+  { level:3, theme:"Wembanyama", rule:"Le maillot",
+    scene: sceneJersey("#1b1b1b","#c4ced4","?","Quel numéro ?"),
+    q:"Quel numéro porte Wemby aux Spurs ?",
+    choices:["Le 1","Le 23","Le 24","Le 9"], correct:0,
+    hint:"Premier choix de la draft... premier numéro !",
+    explain:"Wemby porte le numéro 1." },
+  { level:3, theme:"Wembanyama", rule:"Sa taille",
+    scene: sceneHoop("Combien mesure-t-il ?"),
+    q:"Environ combien mesure Victor Wembanyama ?",
+    choices:["Plus de 2,20 m","1,80 m","2 m pile","3 m"], correct:0,
+    hint:"Il est plus grand que la plupart des portes !",
+    explain:"Wemby mesure environ 2,24 m. Et quand il écarte les bras, ça fait plus de 2,40 m ! Il peut presque toucher le panier sans sauter." },
+  { level:3, theme:"Wembanyama", rule:"Rookie",
+    scene: sceneTrophy("Sa première saison"),
+    q:"En 2024, après sa toute première saison en NBA, quel trophée Wemby a-t-il gagné ?",
+    choices:["Rookie de l'année (meilleur débutant)","Champion NBA","Meilleur coach","Meilleur arbitre"], correct:0,
+    hint:"« Rookie », ça veut dire débutant.",
+    explain:"Wemby a été élu Rookie de l'année 2024, le meilleur débutant... et TOUS les votants l'ont choisi !" },
+  { level:3, theme:"Wembanyama", rule:"Sa passion",
+    scene: sceneChess("Un cerveau de champion"),
+    q:"En dehors du basket, Wemby adore un jeu de réflexion. Lequel ?",
+    choices:["Les échecs","Les billes","Le loto","Le Monopoly"], correct:0,
+    hint:"Un jeu avec un roi, une reine et des cavaliers.",
+    explain:"Wemby adore les échecs ! En 2024, il est même allé défier des joueurs dans un parc de New York." },
+  { level:3, theme:"Équipe de France", rule:"JO Paris 2024",
+    scene: sceneTrophy("Paris 2024"),
+    q:"Aux Jeux olympiques de Paris 2024, quelle médaille l'équipe de France de Wemby a-t-elle gagnée ?",
+    choices:["L'argent","L'or","Le bronze","Aucune"], correct:0,
+    hint:"Ils ont perdu la finale contre les États-Unis de LeBron et Curry.",
+    explain:"La France a gagné la médaille d'argent ! En finale, elle a perdu contre les États-Unis, avec LeBron James, Stephen Curry et Kevin Durant." },
+  { level:3, theme:"Tony Parker", rule:"Les titres",
+    scene: sceneJersey("#c4ced4","#000000","9","Tony Parker"),
+    q:"Combien de titres NBA le Français Tony Parker a-t-il gagnés avec les San Antonio Spurs ?",
+    choices:["4","1","0","10"], correct:0,
+    hint:"2003, 2005, 2007, 2014...",
+    explain:"Tony Parker a gagné 4 titres. En 2007, il a été élu meilleur joueur des Finales : le premier Européen à y arriver !" },
+  { level:3, theme:"Boris Diaw", rule:"Champion 2014",
+    scene: sceneTrophy("Champions 2014"),
+    q:"En 2014, quel autre Français était champion NBA avec Tony Parker aux Spurs ?",
+    choices:["Boris Diaw","Kylian Mbappé","Antoine Griezmann","Teddy Riner"], correct:0,
+    hint:"Les autres sont des champions... mais d'autres sports !",
+    explain:"Boris Diaw, un très bon passeur, a été champion en 2014 avec Tony Parker. Mbappé et Griezmann jouent au foot, Teddy Riner fait du judo !" },
+  { level:3, theme:"Rudy Gobert", rule:"La défense",
+    scene: sceneHoop("Personne ne passe !"),
+    q:"Le Français Rudy Gobert est surtout célèbre pour...",
+    choices:["Ses contres et sa défense","Ses tirs à 3 points","Être le plus petit joueur","Ses dribbles entre les jambes"], correct:0,
+    hint:"Il est surnommé « Stifle Tower », un jeu de mots avec la Tour Eiffel !",
+    explain:"Gobert a été élu 4 fois meilleur défenseur de la NBA : un record ! Avec ses grands bras, il contre tout ce qui passe." },
+  { level:3, theme:"Draft 2024", rule:"Encore un Français",
+    scene: sceneBoard("#1","DRAFT 2024","Encore un Français !"),
+    q:"En 2024, un an après Wemby, un autre Français a été choisi en numéro 1 de la draft. Qui ?",
+    choices:["Zaccharie Risacher","Tony Parker","Rudy Gobert","Kylian Mbappé"], correct:0,
+    hint:"Il a été choisi par les Atlanta Hawks.",
+    explain:"Zaccharie Risacher a été choisi numéro 1 par les Atlanta Hawks, et un autre Français, Alex Sarr, numéro 2 ! La France est devenue un pays de champions du basket." },
+  { level:3, theme:"Wembanyama", rule:"Avant la NBA",
+    scene: sceneMystery("Avant de partir aux États-Unis","#0055a4"),
+    q:"Avant la NBA, dans quel club Wemby jouait-il en France ?",
+    choices:["Les Metropolitans 92 (Boulogne-Levallois)","Le Real Madrid","Les Chicago Bulls","Le PSG football"], correct:0,
+    hint:"Un club de la région parisienne, dans les Hauts-de-Seine (92).",
+    explain:"Wemby a commencé à Nanterre, puis il a joué à l'ASVEL et enfin aux Metropolitans 92, où il a été élu meilleur joueur du championnat de France." },
+
+  /* ===================== LA NBA ===================== */
+  { level:4, theme:"La ligue", rule:"Les équipes",
+    scene: sceneVersus("#c8102e","#1d428a","Combien d'équipes ?"),
+    q:"Combien y a-t-il d'équipes en NBA ?",
+    choices:["30","10","50","100"], correct:0,
+    hint:"29 aux États-Unis et 1 au Canada.",
+    explain:"Il y a 30 équipes : 29 aux États-Unis et 1 au Canada (les Toronto Raptors)." },
+  { level:4, theme:"La ligue", rule:"Le Canada",
+    scene: sceneGlobe("Une seule hors des États-Unis"),
+    q:"Quelle est la seule équipe NBA qui joue au Canada ?",
+    choices:["Toronto Raptors","Chicago Bulls","Miami Heat","New York Knicks"], correct:0,
+    hint:"Leur mascotte est un dinosaure !",
+    explain:"Les Toronto Raptors (raptor = un dinosaure) jouent au Canada. Ils ont été champions en 2019." },
+  { level:4, theme:"Les règles", rule:"Le temps",
+    scene: sceneClock("12","Un quart-temps"),
+    q:"Un match NBA dure 4 quarts-temps. Combien de minutes dure chaque quart-temps ?",
+    choices:["12 minutes","10 minutes","20 minutes","45 minutes"], correct:0,
+    hint:"C'est un peu plus long qu'en France, où c'est 10 minutes.",
+    explain:"En NBA, chaque quart-temps dure 12 minutes, donc 48 minutes en tout. En France et en Europe, c'est 4 fois 10 minutes." },
+  { level:4, theme:"Les règles", rule:"Les 24 secondes",
+    scene: sceneClock("??","Vite, il faut tirer !"),
+    q:"En NBA, combien de secondes une équipe a-t-elle pour tirer au panier ?",
+    choices:["24 secondes","10 secondes","60 secondes","5 secondes"], correct:0,
+    hint:"Deux douzaines de secondes.",
+    explain:"Une équipe a 24 secondes pour tirer. Sinon, le ballon va à l'adversaire. C'est pour que le jeu reste rapide !" },
+  { level:4, theme:"Les règles", rule:"Les fautes",
+    scene: sceneBoard("?","FAUTES PERSONNELLES","Trop de fautes..."),
+    q:"En NBA, au bout de combien de fautes un joueur doit-il quitter le match ?",
+    choices:["6 fautes","5 fautes","3 fautes","10 fautes"], correct:0,
+    hint:"Une de plus qu'en France !",
+    explain:"En NBA, un joueur sort à sa 6e faute. En France et en Europe, c'est à la 5e faute." },
+  { level:4, theme:"Le panier", rule:"La hauteur",
+    scene: sceneHoop("À quelle hauteur ?"),
+    q:"À quelle hauteur est le panier en NBA ?",
+    choices:["3,05 m","2,60 m","4 m","2 m"], correct:0,
+    hint:"C'est la même hauteur que pour les grands en France.",
+    explain:"Le panier est à 3,05 m du sol, comme partout chez les adultes. En mini-basket, il est à 2,60 m." },
+  { level:4, theme:"Les Finales", rule:"Le format",
+    scene: sceneVersus("#007a33","#552583","Les Finales NBA"),
+    q:"Pour gagner les Finales NBA, combien de matchs faut-il gagner ?",
+    choices:["4 matchs (le premier à 4 victoires)","1 seul match","2 matchs","10 matchs"], correct:0,
+    hint:"On joue au maximum 7 matchs.",
+    explain:"Les Finales se jouent « au meilleur des 7 matchs » : la première équipe qui gagne 4 matchs est championne." },
+  { level:4, theme:"Les trophées", rule:"Le champion",
+    scene: sceneTrophy("Le trophée des champions"),
+    q:"Comment s'appelle le trophée remis à l'équipe championne NBA ?",
+    choices:["Le trophée Larry O'Brien","La Coupe du monde","Le Ballon d'or","La Ligue des champions"], correct:0,
+    hint:"Il porte le nom d'un ancien patron de la NBA.",
+    explain:"C'est le trophée Larry O'Brien : un gros ballon doré posé sur un panier. Les joueurs reçoivent aussi une bague de champion !" },
+  { level:4, theme:"Les trophées", rule:"MVP",
+    scene: sceneTrophy("M.V.P."),
+    q:"Que veut dire « MVP » ?",
+    choices:["Le joueur le plus précieux : le meilleur de la saison","Un type de dunk","Une faute grave","Le nom d'une équipe"], correct:0,
+    hint:"En anglais : Most Valuable Player.",
+    explain:"MVP = Most Valuable Player, le joueur le plus précieux. Chaque année, le meilleur joueur de la saison reçoit ce trophée." },
+  { level:4, theme:"Les stats", rule:"Triple-double",
+    scene: sceneBoard("10-10-10","POINTS - REBONDS - PASSES","Le triple-double"),
+    q:"Qu'est-ce qu'un « triple-double » ?",
+    choices:["Au moins 10 dans trois catégories (points, rebonds, passes...)","Trois dribbles d'affilée","Un tir qui vaut 6 points","Trois fautes en même temps"], correct:0,
+    hint:"Regarde le tableau d'affichage : 10, 10 et 10 !",
+    explain:"Un triple-double, c'est faire au moins 10 dans trois statistiques en un match : par exemple 10 points, 10 rebonds et 10 passes. Jokic et Westbrook sont des champions de ça !" },
+  { level:4, theme:"L'histoire", rule:"Les plus titrés",
+    scene: sceneVersus("#007a33","#552583","Les rois des titres"),
+    q:"Quelles sont les deux équipes qui ont gagné le plus de titres dans l'histoire de la NBA ?",
+    choices:["Les Boston Celtics et les Los Angeles Lakers","Les Chicago Bulls et les Miami Heat","Les Spurs et les Raptors","Les Knicks et les Warriors"], correct:0,
+    hint:"Une équipe verte et une équipe violet et or.",
+    explain:"Les Celtics et les Lakers ont chacun gagné 17 titres ou plus. C'est la plus grande rivalité de la NBA !" },
+  { level:4, theme:"Les équipes", rule:"Les Bulls",
+    scene: sceneAnimal("Quel animal ?"),
+    q:"Quel animal représente les Chicago Bulls, l'équipe de Michael Jordan ?",
+    choices:["Un taureau","Un ours","Un aigle","Un lion"], correct:0,
+    hint:"« Bull », en anglais, c'est un animal avec des cornes.",
+    explain:"« Bull » veut dire taureau. Leur logo est une tête de taureau rouge !" },
+  { level:4, theme:"L'All-Star Game", rule:"Le concours",
+    scene: sceneHoop("Le concours de dunks"),
+    q:"Pendant quel événement a lieu le célèbre concours de dunks ?",
+    choices:["Le All-Star Game (le match des étoiles)","Les Finales","Noël","Les Jeux olympiques"], correct:0,
+    hint:"Un week-end de fête où les meilleurs joueurs sont invités.",
+    explain:"Chaque année, pendant le week-end du All-Star Game, les stars font un match de gala, un concours de dunks et un concours de tirs à 3 points !" },
+  { level:4, theme:"La draft", rule:"Les jeunes",
+    scene: sceneBoard("#1","LA DRAFT","Choisir les jeunes"),
+    q:"Qu'est-ce que la « draft » en NBA ?",
+    choices:["Le moment où les équipes choisissent les jeunes joueurs","Un match de gala","Une faute technique","Une danse de victoire"], correct:0,
+    hint:"Wemby a été le numéro 1 de celle de 2023.",
+    explain:"La draft, c'est chaque été : les équipes choisissent chacune leur tour les meilleurs jeunes joueurs du monde. Les équipes les moins fortes ont souvent plus de chances de choisir en premier." }
+];
+
+/* Bonus culture basket (pour le fun, ne compte pas) */
+var BONUS=[
+ {q:"Qui a inventé le basket-ball, en 1891 ?",choices:["Un professeur de sport, James Naismith","Michael Jordan","Un roi anglais","Personne, il a toujours existé"],correct:0,explain:"Le basket a été inventé en 1891 par James Naismith, un professeur, pour occuper ses élèves pendant l'hiver."},
+ {q:"Au tout début, dans quoi marquait-on les paniers ?",choices:["Un vrai panier de basket","Un panier de pêches accroché au balcon","Un seau en métal","Un filet de foot"],correct:1,explain:"Au début, on visait un panier de pêches ! Il fallait aller rechercher le ballon à chaque panier marqué."},
+ {q:"Dans quel film Michael Jordan joue-t-il au basket avec Bugs Bunny ?",choices:["Space Jam","Toy Story","Cars","Le Roi Lion"],correct:0,explain:"Space Jam (1996) ! Et en 2021, LeBron James a joué dans Space Jam 2."},
+ {q:"En 1992, l'équipe des États-Unis avec Jordan, Magic et Bird avait un surnom. Lequel ?",choices:["La Dream Team (l'équipe de rêve)","Les Avengers","La Super Team","Les Invincibles"],correct:0,explain:"La Dream Team des Jeux de Barcelone 1992, peut-être la meilleure équipe de l'histoire !"},
+ {q:"Comment s'appelle le panier où le ballon rentre sans toucher l'anneau ?",choices:["Un swish","Un plouf","Un boing","Un splash"],correct:0,explain:"« Swish » ! C'est le bruit du ballon qui ne touche que le filet."}
+];
+var bonusQ=null,lastBonus=null;
+function pickBonus(){if(!BONUS.length)return null;if(BONUS.length===1)return BONUS[0];var b;do{b=shuffle(BONUS)[0];}while(b===lastBonus);lastBonus=b;return b;}
+
+/* ============================================================
+   COACH  (personnage inspiré de Kobe Bryant)
+   >>> Tu peux changer le nom ci-dessous : il apparaîtra partout.
+   ============================================================ */
+var COACH_NAME="Coach Mamba";
+var SECRETS=[
+ "Kobe arrivait à l'entraînement bien avant tout le monde. Le secret des champions : travailler même quand personne ne regarde.",
+ "Kobe regardait les vidéos de ses matchs pour trouver ses erreurs. Rater, ce n'est pas grave : c'est comme ça qu'on apprend !",
+ "Pour dribbler comme un pro : tête haute ! Regarde tes coéquipiers, pas le ballon.",
+ "Stephen Curry s'échauffe en dribblant avec DEUX ballons en même temps. Essaie avec un seul d'abord !",
+ "Quand tu tires : le coude sous le ballon, et à la fin, laisse ta main « dans le panier », comme si tu attrapais un biscuit dans un pot.",
+ "Jordan n'a pas été pris dans la grande équipe de son lycée la première fois. Il s'est entraîné encore plus... et tu connais la suite !",
+ "LeBron James dort beaucoup pour être en forme. Le sommeil, c'est l'arme secrète des champions.",
+ "Wemby joue aux échecs pour muscler son cerveau. Au basket aussi, il faut réfléchir vite !",
+ "Un bon joueur de basket fait des passes. Le meilleur panier, c'est souvent celui de ton coéquipier démarqué.",
+ "Au lancer franc, fais toujours le même petit rituel avant de tirer : ça calme et ça aide à viser."
+];
+var GOOD=["Tu as la mentalité Mamba !","Rien que le filet.","Magnifique ! Même Wemby applaudit.","Tu voles comme Air Jordan !","Digne de Chef Curry !","Le Roi James serait fier de toi !","Bonne réponse, "+COACH_NAME+" valide !"];
+var BAD=["Raté... mais un champion se relève toujours. On y retourne !","Kobe a raté des milliers de tirs avant de devenir une légende. À toi de rebondir !","Le ballon a tourné puis ressorti. Pas grave, on remet ça !","Contré par la défense ! On respire et on repart.","Pas cette fois. Retiens bien la réponse, elle reviendra !"];
+var reduceMotion=(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+var CONF_COLORS=['#e8752a','#fdb927','#552583','#1d428a','#c8102e','#2e9e5b'];
+function celebrate(){if(reduceMotion)return;var cx=window.innerWidth/2,cy=window.innerHeight*0.36;for(var i=0;i<22;i++){var s=document.createElement('span');s.className='confetti';s.style.left=cx+'px';s.style.top=cy+'px';s.style.background=CONF_COLORS[i%CONF_COLORS.length];var ang=Math.random()*Math.PI*2,dist=60+Math.random()*160;s.style.setProperty('--dx',(Math.cos(ang)*dist).toFixed(0)+'px');s.style.setProperty('--dy',(Math.sin(ang)*dist-40).toFixed(0)+'px');s.style.setProperty('--rot',(Math.random()*540-270).toFixed(0)+'deg');document.body.appendChild(s);(function(n){setTimeout(function(){if(n.parentNode)n.parentNode.removeChild(n);},950);})(s);}}
+function doShake(){if(reduceMotion)return;var c=document.querySelector('.card');if(c){c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');}}
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+/* ============================================================
+   SAUVEGARDE (localStorage, repli en mémoire)
+   ============================================================ */
+var SAVE_KEY='quiz_nba_legendes_v1';
+var profile=null;
+function blankProfile(){return {name:'',avatar:'p1',stars:{1:0,2:0,3:0,4:0},best:{1:0,2:0,3:0,4:0},played:0};}
+function loadSave(){try{var s=localStorage.getItem(SAVE_KEY);return s?JSON.parse(s):null;}catch(e){return null;}}
+function persist(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(profile));}catch(e){}}
+function totalStars(){var t=0;for(var i=0;i<LEVEL_ORDER.length;i++)t+=(profile.stars[LEVEL_ORDER[i]]||0);return t;}
+function rankName(){var t=totalStars();if(t>=12)return'Légende (GOAT)';if(t>=9)return'MVP';if(t>=6)return'All-Star';if(t>=3)return'Titulaire';return'Rookie';}
+
+/* ============================================================
+   JOUEURS (avatars inspirés de vrais joueurs, dessins originaux)
+   ============================================================ */
+var PLAYERS=[
+ {id:'p1',name:"L'Alien",     inspi:'Victor Wembanyama',   num:'1',  c1:'#1b1b1b',c2:'#c4ced4',skin:'#8a5a3a',hair:'curly',need:0},
+ {id:'p2',name:'Le Roi',      inspi:'LeBron James',        num:'23', c1:'#552583',c2:'#fdb927',skin:'#6b4226',hair:'band', need:0},
+ {id:'p3',name:'Air',         inspi:'Michael Jordan',      num:'23', c1:'#ce1141',c2:'#000000',skin:'#5a3620',hair:'bald', need:0},
+ {id:'p4',name:'Chef',        inspi:'Stephen Curry',       num:'30', c1:'#1d428a',c2:'#ffc72c',skin:'#a8724a',hair:'short',need:0},
+ {id:'p5',name:'Greek Freak', inspi:'Giannis Antetokounmpo',num:'34',c1:'#00471b',c2:'#eee1c6',skin:'#5e3b22',hair:'short',need:3},
+ {id:'p6',name:'Le Joker',    inspi:'Nikola Jokic',        num:'15', c1:'#0e2240',c2:'#fec524',skin:'#f1c9a5',hair:'brown',need:6},
+ {id:'p7',name:'TP',          inspi:'Tony Parker',         num:'9',  c1:'#c4ced4',c2:'#000000',skin:'#9a6a45',hair:'short',need:9},
+ {id:'p8',name:'Le Big',      inspi:"Shaquille O'Neal",    num:'32', c1:'#0077c0',c2:'#ffffff',skin:'#4a2c18',hair:'bald', need:12}
+];
+function playerById(id){for(var i=0;i<PLAYERS.length;i++)if(PLAYERS[i].id===id)return PLAYERS[i];return PLAYERS[0];}
+function playerUnlocked(p){return totalStars()>=p.need;}
+function starPts(cx,cy,r){var p='';for(var i=0;i<5;i++){var a=-Math.PI/2+i*2*Math.PI/5;var a2=a+Math.PI/5;p+=(cx+Math.cos(a)*r).toFixed(1)+','+(cy+Math.sin(a)*r).toFixed(1)+' '+(cx+Math.cos(a2)*r*0.46).toFixed(1)+','+(cy+Math.sin(a2)*r*0.46).toFixed(1)+' ';}return p;}
+/* Tete (centre cx,cy rayon r) avec coiffure */
+function headSVG(cx,cy,r,skin,hair){
+  var s='';
+  if(hair==='curly'){for(var i=-3;i<=3;i++){s+='<circle cx="'+(cx+i*r*0.3)+'" cy="'+(cy-r*0.78+Math.abs(i)*r*0.1)+'" r="'+(r*0.3)+'" fill="#1a1008"/>';}}
+  s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+skin+'"/>';
+  if(hair==='short')s+='<path d="M'+(cx-r*0.95)+' '+(cy-r*0.2)+' Q'+cx+' '+(cy-r*1.5)+' '+(cx+r*0.95)+' '+(cy-r*0.2)+' Q'+cx+' '+(cy-r*0.85)+' '+(cx-r*0.95)+' '+(cy-r*0.2)+' Z" fill="#1a1008"/>';
+  if(hair==='brown')s+='<path d="M'+(cx-r*0.98)+' '+(cy-r*0.1)+' Q'+cx+' '+(cy-r*1.6)+' '+(cx+r*0.98)+' '+(cy-r*0.1)+' Q'+cx+' '+(cy-r*0.8)+' '+(cx-r*0.98)+' '+(cy-r*0.1)+' Z" fill="#6b4423"/>';
+  if(hair==='band')s+='<path d="M'+(cx-r*0.95)+' '+(cy-r*0.2)+' Q'+cx+' '+(cy-r*1.45)+' '+(cx+r*0.95)+' '+(cy-r*0.2)+' Q'+cx+' '+(cy-r*0.85)+' '+(cx-r*0.95)+' '+(cy-r*0.2)+' Z" fill="#1a1008"/>'+
+    '<rect x="'+(cx-r)+'" y="'+(cy-r*0.55)+'" width="'+(2*r)+'" height="'+(r*0.26)+'" rx="2" fill="#ffffff"/>';
+  s+='<circle cx="'+(cx-r*0.35)+'" cy="'+(cy+r*0.05)+'" r="'+(r*0.12)+'" fill="#1a1008"/><circle cx="'+(cx+r*0.35)+'" cy="'+(cy+r*0.05)+'" r="'+(r*0.12)+'" fill="#1a1008"/>'+
+    '<path d="M'+(cx-r*0.35)+' '+(cy+r*0.4)+' Q'+cx+' '+(cy+r*0.72)+' '+(cx+r*0.35)+' '+(cy+r*0.4)+'" stroke="#1a1008" stroke-width="'+Math.max(1.2,r*0.1)+'" fill="none" stroke-linecap="round"/>';
+  if(hair==='band')s+='<path d="M'+(cx-r*0.55)+' '+(cy+r*0.45)+' Q'+cx+' '+(cy+r*1.15)+' '+(cx+r*0.55)+' '+(cy+r*0.45)+'" stroke="#1a1008" stroke-width="'+(r*0.14)+'" fill="none"/>';
+  return s;
+}
+function avatarSVG(id,size){size=size||64;var p=playerById(id);
+  var inner='<circle cx="32" cy="32" r="31" fill="'+p.c2+'" opacity=".25"/>'+
+    '<path d="M10 64 L12 48 Q32 40 52 48 L54 64 Z" fill="'+p.c1+'" stroke="'+p.c2+'" stroke-width="2"/>'+
+    '<text x="32" y="61" font-family="Impact,Arial Black,Helvetica" font-size="12" fill="'+p.c2+'" text-anchor="middle">'+p.num+'</text>'+
+    '<rect x="28" y="36" width="8" height="8" fill="'+p.skin+'"/>'+
+    headSVG(32,27,13,p.skin,p.hair);
+  if(p.id==='p8'&&totalStars()>=12)inner+='<path d="M22 12 L25 5 L32 10 L39 5 L42 12 Z" fill="#fdb927" stroke="#b58a12"/>';
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><clipPath id="cl'+size+id+'"><circle cx="32" cy="32" r="31"/></clipPath><circle cx="32" cy="32" r="31" fill="#f4ecdc"/><g clip-path="url(#cl'+size+id+')">'+inner+'</g><circle cx="32" cy="32" r="31" fill="none" stroke="'+p.c1+'" stroke-width="2"/></svg>';}
+/* Coach Mamba : maillot violet et or 24, sifflet */
+function coachSVG(size){size=size||40;
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><clipPath id="clc'+size+'"><circle cx="32" cy="32" r="31"/></clipPath><circle cx="32" cy="32" r="31" fill="#1b1733"/><g clip-path="url(#clc'+size+')">'+
+    '<path d="M8 64 L11 47 Q32 39 53 47 L56 64 Z" fill="#552583" stroke="#fdb927" stroke-width="2"/>'+
+    '<text x="32" y="61" font-family="Impact,Arial Black,Helvetica" font-size="12" fill="#fdb927" text-anchor="middle">24</text>'+
+    '<rect x="28" y="35" width="8" height="8" fill="#7a4a2a"/>'+
+    headSVG(32,26,13,'#7a4a2a','short')+
+    '<path d="M36 41 L44 44" stroke="#c9c9c9" stroke-width="1.2"/><rect x="42" y="42" width="7" height="4" rx="2" fill="#c9c9c9"/>'+
+    '</g><circle cx="32" cy="32" r="31" fill="none" stroke="#fdb927" stroke-width="2.5"/></svg>';}
+function starSVG(filled,size,pop){size=size||18;var c=filled?'#fdb927':'#e7dcc6',s=filled?'#c99100':'#d2c6ab';return '<svg class="'+(pop?'starpop':'')+'" width="'+size+'" height="'+size+'" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polygon points="'+starPts(12,12,10)+'" fill="'+c+'" stroke="'+s+'" stroke-width="1"/></svg>';}
+function starRow(n){var h='';for(var i=0;i<3;i++)h+=starSVG(i<n,15,false);return h;}
+function miniBadge(color,sym){var fs=String(sym).length>2?10:(String(sym).length>1?12:15);return '<svg width="38" height="40" viewBox="0 0 38 40" aria-hidden="true"><ellipse cx="19" cy="37" rx="9" ry="2.4" fill="#000" opacity=".12"/><circle cx="19" cy="18" r="16" fill="'+color+'"/><circle cx="19" cy="18" r="16" fill="none" stroke="#fdb927" stroke-width="1.5"/><text x="19" y="'+(18+fs*0.36)+'" font-family="Helvetica,Arial" font-size="'+fs+'" font-weight="900" fill="#fff" text-anchor="middle">'+sym+'</text></svg>';}
+function lockSVG(){return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5a4a2e" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';}
+function decorBanner(){return '<div class="decor"><svg viewBox="0 0 400 110" preserveAspectRatio="xMidYMid slice" width="100%" height="104" xmlns="http://www.w3.org/2000/svg">'+
+  '<rect width="400" height="110" fill="#141a45"/>'+
+  '<path d="M70 0 L20 80 L120 80 Z" fill="#fff" opacity=".06"/><path d="M330 0 L280 80 L380 80 Z" fill="#fff" opacity=".06"/>'+
+  '<rect y="80" width="400" height="30" fill="#d9a15a"/><line x1="0" y1="80" x2="400" y2="80" stroke="#fff" stroke-width="2"/>'+
+  '<rect x="42" y="30" width="6" height="50" fill="#9aa0b8"/><rect x="20" y="22" width="28" height="18" rx="2" fill="#fff" stroke="#c9c2b0"/><ellipse cx="34" cy="44" rx="10" ry="3.5" fill="none" stroke="#e8752a" stroke-width="3"/>'+
+  '<rect x="352" y="30" width="6" height="50" fill="#9aa0b8"/><rect x="352" y="22" width="28" height="18" rx="2" fill="#fff" stroke="#c9c2b0"/><ellipse cx="366" cy="44" rx="10" ry="3.5" fill="none" stroke="#e8752a" stroke-width="3"/>'+
+  '<rect x="150" y="12" width="100" height="30" rx="5" fill="#0b0b14" stroke="#fdb927" stroke-width="2"/><text x="200" y="33" font-family="Impact,Arial Black,Helvetica" font-size="17" fill="#ff5a3c" text-anchor="middle">NBA QUIZ</text>'+
+  ballAt(262,66,13)+
+  '</svg></div>';}
+
+/* ============================================================
+   ANIMATIONS : DUNK ou TIR A 3 POINTS apres une bonne reponse
+   ============================================================ */
+/* Joueur en pied, pieds a l'origine (0,0) ; bras droit leve (main vers 14,-100) */
+function figSVG(p){
+  return '<ellipse cx="0" cy="2" rx="16" ry="4" fill="#000" opacity=".25"/>'+
+    '<line x1="-6" y1="-34" x2="-8" y2="-2" stroke="'+p.skin+'" stroke-width="7" stroke-linecap="round"/>'+
+    '<line x1="6" y1="-34" x2="8" y2="-2" stroke="'+p.skin+'" stroke-width="7" stroke-linecap="round"/>'+
+    '<rect x="-13" y="-4" width="11" height="6" rx="2" fill="#fff"/><rect x="2" y="-4" width="11" height="6" rx="2" fill="#fff"/>'+
+    '<rect x="-14" y="-44" width="28" height="16" rx="4" fill="'+p.c1+'" stroke="'+p.c2+'" stroke-width="1.5"/>'+
+    '<rect x="-14" y="-74" width="28" height="34" rx="7" fill="'+p.c1+'" stroke="'+p.c2+'" stroke-width="1.5"/>'+
+    '<text x="0" y="-50" font-family="Impact,Arial Black,Helvetica" font-size="15" fill="'+p.c2+'" text-anchor="middle">'+p.num+'</text>'+
+    '<line x1="-12" y1="-68" x2="-24" y2="-48" stroke="'+p.skin+'" stroke-width="6" stroke-linecap="round"/>'+
+    '<line x1="11" y1="-70" x2="14" y2="-98" stroke="'+p.skin+'" stroke-width="6" stroke-linecap="round"/>'+
+    headSVG(0,-86,11,p.skin,p.hair);
+}
+function fxCourt(){
+  var s='<rect width="400" height="260" fill="#141a45"/>';
+  var cols=['#e8752a','#fdb927','#6a5acd','#c0392b','#2e9e5b','#ffffff'];
+  for(var r=0;r<4;r++){for(var x=8+(r%2)*9;x<400;x+=18){s+='<circle cx="'+x+'" cy="'+(120+r*11)+'" r="4.5" fill="'+cols[(x+r*5)%cols.length]+'" opacity=".35"/>';}}
+  s+='<rect y="168" width="400" height="92" fill="#d9a15a"/>';
+  for(var k=20;k<400;k+=34){s+='<line x1="'+k+'" y1="168" x2="'+k+'" y2="260" stroke="#c98c45"/>';}
+  s+='<line x1="0" y1="168" x2="400" y2="168" stroke="#fff" stroke-width="2"/>';
+  /* poteau, panneau, arceau, filet (arceau entre x=276 et 324, y=80) */
+  s+='<rect x="352" y="60" width="8" height="160" fill="#9aa0b8"/>'+
+    '<rect x="330" y="20" width="10" height="84" fill="#fff" stroke="#c9c2b0"/><rect x="340" y="60" width="14" height="6" fill="#9aa0b8"/>';
+  return s;
+}
+function fxRimNet(netCls){
+  return '<g class="fx-rim"><path d="M276 80 L330 80" stroke="#e8752a" stroke-width="5" stroke-linecap="round"/></g>'+
+    '<path class="fx-net '+netCls+'" d="M278 82 L286 114 M290 82 L294 114 M302 82 L302 114 M314 82 L310 114 M326 82 L318 114 M282 96 h42 M286 110 h32" stroke="#f2f2f2" stroke-width="1.6" fill="none"/>';
+}
+function dunkSVG(p,big){
+  return '<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">'+fxCourt()+
+    '<g class="fx-drop">'+ballAt(300,70,11)+'</g>'+
+    '<g class="fx-jump"><g transform="translate(90,222)">'+figSVG(p)+'<g class="fx-hand">'+ballAt(14,-106,11)+'</g></g></g>'+
+    fxRimNet('d')+
+    '<g class="fx-word"><text x="150" y="70" font-family="Impact,Arial Black,Helvetica" font-size="'+(big?44:52)+'" fill="#fdb927" stroke="#1b1733" stroke-width="3" text-anchor="middle" paint-order="stroke">'+(big?'MÉGA DUNK !':'DUNK !')+'</text>'+
+    '<text x="150" y="98" font-family="Helvetica,Arial" font-size="18" font-weight="900" fill="#fff" text-anchor="middle">+2 POINTS</text></g>'+
+    '</svg>';
+}
+function threeSVG(p){
+  return '<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">'+fxCourt()+
+    '<path d="M0 250 Q180 196 200 168" stroke="#fff" stroke-width="2" fill="none" opacity=".7"/>'+
+    '<text x="120" y="244" font-family="Helvetica,Arial" font-size="11" font-weight="900" fill="#fff" opacity=".9">LIGNE À 3 POINTS</text>'+
+    '<path class="fx-trail" d="M96 112 Q200 -40 300 70" stroke="#fdb927" stroke-width="2.5" fill="none"/>'+
+    '<g class="fx-shooter"><g transform="translate(70,232)">'+figSVG(p)+'</g></g>'+
+    '<g class="fx-bx"><g class="fx-by"><g class="fx-bd">'+ballAt(94,108,11)+'</g></g></g>'+
+    fxRimNet('t')+
+    '<g class="fx-word t"><text x="200" y="58" font-family="Impact,Arial Black,Helvetica" font-size="48" fill="#fdb927" stroke="#1b1733" stroke-width="3" text-anchor="middle" paint-order="stroke">SWISH ! +3</text></g>'+
+    '</svg>';
+}
+var shotCount=0;
+function shotFX(){
+  var p=playerById(profile.avatar);
+  var kind=(streak>=3)?'mega':((shotCount++%2===0)?'dunk':'three');
+  if(Math.random()<0.3&&kind!=='mega')kind=(kind==='dunk'?'three':'dunk');
+  if(reduceMotion)return kind;
+  var ov=document.createElement('div');ov.className='shotfx';
+  ov.innerHTML=(kind==='three')?threeSVG(p):dunkSVG(p,kind==='mega');
+  document.body.appendChild(ov);
+  var done=false;
+  function close(){if(done)return;done=true;ov.classList.add('out');setTimeout(function(){if(ov.parentNode)ov.parentNode.removeChild(ov);},300);celebrate();}
+  ov.onclick=close;setTimeout(close,kind==='three'?2200:1800);
+  return kind;
+}
+
+/* DOM + état */
+var view=document.getElementById('view');
+var progWrap=document.getElementById('prog');
+var progTxt=document.getElementById('progtxt');
+var progBar=document.getElementById('progbar');
+function hideProg(){progWrap.style.display='none';}
+function showProg(){progWrap.style.display='block';}
+var order=[],current=0,score=0,results=[],answered=false,curLevel=1,ROUND=10,TARGET=10,streak=0,maxStreak=0;
+function shuffle(a){var arr=a.slice();for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}return arr;}
+function poolFor(level){if(level==='all')return BANK.slice();var p=[];for(var i=0;i<BANK.length;i++)if(BANK[i].level===level)p.push(BANK[i]);return p;}
+function buildRound(level){return shuffle(poolFor(level)).slice(0,TARGET);}
+
+/* ===== GRILLE DES JOUEURS (profil + collection) ===== */
+function playerGrid(selId){var grid='';for(var i=0;i<PLAYERS.length;i++){var p=PLAYERS[i],sel=(p.id===selId);
+  if(playerUnlocked(p)){grid+='<button class="mascot'+(sel?' sel':'')+'" data-av="'+p.id+'">'+avatarSVG(p.id,48)+'<div class="mtx"><b>'+p.name+'</b><span>inspiré de '+p.inspi+'</span></div></button>';}
+  else{grid+='<div class="mascot locked">'+avatarSVG(p.id,48)+'<div class="mtx"><b>'+p.name+'</b><span>inspiré de '+p.inspi+'</span></div><div class="mlock">'+lockSVG()+' '+p.need+' ★</div></div>';}}
+  return '<div class="mascotgrid">'+grid+'</div>';}
+
+/* ===== ÉCRAN PROFIL ===== */
+var pendingAvatar='p1';
+function screenProfile(){hideProg();pendingAvatar=profile.avatar||'p1';
+  view.innerHTML=decorBanner()+
+    '<h1 style="color:var(--purple);font-size:23px;font-weight:900;margin:2px 0 8px;text-align:center;text-transform:uppercase">Crée ton joueur</h1>'+
+    '<div class="coachline">'+coachSVG(40)+'<span><b>'+COACH_NAME+'</b> : bienvenue dans la ligue, champion ! Choisis ton joueur préféré.</span></div>'+
+    '<label class="lbl">Ton prénom</label>'+
+    '<input id="pname" class="nameinput" maxlength="14" placeholder="Écris ton prénom" value="'+esc(profile.name)+'">'+
+    '<label class="lbl">Choisis ton joueur</label>'+
+    playerGrid(pendingAvatar)+
+    '<p class="hintnote">D\'autres joueurs se débloquent en gagnant des étoiles !</p>'+
+    '<button class="btn big" id="go">C\'est parti !</button>';
+  var opts=view.querySelectorAll('.mascot[data-av]');for(var k=0;k<opts.length;k++){opts[k].onclick=function(){pendingAvatar=this.getAttribute('data-av');var all=view.querySelectorAll('.mascot');for(var j=0;j<all.length;j++)all[j].classList.remove('sel');this.classList.add('sel');};}
+  document.getElementById('go').onclick=function(){var v=(document.getElementById('pname').value||'').trim();if(!v){var el=document.getElementById('pname');el.focus();el.classList.add('shake');setTimeout(function(){el.classList.remove('shake');},450);return;}profile.name=v;profile.avatar=pendingAvatar;persist();screenHome();};}
+
+/* ===== ÉCRAN ACCUEIL ===== */
+var secretIdx=Math.floor(Math.random()*SECRETS.length);
+function secretBox(){return '<div class="secret">'+coachSVG(46)+'<div class="s-txt"><b>Le secret de '+COACH_NAME+'</b><span id="secrettxt">'+SECRETS[secretIdx]+'</span><br><button id="nextsecret">Un autre secret</button></div></div>';}
+function screenHome(){hideProg();var mods='';for(var i=0;i<LEVEL_ORDER.length;i++){var f=LEVEL_ORDER[i],L=LEVELS[f];var rec=profile.best[f]?(' &middot; record '+profile.best[f]+'/'+TARGET):'';mods+='<button class="module" data-lvl="'+f+'">'+miniBadge(L.color,L.sym)+'<div class="m-txt"><b>'+L.name+'</b><span>'+L.sub+rec+'</span></div><div class="m-stars">'+starRow(profile.stars[f]||0)+'</div></button>';}
+  var p=playerById(profile.avatar);
+  view.innerHTML=decorBanner()+
+    '<div class="playercard"><div class="pc-av">'+avatarSVG(profile.avatar,54)+'</div><div class="pc-txt"><b>'+esc(profile.name)+'</b><span>'+p.name+' &middot; '+rankName()+'</span></div><div class="pc-stars">'+starSVG(true,18)+' '+totalStars()+'/12</div></div>'+
+    secretBox()+
+    '<div class="sectitle">Choisis ta conférence</div>'+
+    '<div class="modules">'+mods+'</div>'+
+    '<button class="mixbtn" id="mix">Match des étoiles : toutes les questions mélangées</button>'+
+    '<div class="homebtns"><button class="btn big" id="coll">Mes joueurs</button><button class="btn ghost big" id="edit">Modifier mon profil</button></div>';
+  var ms=view.querySelectorAll('.module');for(var k=0;k<ms.length;k++){ms[k].onclick=function(){startRound(parseInt(this.getAttribute('data-lvl'),10));};}
+  document.getElementById('nextsecret').onclick=function(){secretIdx=(secretIdx+1)%SECRETS.length;document.getElementById('secrettxt').textContent=SECRETS[secretIdx];};
+  document.getElementById('mix').onclick=function(){startRound('all');};
+  document.getElementById('coll').onclick=screenCollection;
+  document.getElementById('edit').onclick=screenProfile;}
+
+/* ===== ÉCRAN JOUEURS ===== */
+function screenCollection(){hideProg();
+  view.innerHTML=decorBanner()+
+    '<h1 style="color:var(--purple);font-size:23px;font-weight:900;margin:2px 0 6px;text-align:center;text-transform:uppercase">Mes joueurs</h1>'+
+    '<div class="coachline" style="justify-content:center">'+starSVG(true,16)+'<span>'+totalStars()+' / 12 étoiles &middot; gagne des étoiles pour tout débloquer</span></div>'+
+    playerGrid(profile.avatar)+
+    '<button class="btn ghost big" id="back" style="margin-top:16px">Retour</button>';
+  var ms=view.querySelectorAll('.mascot[data-av]');for(var k=0;k<ms.length;k++){ms[k].onclick=function(){profile.avatar=this.getAttribute('data-av');persist();screenCollection();};}
+  document.getElementById('back').onclick=screenHome;}
+
+/* ===== JEU ===== */
+function startRound(level){curLevel=level;order=buildRound(level);ROUND=order.length;current=0;score=0;results=[];streak=0;maxStreak=0;bonusQ=pickBonus();showProg();renderQuestion();}
+function playHeader(){return '<div class="playbar"><div class="pb-av">'+avatarSVG(profile.avatar,30)+'</div><div class="pb-name">'+esc(profile.name)+'</div><div class="pb-score">Score '+score+'</div>'+(streak>=2?'<div class="pb-streak">Série x'+streak+'</div>':'')+'</div>';}
+function catBadge(){if(curLevel==='all')return '<span class="leveldot"><i style="background:linear-gradient(90deg,#552583,#1d428a,#0055a4,#c8102e)"></i>Match des étoiles</span>';var L=LEVELS[curLevel];return '<span class="leveldot"><i style="background:'+L.color+'"></i>'+L.name+'</span>';}
+function choicesHTML(qd){var idx=shuffle([0,1,2,3].slice(0,qd.choices.length)),letters=['A','B','C','D'],ch='';for(var i=0;i<idx.length;i++){var oi=idx[i];ch+='<button class="choice" data-oi="'+oi+'"><span class="letter">'+letters[i]+'</span><span>'+qd.choices[oi]+'</span></button>';}return ch;}
+function markChoices(qd,clicked){var btns=view.querySelectorAll('.choice');for(var i=0;i<btns.length;i++){var oi=parseInt(btns[i].getAttribute('data-oi'),10);btns[i].setAttribute('disabled','disabled');if(oi===qd.correct)btns[i].className='choice correct';else if(btns[i]===clicked)btns[i].className='choice wrong';}}
+function renderQuestion(){answered=false;var qd=order[current];progTxt.textContent='Question '+(current+1)+' / '+ROUND;progBar.style.width=(current/ROUND*100)+'%';
+  view.innerHTML=playHeader()+
+    '<div class="meta"><span class="badge theme">'+qd.theme+'</span><span class="badge ref">'+qd.rule+'</span>'+catBadge()+'</div>'+
+    (qd.scene||'')+
+    '<div class="qtext">'+qd.q+'</div>'+
+    '<div class="choices">'+choicesHTML(qd)+'</div>'+
+    '<div class="tools"><button class="hintbtn" id="hintbtn">'+coachSVG(26)+'Le secret du coach</button></div>'+
+    '<div class="hint" id="hint"><b>'+COACH_NAME+' :</b> '+qd.hint+'</div>'+
+    '<div class="explain" id="explain"><b id="verdict"></b><span id="exptxt"></span></div>'+
+    '<div class="nextrow" id="nextrow"><button class="btn" id="nextbtn"></button></div>';
+  var btns=view.querySelectorAll('.choice');for(var b=0;b<btns.length;b++)btns[b].onclick=onAnswer;
+  document.getElementById('hintbtn').onclick=function(){document.getElementById('hint').classList.add('show');this.style.opacity='.5';};}
+function onAnswer(){if(answered)return;answered=true;var qd=order[current];var chosen=parseInt(this.getAttribute('data-oi'),10);var good=(chosen===qd.correct);if(good)score++;results.push({ok:good,theme:qd.theme+' : '+qd.rule});markChoices(qd,this);
+  var exp=document.getElementById('explain');exp.className='explain show '+(good?'good':'bad');var vtxt;
+  if(good){streak++;if(streak>maxStreak)maxStreak=streak;var kind=shotFX();if(reduceMotion)celebrate();vtxt={dunk:'DUNK ! ',mega:'MÉGA DUNK ! ',three:'SWISH, +3 ! '}[kind]+pick(GOOD);if(streak>=2)vtxt+=' <span class="pb-streak">Série x'+streak+'</span>';}else{streak=0;doShake();vtxt=pick(BAD);}
+  document.getElementById('verdict').innerHTML=vtxt;document.getElementById('exptxt').textContent=qd.explain;
+  document.getElementById('nextrow').classList.add('show');var nb=document.getElementById('nextbtn');var last=(current+1>=ROUND);nb.textContent=last?(bonusQ?'Question bonus':'Mon résultat'):'Question suivante';
+  nb.onclick=function(){if(!last){current++;renderQuestion();window.scrollTo(0,0);}else if(bonusQ){renderBonus();}else{resultScreen();}};}
+function renderBonus(){var qd=bonusQ;progTxt.textContent='Bonus';progBar.style.width='100%';
+  view.innerHTML=playHeader()+
+    '<div class="meta"><span class="badge theme" style="background:#8a6420">Bonus culture</span><span class="badge ref">Basket</span><span class="leveldot"><i style="background:#fdb927"></i>Pour la gloire</span></div>'+
+    '<div class="coachline">'+coachSVG(34)+'<span><b>'+COACH_NAME+'</b> : celle-là, c\'est pour le plaisir, elle ne compte pas !</span></div>'+
+    '<div class="qtext">'+qd.q+'</div>'+
+    '<div class="choices">'+choicesHTML(qd)+'</div>'+
+    '<div class="explain" id="explain"><b id="verdict"></b><span id="exptxt"></span></div>'+
+    '<div class="nextrow" id="nextrow"><button class="btn" id="nextbtn">Mon résultat</button></div>';
+  var btns=view.querySelectorAll('.choice');for(var b=0;b<btns.length;b++)btns[b].onclick=onBonusAnswer;
+  document.getElementById('nextbtn').onclick=function(){resultScreen();};}
+function onBonusAnswer(){var qd=bonusQ;var good=(parseInt(this.getAttribute('data-oi'),10)===qd.correct);markChoices(qd,this);
+  var exp=document.getElementById('explain');exp.className='explain show '+(good?'good':'bad');if(good)shotFX();else doShake();
+  document.getElementById('verdict').textContent=good?'Bravo, tu connais l\'histoire du basket !':'Pas grave, c\'était juste pour le fun.';document.getElementById('exptxt').textContent=qd.explain;document.getElementById('nextrow').classList.add('show');}
+
+/* ===== RÉSULTAT + ÉTOILES ===== */
+function starsFromScore(s,total){if(s>=total)return 3;if(s>=total-1)return 2;if(s>=Math.ceil(total*0.6))return 1;return 0;}
+function resultScreen(){progTxt.textContent='Fin du match';progBar.style.width='100%';var earned=starsFromScore(score,ROUND);var unlockMsg='';
+  if(curLevel!=='all'){var before=totalStars();profile.played=(profile.played||0)+1;if(score>(profile.best[curLevel]||0))profile.best[curLevel]=score;if(earned>(profile.stars[curLevel]||0))profile.stars[curLevel]=earned;var after=totalStars();for(var i=0;i<PLAYERS.length;i++){if(PLAYERS[i].need>before&&PLAYERS[i].need<=after){unlockMsg='Nouveau joueur débloqué : '+PLAYERS[i].name+' !';}}persist();}
+  var starsHtml='';for(var s=0;s<3;s++)starsHtml+=starSVG(s<earned,34,s<earned);
+  var msg,sub;
+  if(score===ROUND){msg='Légende NBA !';sub='Sans faute ! '+COACH_NAME+' te donne son maillot n°24.';celebrate();}
+  else if(earned===2){msg='All-Star !';sub='Très solide, encore un petit effort et c\'est le sans-faute.';}
+  else if(earned===1){msg='Beau match !';sub='Bien joué ! Rejoue pour viser les 3 étoiles.';}
+  else{msg='Retour à l\'entraînement';sub='Pas de panique : même Jordan a raté des tirs. Relance un match !';}
+  var rows='';for(var r=0;r<results.length;r++){rows+='<div class="row"><div class="n">'+(r+1)+'</div><div class="t">'+results[r].theme+'</div><div class="m '+(results[r].ok?'y':'x')+'">'+(results[r].ok?'✓':'✗')+'</div></div>';}
+  var lvl=(curLevel==='all')?'Match des étoiles':LEVELS[curLevel].name;
+  var bestLine=(maxStreak>=2)?'<div style="text-align:center"><span class="bestrow">Meilleure série : '+maxStreak+' d\'affilée</span></div>':'';
+  var unlockLine=unlockMsg?'<div class="unlock">'+starSVG(true,18)+unlockMsg+'</div>':'';
+  var starBlock=(curLevel!=='all')?'<div class="starsbig">'+starsHtml+'</div>':'';
+  view.innerHTML='<div class="result"><h2>'+msg+'</h2>'+starBlock+
+    '<div class="scorebig">'+score+'<small>/'+ROUND+'</small></div>'+
+    '<div class="verdict">'+lvl+' &middot; '+sub+'</div>'+unlockLine+bestLine+
+    '<div class="scorecard">'+rows+'</div>'+
+    '<button class="btn big" id="again">Rejouer</button>'+
+    '<button class="btn ghost big" id="home" style="margin-top:10px">Retour au vestiaire</button>'+
+    '<div class="footer">Jeu familial non officiel, sans lien avec la NBA. Les joueurs et '+COACH_NAME+' sont des dessins originaux inspirés de vrais champions.</div></div>';
+  document.getElementById('again').onclick=function(){startRound(curLevel);};
+  document.getElementById('home').onclick=screenHome;}
+
+/* ===== BOOT ===== */
+function boot(){var s=loadSave();if(s&&s.name){profile=s;if(!profile.stars)profile.stars={1:0,2:0,3:0,4:0};if(!profile.best)profile.best={1:0,2:0,3:0,4:0};screenHome();}else{profile=blankProfile();screenProfile();}}
+boot();
+
+</script>
+</body>
+</html>
