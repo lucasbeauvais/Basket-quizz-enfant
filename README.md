@@ -26,7 +26,7 @@ Un bloc éducatif pour connaître les règles comme un arbitre (règles officiel
 | Mauvaise réponse | Tampon « RATÉ ! » |
 | Fin du match | **Séance de tirs** : mini-jeu façon Angry Birds (on tire vers l'arrière, une courbe montre la visée, on relâche). +2 ou +3 par panier, +1 si « swish », dernier ballon « money ball » x2. Au hasard, un défenseur surprise essaie de contrer (il saute en rythme ou agite les bras) : il faut choisir le bon moment ou lober, +1 si on passe par-dessus |
 | Accueil | Bouton « Entraînement aux tirs » pour jouer au mini-jeu librement |
-| Mon vestiaire | Prénom, statistiques, choix du joueur (débloqués avec les étoiles), 9 fonds d'écran débloqués avec les points (100 à 3000 pts), remise à zéro du compte |
+| Mon vestiaire | Prénom, statistiques, choix du joueur (débloqués avec les étoiles), 9 fonds d'écran débloqués avec les points (50 à 1000 pts), remise à zéro du compte |
 
 Les bruitages sont générés par le navigateur (aucun fichier son) et se coupent avec le bouton haut-parleur.
 
