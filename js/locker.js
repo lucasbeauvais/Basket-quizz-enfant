@@ -147,6 +147,10 @@ function screenLocker(){hideProg();
     '<div class="sectitle" style="margin-top:18px">Mon fond d\'écran <small>(se débloquent avec les points)</small></div>'+
     (nextBg?'<p class="hintnote left">Prochain fond : <b>'+nextBg.name+'</b> à '+nextBg.need+' points (encore '+(nextBg.need-pts)+').</p>':'<p class="hintnote left">Tous les fonds sont débloqués, bravo !</p>')+
     '<div class="bggrid">'+bgs+'</div>'+
+    '<div class="sectitle" style="margin-top:22px">Continuer sur un autre téléphone</div>'+
+    '<div class="tfbox"><p>Tu joues sur le téléphone de papa et tu veux continuer sur celui de maman ? Crée un lien ou un QR code : ta partie y sera copiée.</p>'+
+    '<button class="btn big shootbtn" id="ltransfer">Transférer ma partie</button>'+
+    '<button class="linkbtn" id="limport">J\'ai un lien de partie à récupérer</button></div>'+
     '<div class="sectitle" style="margin-top:22px">Recommencer à zéro</div>'+
     '<div class="resetbox"><p>Efface les étoiles, les points, les records, les badges d\'arbitre et le diplôme pour rejouer toutes les questions depuis le début. Ton prénom est gardé.</p>'+
     '<button class="btn ghost dangerline" id="lreset">Réinitialiser mon compte</button></div>';
@@ -157,6 +161,8 @@ function screenLocker(){hideProg();
   var bs=view.querySelectorAll('.bgopt[data-bg]');for(var m=0;m<bs.length;m++){bs[m].onclick=function(){Sfx.pop();profile.bg=this.getAttribute('data-bg');persist();applyBg();var y=window.scrollY;screenLocker();window.scrollTo(0,y);};}
   var bl=view.querySelectorAll('.ballopt[data-ball]');for(var q=0;q<bl.length;q++){bl[q].onclick=function(){Sfx.pop();profile.ballSkin=this.getAttribute('data-ball');persist();var y=window.scrollY;screenLocker();window.scrollTo(0,y);};}
   document.getElementById('lreset').onclick=askReset;
+  document.getElementById('ltransfer').onclick=Transfer.openShare;
+  document.getElementById('limport').onclick=Transfer.openImport;
 }
 function askReset(){
   if(document.querySelector('.quitask'))return;

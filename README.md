@@ -27,6 +27,7 @@ Un bloc éducatif pour connaître les règles comme un arbitre (règles officiel
 | Fin du match | **Séance de tirs** : mini-jeu façon Angry Birds (on tire vers l'arrière, une courbe montre la visée, on relâche). +2 ou +3 par panier, +1 si « swish », dernier ballon « money ball » x2. Au hasard, un défenseur surprise essaie de contrer (il saute en rythme ou agite les bras) : il faut choisir le bon moment ou lober, +1 si on passe par-dessus |
 | Accueil | Bouton « Entraînement aux tirs » pour jouer au mini-jeu librement |
 | Mon vestiaire | Prénom, statistiques, choix du joueur (débloqués avec les étoiles), 9 fonds d'écran débloqués avec les points (50 à 1000 pts), remise à zéro du compte |
+| Transférer sa partie | Dans Mon vestiaire : lien + QR code qui contient toute la progression (après le #, rien n'est envoyé à un serveur). Ouvert sur un autre téléphone, il propose de récupérer la partie |
 
 Les bruitages sont générés par le navigateur (aucun fichier son) et se coupent avec le bouton haut-parleur.
 
@@ -40,13 +41,14 @@ js/rules-data.js        l'école des règles : fiches et quiz par chapitre
 js/rules-art.js         schémas de terrain et gestes de l'arbitre
 js/rules.js             écrans de l'école des règles et diplôme
 js/locker.js            Mon vestiaire : profil, joueurs, fonds d'écran, remise à zéro
+js/transfer.js          transfert de partie vers un autre téléphone (lien, QR code, code à coller)
 js/art.js               dessins SVG (utilisés tant qu'il n'y a pas d'image)
 js/assets.js            liste des images optionnelles
 js/fx.js                grandes animations (GSAP + canvas-confetti)
 js/minigame.js          mini-jeu de tir
 js/sound.js             bruitages
 js/app.js               écrans et règles du jeu
-vendor/                 GSAP 3 et canvas-confetti (copiés pour marcher hors-ligne)
+vendor/                 GSAP 3, canvas-confetti et qrcode-generator (copiés pour marcher hors-ligne)
 assets/img/             images générées (Gemini / ChatGPT)
 prompts-images.html     tous les prompts pour générer les images, avec boutons « Copier »
 prompts-images-lot2.html  le 2e lot : défenseur, fonds d'écran, badge sifflet, icône règles

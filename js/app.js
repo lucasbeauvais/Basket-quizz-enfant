@@ -60,9 +60,11 @@ function screenProfile(){hideProg();pendingAvatar=profile.avatar||'p1';
     '<label class="lbl">Choisis ton joueur</label>'+
     playerGrid(pendingAvatar)+
     '<p class="hintnote">D\'autres joueurs se débloquent en gagnant des étoiles !</p>'+
-    '<button class="btn big" id="go">C\'est parti !</button>';
+    '<button class="btn big" id="go">C\'est parti !</button>'+
+    '<button class="linkbtn" id="haveold">J\'ai déjà une partie sur un autre téléphone</button>';
   popIn('.mascot');
   var opts=view.querySelectorAll('.mascot[data-av]');for(var k=0;k<opts.length;k++){opts[k].onclick=function(){Sfx.pop();pendingAvatar=this.getAttribute('data-av');var all=view.querySelectorAll('.mascot');for(var j=0;j<all.length;j++)all[j].classList.remove('sel');this.classList.add('sel');if(window.gsap)gsap.fromTo(this,{scale:.9},{scale:1,duration:.4,ease:'elastic.out(1,.4)'});};}
+  document.getElementById('haveold').onclick=Transfer.openImport;
   document.getElementById('go').onclick=function(){var v=(document.getElementById('pname').value||'').trim();if(!v){var el=document.getElementById('pname');el.focus();el.classList.add('shake');setTimeout(function(){el.classList.remove('shake');},450);return;}profile.name=v;profile.avatar=pendingAvatar;persist();Sfx.whistle();screenHome();};}
 
 /* ===== ÉCRAN ACCUEIL ===== */
@@ -247,6 +249,8 @@ function resultScreen(){hideProg();var earned=starsFromScore(correct,ROUND);var 
 /* ===== BOOT ===== */
 function applyBrand(){if(!Assets.has('brand/logo'))return;var ic=document.querySelector('.topbar > svg');if(ic)ic.outerHTML='<img class="brandlogo" src="'+Assets.url('brand/logo')+'" alt="">';var l=document.createElement('link');l.rel='icon';l.href=Assets.url('brand/logo');document.head.appendChild(l);}
 function boot(){applyBrand();var s=loadSave();var b=blankProfile();
-  if(s&&s.name){profile=s;for(var k in b){if(profile[k]===undefined)profile[k]=b[k];}applyBg();screenHome();}
-  else{profile=b;applyBg();screenProfile();}}
+  if(s&&s.name){profile=s;for(var k in b){if(profile[k]===undefined)profile[k]=b[k];}}else profile=b;
+  applyBg();
+  /* lien de transfert (#partie=…) : on affiche l'écran normal puis on propose de récupérer la partie */
+  Transfer.fromUrl(function(){if(profile.name)screenHome();else screenProfile();});}
 Assets.load(boot);
