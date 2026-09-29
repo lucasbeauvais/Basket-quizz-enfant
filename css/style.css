@@ -446,3 +446,5 @@ button.playercard:hover{border-color:var(--orange)}
 .tfwarn{background:#fbeceb;border-radius:10px;padding:8px 10px;font-size:13px}
 .quitcard .tfsum b,.quitcard .tfwarn b{display:inline;font-size:inherit;color:var(--purple)}
 .quitcard .tfsum b{font-size:16px}
+.btn.wabtn{display:flex;align-items:center;justify-content:center;gap:9px;background:#25d366;color:#fff;box-shadow:0 6px 0 #128c7e;text-decoration:none;margin:0 0 12px}
+.btn.wabtn:active{box-shadow:0 3px 0 #128c7e}

@@ -43,6 +43,9 @@ var Transfer = (function(){
   function summary(p){var s=0;LV.forEach(function(l){s+=p.stars[l]||0;});var b=0;for(var k in p.rules.badges)if(p.rules.badges[k])b++;
     return '<b>'+esc(p.name)+'</b> &middot; '+p.careerPts+' points &middot; '+s+' étoiles &middot; '+b+' badge'+(b>1?'s':'');}
 
+  /* message prêt à envoyer (WhatsApp) */
+  function msg(url){return '\uD83C\uDFC0 Voici la partie de '+profile.name+' au Quiz NBA ('+(profile.careerPts||0)+' points). Ouvre ce lien pour continuer à jouer : '+url;}
+  function waIcon(){return '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style="flex:0 0 auto"><path fill="#fff" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>';}
   function qrSVG(text){
     if(typeof qrcode!=='function')return '';
     try{var q=qrcode(0,'L');q.addData(text);q.make();return q.createSvgTag({cellSize:4,margin:2,scalable:true});}catch(e){return '';}
@@ -55,6 +58,7 @@ var Transfer = (function(){
       '<p>Scanne ce QR code avec l\'autre téléphone, ou envoie-lui le lien. La partie y sera copiée avec tes points, étoiles, badges, joueur, fonds et ballons.</p>'+
       '<div class="tfqr">'+qrSVG(url)+'</div>'+
       '<textarea class="tflink" id="tflink" readonly rows="3">'+esc(url)+'</textarea>'+
+      '<a class="btn big wabtn" id="tfwa" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(msg(url))+'">'+waIcon()+'Envoyer sur WhatsApp</a>'+
       '<div class="quitrow">'+(navigator.share?'<button class="btn shootbtn" id="tfshare">Envoyer</button>':'')+'<button class="btn" id="tfcopy">Copier le lien</button></div>'+
       '<button class="btn ghost big" id="tfclose" style="margin-top:10px">Fermer</button>'+
       '<p class="tfnote">Le lien est une photo de ta partie maintenant : si tu rejoues ici, crée un nouveau lien.</p></div>';
@@ -71,6 +75,7 @@ var Transfer = (function(){
     };
     var sh=el.querySelector('#tfshare');
     if(sh)sh.onclick=function(){navigator.share({title:'Ma partie de Quiz NBA',text:'Continue la partie de '+profile.name+' au Quiz NBA :',url:url}).catch(function(){});};
+    el.querySelector('#tfwa').addEventListener('click',function(){Sfx.pop();});
   }
 
   /* fenêtre « J'ai un code de partie » (profil ou vestiaire) */
