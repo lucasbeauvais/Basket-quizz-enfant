@@ -448,3 +448,8 @@ button.playercard:hover{border-color:var(--orange)}
 .quitcard .tfsum b{font-size:16px}
 .btn.wabtn{display:flex;align-items:center;justify-content:center;gap:9px;background:#25d366;color:#fff;box-shadow:0 6px 0 #128c7e;text-decoration:none;margin:0 0 12px}
 .btn.wabtn:active{box-shadow:0 3px 0 #128c7e}
+
+/* ===== NIVEAU PRO ===== */
+.module.pro{background:linear-gradient(135deg,#1b1733,#2e2461);border-color:var(--gold)}
+.module.pro .m-txt b{color:var(--gold)}
+.module.pro .m-txt span{color:rgba(255,255,255,.8)}

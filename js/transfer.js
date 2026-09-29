@@ -6,7 +6,7 @@
    ou coller le code) récupère la partie.
    ============================================================ */
 var Transfer = (function(){
-  var LV=[1,2,3,4,5];
+  var LV=[1,2,3,4,5,6];  /* version 2 du code : 6 catégories (la v1 en avait 5) */
   function b64e(str){return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
   function b64d(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return decodeURIComponent(escape(atob(s)));}
   function num(v){v=parseInt(v,10);return isFinite(v)&&v>0?v:0;}
@@ -15,7 +15,7 @@ var Transfer = (function(){
   function pack(p){
     var r=p.rules||{},badges=0,read=0,best=[];
     RULE_CHAPTERS.forEach(function(ch,i){if(r.badges&&r.badges[ch.id])badges|=1<<i;if(r.read&&r.read[ch.id])read|=1<<i;best.push((r.best&&r.best[ch.id])||0);});
-    var arr=[1,p.name,p.avatar,
+    var arr=[2,p.name,p.avatar,
       LV.map(function(l){return (p.stars&&p.stars[l])||0;}),
       LV.map(function(l){return (p.best&&p.best[l])||0;}),
       LV.map(function(l){return (p.bestPts&&p.bestPts[l])||0;}).concat([(p.bestPts&&p.bestPts.all)||0]),
@@ -26,11 +26,11 @@ var Transfer = (function(){
   function unpack(code){
     try{
       var a=JSON.parse(b64d(code));
-      if(!a||a[0]!==1||typeof a[1]!=='string'||!a[1].trim())return null;
-      var p=blankProfile();
+      if(!a||(a[0]!==1&&a[0]!==2)||typeof a[1]!=='string'||!a[1].trim())return null;
+      var p=blankProfile(),n=(a[0]===1)?5:6,lv=LV.slice(0,n);
       p.name=a[1].trim().slice(0,14); p.avatar=playerById(a[2]).id;
-      LV.forEach(function(l,i){p.stars[l]=Math.min(3,num(a[3][i]));p.best[l]=num(a[4][i]);p.bestPts[l]=num(a[5][i]);});
-      p.bestPts.all=num(a[5][5]); p.careerPts=num(a[6]); p.played=num(a[7]);
+      lv.forEach(function(l,i){p.stars[l]=Math.min(3,num(a[3][i]));p.best[l]=num(a[4][i]);p.bestPts[l]=num(a[5][i]);});
+      p.bestPts.all=num(a[5][n]); p.careerPts=num(a[6]); p.played=num(a[7]);
       RULE_CHAPTERS.forEach(function(ch,i){if(a[8]&(1<<i))p.rules.badges[ch.id]=true;if(a[9]&(1<<i))p.rules.read[ch.id]=true;if(a[10]&&a[10][i])p.rules.best[ch.id]=num(a[10][i]);});
       if(a[11])p.bg=String(a[11]); if(a[12])p.ballSkin=String(a[12]);
       return p;

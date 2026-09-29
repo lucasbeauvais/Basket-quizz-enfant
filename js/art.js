@@ -271,7 +271,7 @@ function bannerHTML(){
   return decorBanner();
 }
 function categoryIcon(lvl){
-  var key={1:'legendes',2:'stars',3:'france',4:'nba',5:'regles',all:'mix'}[lvl];
+  var key={1:'legendes',2:'stars',3:'france',4:'nba',5:'regles',6:'pro',all:'mix'}[lvl];
   if(Assets.has('categories/'+key))return '<img class="catimg" src="'+Assets.url('categories/'+key)+'" alt="" draggable="false">';
   if(lvl==='all')return miniBadge('#8a6420','★');
   return miniBadge(LEVELS[lvl].color,LEVELS[lvl].sym);

@@ -16,7 +16,7 @@ function doShake(){if(reduceMotion)return;var c=document.querySelector('.card');
 /* ===== SAUVEGARDE ===== */
 var SAVE_KEY='quiz_nba_legendes_v1';
 var profile=null;
-function blankProfile(){return {name:'',avatar:'p1',stars:{1:0,2:0,3:0,4:0,5:0},best:{1:0,2:0,3:0,4:0,5:0},bestPts:{1:0,2:0,3:0,4:0,5:0,all:0},rules:{read:{},badges:{},best:{}},careerPts:0,played:0};}
+function blankProfile(){return {name:'',avatar:'p1',stars:{1:0,2:0,3:0,4:0,5:0,6:0},best:{1:0,2:0,3:0,4:0,5:0,6:0},bestPts:{1:0,2:0,3:0,4:0,5:0,6:0,all:0},rules:{read:{},badges:{},best:{}},careerPts:0,played:0};}
 function loadSave(){try{var s=localStorage.getItem(SAVE_KEY);return s?JSON.parse(s):null;}catch(e){return null;}}
 function persist(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(profile));}catch(e){}}
 function maxStars(){return LEVEL_ORDER.length*3;}
@@ -33,7 +33,8 @@ var progBar=document.getElementById('progbar');
 function hideProg(){progWrap.style.display='none';seeBg(false);}
 function showProg(){progWrap.style.display='block';}
 var order=[],current=0,points=0,correct=0,results=[],answered=false,curLevel=1,ROUND=10,TARGET=10,streak=0,maxStreak=0,bonusBalls=0,shotPts=0,shotCount=0;
-function poolFor(level){if(level==='all')return BANK.slice();var p=[];for(var i=0;i<BANK.length;i++)if(BANK[i].level===level)p.push(BANK[i]);return p;}
+/* le Match des étoiles mélange tout sauf le Niveau Pro */
+function poolFor(level){if(level==='all')return BANK.filter(function(q){return q.level!==6;});var p=[];for(var i=0;i<BANK.length;i++)if(BANK[i].level===level)p.push(BANK[i]);return p;}
 function buildRound(level){return shuffle(poolFor(level)).slice(0,TARGET);}
 function onFire(){return streak>=5;}
 
@@ -70,7 +71,7 @@ function screenProfile(){hideProg();pendingAvatar=profile.avatar||'p1';
 /* ===== ÉCRAN ACCUEIL ===== */
 var secretIdx=Math.floor(Math.random()*SECRETS.length);
 function secretBox(){return '<div class="secret">'+coachHTML(54)+'<div class="s-txt"><b>Le secret de '+COACH_NAME+'</b><span id="secrettxt">'+SECRETS[secretIdx]+'</span><br><button id="nextsecret">Un autre secret</button></div></div>';}
-function screenHome(){hideProg();var mods='';for(var i=0;i<LEVEL_ORDER.length;i++){var f=LEVEL_ORDER[i],L=LEVELS[f];var rec=profile.bestPts[f]?(' &middot; record '+profile.bestPts[f]+' pts'):'';mods+='<button class="module" data-lvl="'+f+'">'+categoryIcon(f)+'<div class="m-txt"><b>'+L.name+'</b><span>'+L.sub+rec+'</span></div><div class="m-stars">'+starRow(profile.stars[f]||0)+'</div></button>';}
+function screenHome(){hideProg();var mods='';for(var i=0;i<LEVEL_ORDER.length;i++){var f=LEVEL_ORDER[i],L=LEVELS[f];var rec=profile.bestPts[f]?(' &middot; record '+profile.bestPts[f]+' pts'):'';mods+='<button class="module'+(L.pro?' pro':'')+'" data-lvl="'+f+'">'+categoryIcon(f)+'<div class="m-txt"><b>'+L.name+'</b><span>'+L.sub+rec+'</span></div><div class="m-stars">'+starRow(profile.stars[f]||0)+'</div></button>';}
   var p=playerById(profile.avatar);
   view.innerHTML=
     '<button class="playercard pc-wall" id="pcard" style="'+bgStyle(null,.2)+'"><div class="pc-av">'+avatarHTML(profile.avatar,64)+'</div><div class="pc-txt"><b>'+esc(profile.name)+'</b><span>'+p.name+' &middot; '+rankName()+'</span><span class="pc-pts">'+(profile.careerPts||0)+' points en carrière</span></div><div class="pc-stars">'+starSVG(true,18)+' '+totalStars()+'/'+maxStars()+'</div><span class="pc-bgname">Fond : '+currentBg().name+' &middot; changer</span></button>'+
@@ -121,14 +122,15 @@ function renderQuestion(){seeBg(false);answered=false;var qd=order[current];prog
     (qd.scene?qd.scene():'')+
     '<div class="qtext">'+qd.q+'</div>'+
     '<div class="choices">'+choicesHTML(qd)+'</div>'+
-    '<div class="tools"><button class="hintbtn" id="hintbtn">'+coachHTML(30,'thinking')+'Le secret du coach</button></div>'+
+    '<div class="tools"><button class="hintbtn" id="hintbtn">'+coachHTML(30,'thinking')+(qd.level===6?'Indice du coach (-'+PRO_HINT_COST+' pts)':'Le secret du coach')+'</button></div>'+
     '<div class="hint" id="hint"><b>'+COACH_NAME+' :</b> '+qd.hint+'</div>'+
     '<div class="explain" id="explain"><b id="verdict"></b><span id="exptxt"></span></div>'+
     '<div class="nextrow" id="nextrow"></div>';
   if(window.gsap&&!reduceMotion){gsap.from('.scene',{scale:.92,opacity:0,duration:.4,ease:'back.out(1.7)'});gsap.from('.choice',{x:40,opacity:0,duration:.35,stagger:.06,ease:'power2.out',delay:.1});}
   var btns=view.querySelectorAll('.choice');for(var b=0;b<btns.length;b++)btns[b].onclick=onAnswer;
   bindQuit();
-  document.getElementById('hintbtn').onclick=function(){Sfx.pop();var h=document.getElementById('hint');h.classList.add('show');this.style.opacity='.5';if(window.gsap)gsap.from(h,{y:-10,opacity:0,duration:.3});};}
+  document.getElementById('hintbtn').onclick=function(){if(this.dataset.used)return;this.dataset.used='1';Sfx.pop();var h=document.getElementById('hint');h.classList.add('show');this.style.opacity='.5';
+    if(qd.level===6){points=Math.max(0,points-PRO_HINT_COST);refreshBar();}if(window.gsap)gsap.from(h,{y:-10,opacity:0,duration:.3});};}
 
 /* Enchaîne : dunk/3 pts -> (gants en mousse | en feu) -> "+3" qui vole jusqu'au score */
 function celebrateGood(pts,milestone,done){
@@ -146,13 +148,13 @@ function onAnswer(){if(answered)return;answered=true;var qd=order[current];var c
   var exp=document.getElementById('explain');exp.className='explain show '+(good?'good':'bad');var vtxt,milestone=null,pts=0;
   if(good){
     streak++;correct++;if(streak>maxStreak)maxStreak=streak;
-    pts=onFire()?6:3;points+=pts;
+    var base=(qd.level===6)?PRO_POINTS:3;pts=onFire()?base*2:base;points+=pts;
     if(streak%5===0)milestone='fire';else if(streak%3===0)milestone='foam';
     if(streak%3===0)bonusBalls++;
     Sfx.good();
     var kind=celebrateGood(pts,milestone);
-    vtxt={dunk:'DUNK ! ',mega:'MÉGA DUNK ! ',three:'SWISH, +3 ! '}[kind]+pick(GOOD);
-    if(pts===6)vtxt='EN FEU, +6 ! '+pick(GOOD);
+    vtxt={dunk:'DUNK, +'+pts+' ! ',mega:'MÉGA DUNK, +'+pts+' ! ',three:'SWISH, +'+pts+' ! '}[kind]+pick(GOOD);
+    if(onFire())vtxt='EN FEU, +'+pts+' ! '+pick(GOOD);
     if(reduceMotion)refreshBar();
   }else{streak=0;doShake();FX.wrong();vtxt=pick(BAD);refreshBar();}
   document.getElementById('verdict').innerHTML=vtxt;document.getElementById('exptxt').textContent=qd.explain;

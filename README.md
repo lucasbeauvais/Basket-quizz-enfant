@@ -7,6 +7,11 @@ Quiz de basket pour enfants : 54 questions sur les légendes (Jordan, Kobe...), 
 Ouvrir `index.html` dans un navigateur (ordinateur, tablette ou téléphone). Aucune installation, ça marche aussi hors-ligne.
 Pour y jouer en ligne : GitHub > Settings > Pages > branche `main`, dossier `/`.
 
+## Le Niveau Pro
+
+20 questions plus difficiles : combinaisons (pick and roll, passe et va, alley-oop, backdoor, box-out), concours de dunks (Jordan 1988, Vince Carter 2000, Spud Webb, Nate Robinson, LaVine / Gordon) et règles avancées (faute disqualifiante, antisportives, prolongation, temps-morts, zone de non-charge...).
+**+5 points** par bonne réponse (+10 en série « En feu »), l'indice du coach **coûte 2 points**, et ces questions sont **hors du Match des étoiles**.
+
 ## L'école des règles FIBA
 
 Un bloc éducatif pour connaître les règles comme un arbitre (règles officielles FIBA, utilisées par la FFBB, simplifiées pour les enfants) :
@@ -37,6 +42,7 @@ Les bruitages sont générés par le navigateur (aucun fichier son) et se coupen
 index.html              la page
 css/style.css           les styles
 js/data.js              questions, catégories, joueurs, secrets du coach  <- pour ajouter des questions
+js/pro-data.js          les questions du Niveau Pro
 js/rules-data.js        l'école des règles : fiches et quiz par chapitre
 js/rules-art.js         schémas de terrain et gestes de l'arbitre
 js/rules.js             écrans de l'école des règles et diplôme
