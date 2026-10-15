@@ -1,0 +1,10 @@
+# En-têtes servis par Cloudflare Pages
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# Images et bibliothèques : elles changent rarement, le navigateur les garde 7 jours
+/assets/img/*
+  Cache-Control: public, max-age=604800
+/vendor/*
+  Cache-Control: public, max-age=604800
