@@ -4,8 +4,20 @@ Quiz de basket pour enfants : 54 questions sur les légendes (Jordan, Kobe...), 
 
 ## Jouer
 
-Ouvrir `index.html` dans un navigateur (ordinateur, tablette ou téléphone). Aucune installation, ça marche aussi hors-ligne.
-Pour y jouer en ligne : GitHub > Settings > Pages > branche `main`, dossier `/`.
+Adresse : **https://basketquiz.lucasbeauvais.com/** (Cloudflare Pages).
+Ouvrir `index.html` marche aussi en local, sans installation, même hors-ligne.
+
+### Hébergement Cloudflare Pages
+
+1. Cloudflare > Workers & Pages > Create > Pages > Connect to Git > dépôt `Basket-quizz-enfant`.
+2. Production branch : `claude/quiz-basket-nba-wqk51l` ; Framework : None ; Build command : vide ; Build output directory : `/`.
+3. Custom domains > `basketquiz.lucasbeauvais.com`.
+
+Chaque push sur la branche redéploie le site. `_headers` règle le cache (images et bibliothèques gardées 7 jours).
+
+### Déménagement depuis GitHub Pages
+
+L'ancienne adresse (`lucasbeauvais.github.io/Basket-quizz-enfant`) redirige vers la nouvelle **dès que celle-ci répond**, en emportant la partie du téléphone (une seule fois). Réglage : `NEW_HOME` dans `js/transfer.js`.
 
 ## Le Niveau Pro
 

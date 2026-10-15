@@ -114,12 +114,39 @@ var Transfer = (function(){
 
   /* au démarrage : le lien contient-il une partie ? */
   function fromUrl(onNone){
-    var m=location.hash.match(/partie=([A-Za-z0-9_-]+)/);
+    var m=location.hash.match(/partie=([A-Za-z0-9_-]+)/), moved=/(^|[#&])demenage=1/.test(location.hash);
     if(!m){onNone();return;}
     try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}
     var p=unpack(m[1]);
     if(!p){onNone();return;}
+    /* déménagement depuis l'ancienne adresse et rien sur ce téléphone : on reprend la partie sans rien demander */
+    if(moved&&!(profile&&profile.name)){profile=p;persist();applyBg();onNone();movedNotice();return;}
     onNone();confirmImport(p);
   }
-  return {pack:pack,unpack:unpack,link:link,openShare:openShare,openImport:openImport,fromUrl:fromUrl};
+  function movedNotice(){
+    var el=document.createElement('div');el.className='quitask';
+    el.innerHTML='<div class="quitcard tfcard"><b>Le jeu a déménagé !</b><p>Nouvelle adresse : <b>'+esc(location.host)+'</b>. Ta partie a suivi : tes points, étoiles et badges sont bien là.</p>'+
+      '<button class="btn big shootbtn" id="mvok">C\'est parti !</button></div>';
+    document.body.appendChild(el);el.querySelector('#mvok').onclick=function(){if(el.parentNode)el.parentNode.removeChild(el);};
+    FX.fireworks(1000);
+  }
+
+  /* ============================================================
+     DÉMÉNAGEMENT : l'ancienne adresse (GitHub Pages) envoie vers la
+     nouvelle, en emportant la partie du téléphone. Sécurité : on ne
+     redirige que si la nouvelle adresse répond vraiment.
+     ============================================================ */
+  var NEW_HOME='https://basketquiz.lucasbeauvais.com/', OLD_HOSTS=['lucasbeauvais.github.io'];
+  function migrate(next){
+    if(OLD_HOSTS.indexOf(location.hostname)<0){next();return;}
+    var done=false,timer=setTimeout(function(){if(!done){done=true;next();}},3500);
+    fetch(NEW_HOME+'index.html',{mode:'no-cors',cache:'no-store'}).then(function(){
+      if(done)return;done=true;clearTimeout(timer);
+      var dest=NEW_HOME,already=false;
+      try{already=localStorage.getItem('quiz_nba_demenage')==='1';}catch(e){}
+      if(!already&&profile&&profile.name){dest+='#partie='+pack(profile)+'&demenage=1';try{localStorage.setItem('quiz_nba_demenage','1');}catch(e){}}
+      location.replace(dest);
+    },function(){if(!done){done=true;clearTimeout(timer);next();}});
+  }
+  return {pack:pack,unpack:unpack,link:link,openShare:openShare,openImport:openImport,fromUrl:fromUrl,migrate:migrate};
 })();

@@ -453,3 +453,4 @@ button.playercard:hover{border-color:var(--orange)}
 .module.pro{background:linear-gradient(135deg,#1b1733,#2e2461);border-color:var(--gold)}
 .module.pro .m-txt b{color:var(--gold)}
 .module.pro .m-txt span{color:rgba(255,255,255,.8)}
+.quitcard p b{display:inline;font-size:inherit;color:var(--purple)}

@@ -254,5 +254,7 @@ function boot(){applyBrand();var s=loadSave();var b=blankProfile();
   if(s&&s.name){profile=s;for(var k in b){if(profile[k]===undefined)profile[k]=b[k];}}else profile=b;
   applyBg();
   /* lien de transfert (#partie=…) : on affiche l'écran normal puis on propose de récupérer la partie */
-  Transfer.fromUrl(function(){if(profile.name)screenHome();else screenProfile();});}
+  Transfer.fromUrl(function(){if(profile.name)screenHome();else screenProfile();});
+  /* ancienne adresse GitHub : si la nouvelle répond, on y part avec la partie */
+  Transfer.migrate(function(){});}
 Assets.load(boot);
