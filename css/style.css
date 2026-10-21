@@ -454,3 +454,5 @@ button.playercard:hover{border-color:var(--orange)}
 .module.pro .m-txt b{color:var(--gold)}
 .module.pro .m-txt span{color:rgba(255,255,255,.8)}
 .quitcard p b{display:inline;font-size:inherit;color:var(--purple)}
+.sitefoot{margin:12px 0 4px;font-size:12px;color:rgba(255,255,255,.75);text-align:center;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.sitefoot a{color:#fff;font-weight:700;text-decoration:underline;text-underline-offset:2px}
