@@ -1,0 +1,15 @@
+{
+  "name": "Arsenal de Poche",
+  "short_name": "Arsenal",
+  "description": "Remplis ton sac d'armes et de soins, fusionne-les et tiens 15 vagues. Gratuit, sans pub.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1b2130",
+  "theme_color": "#1b2130",
+  "lang": "fr",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

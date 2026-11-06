@@ -82,3 +82,27 @@ prompts-images-lot3.html  le 3e lot : 8 ballons de style (débloqués avec les �
 Pour modifier les prompts : éditer `tools/build_prompts.py` puis lancer `python3 tools/build_prompts.py`.
 
 Jeu familial non officiel, sans lien avec la NBA. Les joueurs sont des personnages inventés ; seul Coach Mamba est inspiré de Kobe Bryant.
+
+---
+
+# Arsenal de Poche (jeu bonus, dossier `arsenal/`)
+
+Jeu de survie par vagues, gratuit et **sans pub** : remplis ton sac d'armes et de soins, fusionne-les, tiens 15 vagues.
+Indépendant du quiz : tout est dans `arsenal/` (HTML/CSS/JS pur, aucune dépendance, marche hors-ligne).
+
+- **Jouer** : `/arsenal/` sur le site déployé (ex. `https://basketquiz.lucasbeauvais.com/arsenal/` une fois la branche fusionnée dans la branche de production), ou ouvrir `arsenal/index.html` en local.
+- **Installer comme une appli** : sur mobile, menu du navigateur > « Ajouter à l'écran d'accueil » (manifest + service worker = plein écran et hors-ligne).
+- **Sauvegarde** : dans le navigateur (localStorage), la partie en cours reprend là où tu l'as laissée entre deux vagues.
+
+## Mécaniques
+- **Sac (grille)** : seuls les objets posés dans le sac sont actifs. La réserve (6 cases) stocke.
+- **Boutique** : 3 objets tirés au sort par vague (rareté Commun → Légendaire, meilleure au fil des vagues). 1 relance gratuite par vague, puis payante.
+- **Fusion** : 2 objets identiques de même niveau → 1 objet ★ supérieur (max ★★★).
+- **Combos d'adjacence** : Munitions (+dégâts), Boisson (+cadence), Lunette (+critique), Crocs (vol de vie) boostent les armes qu'ils touchent.
+- **Soins / défense** : Bandage, Trousse, Plaque, Bouclier, Pile de secours (relève une fois par vague). Les PV ne remontent que de 30 % entre les vagues.
+- **Boss** aux vagues 5, 10, 15. Gagner un chapitre débloque le suivant (ennemis ×2,2 PV), sans fin.
+- **Atelier** : les pièces gagnées achètent des améliorations permanentes (PV, dégâts, argent de départ, chance, sac plus grand, boutique plus grande).
+
+## Équilibrage
+Tout se règle dans `arsenal/data.js` (objets, ennemis, améliorations) et `buildWave()` dans `arsenal/game.js` (difficulté des vagues).
+En console : `ARSENAL.run`, `ARSENAL.meta`, `ARSENAL.tick(dt)` pour simuler.

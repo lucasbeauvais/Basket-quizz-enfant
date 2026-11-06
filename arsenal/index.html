@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#1b2130">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Arsenal de Poche</title>
+<meta name="description" content="Jeu de survie par vagues : remplis ton sac d'armes et de soins, fusionne-les et tiens 15 vagues. Gratuit, sans pub.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ================= BASE ================= -->
+  <section id="home" class="screen">
+    <div class="home-top">
+      <button class="icon-btn" id="btnSound" aria-label="Son">🔊</button>
+      <div class="pill coin-pill"><i class="coin"></i><b id="homeCoins">0</b></div>
+    </div>
+    <h1 class="logo">ARSENAL<span>de poche</span></h1>
+    <canvas id="homeHero" width="240" height="170"></canvas>
+    <div class="chapter-pick">
+      <button class="arrow" id="chPrev" aria-label="Chapitre précédent">‹</button>
+      <div class="chapter-label"><small>Chapitre <b id="chNum">1</b></small><span id="chName">Faubourgs</span></div>
+      <button class="arrow" id="chNext" aria-label="Chapitre suivant">›</button>
+    </div>
+    <div class="home-actions">
+      <button class="btn btn-green big" id="btnStart">JOUER</button>
+      <button class="btn btn-blue" id="btnResume" hidden>Reprendre la partie</button>
+    </div>
+    <div class="records" id="records"></div>
+    <h2 class="section-title">Atelier <small>améliorations permanentes</small></h2>
+    <div id="upgrades"></div>
+    <div class="home-foot">
+      <button class="link" id="btnHelp">Comment jouer ?</button>
+      <button class="link danger" id="btnReset">Effacer ma sauvegarde</button>
+    </div>
+  </section>
+
+  <!-- ================= PARTIE ================= -->
+  <section id="game" class="screen" hidden>
+    <header class="hud">
+      <button class="icon-btn" id="btnPause" aria-label="Pause">❚❚</button>
+      <div class="wave-title">Vague <b id="waveNum">1</b>/<span id="waveMax">15</span></div>
+      <div class="pill cash-pill"><i class="bill"></i><b id="cash">0</b></div>
+    </header>
+
+    <div class="battle-wrap" id="battleWrap">
+      <canvas id="battle"></canvas>
+      <button class="speed-btn" id="btnSpeed">x1 ▶</button>
+      <div class="banner" id="banner" hidden></div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="grid-wrap"><div id="grid"></div></div>
+
+    <div id="prep">
+      <div class="bench-label">Réserve <small>(inactive)</small></div>
+      <div id="bench"></div>
+      <div class="shop-wrap">
+        <div id="shop"></div>
+        <div id="sellZone" hidden><span>Lâche ici pour vendre</span><b id="sellPrice"></b></div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-blue" id="btnReroll"></button>
+        <button class="btn btn-green" id="btnPlay">JOUER ➜</button>
+      </div>
+      <p class="tip" id="tip"></p>
+    </div>
+  </section>
+
+  <!-- ================= SURCOUCHES ================= -->
+  <div class="overlay" id="sheet" hidden>
+    <div class="sheet">
+      <div class="sheet-head">
+        <div class="sheet-icon" id="shIcon"></div>
+        <div>
+          <div class="sheet-name" id="shName"></div>
+          <div class="sheet-sub" id="shSub"></div>
+        </div>
+      </div>
+      <div class="sheet-desc" id="shDesc"></div>
+      <div class="sheet-stats" id="shStats"></div>
+      <div class="sheet-btns" id="shBtns"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="pauseMenu" hidden>
+    <div class="panel">
+      <h2>Pause</h2>
+      <button class="btn btn-green" id="btnContinue">Reprendre</button>
+      <button class="btn btn-blue" id="btnSound2">Son : oui</button>
+      <button class="btn btn-red" id="btnQuit">Abandonner la partie</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="result" hidden>
+    <div class="panel result">
+      <div class="result-emblem" id="resEmblem"></div>
+      <div class="ribbon" id="resTitle">Bataille perdue</div>
+      <p class="res-waves" id="resWaves"></p>
+      <h3>Dégâts totaux <b id="resDmg"></b></h3>
+      <div id="resBreak"></div>
+      <h3 class="rew-title">Récompenses</h3>
+      <div class="rewards" id="resRewards"></div>
+      <button class="btn btn-green" id="btnBack">Retour à la base</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="help" hidden>
+    <div class="panel help">
+      <h2>Comment jouer</h2>
+      <ol>
+        <li><b>Achète</b> des objets dans la boutique (touche un objet pour voir ses stats).</li>
+        <li><b>Glisse-les dans ton sac</b> (la grille). Seuls les objets du sac sont actifs, la réserve sert de stockage.</li>
+        <li><b>Tourne</b> un objet : touche-le puis « Tourner », ou appuie sur <kbd>R</kbd> / clic droit pendant que tu le déplaces.</li>
+        <li><b>Fusionne</b> : pose un objet sur un objet identique de même niveau → il gagne une étoile ★ (max ★★★).</li>
+        <li><b>Combos</b> : les objets bonus (munitions, boisson, lunette, crocs) boostent les <b>armes qui les touchent</b>.</li>
+        <li><b>Soins</b> : tes PV ne remontent que de 30 % entre deux vagues. Bandages, trousses et boucliers te gardent en vie.</li>
+        <li>1 relance gratuite par vague. Boss aux vagues 5, 10 et 15. Gagne le chapitre pour débloquer le suivant.</li>
+        <li>Les <b>pièces</b> gagnées servent à l'Atelier (améliorations permanentes).</li>
+      </ol>
+      <button class="btn btn-green" id="btnHelpOk">C'est parti !</button>
+    </div>
+  </div>
+
+  <div id="toast" hidden></div>
+  <div id="ghost" hidden></div>
+</div>
+
+<script src="data.js"></script>
+<script src="game.js"></script>
+<script>
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+</script>
+</body>
+</html>
